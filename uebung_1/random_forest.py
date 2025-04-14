@@ -1,53 +1,64 @@
-from data_loader import load_csv_from_zip
 from reporting import compare_labels, report
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from pathlib import Path
 import pandas as pd
 
-# Ensure output directory exists
-Path("./out").mkdir(parents=True, exist_ok=True)
 
-# Load the data frames from the zip file
-data_df, eval_df= load_csv_from_zip('184-702-tu-ml-2025-s-breast-cancer-diagnostic.zip', [
-  'breast-cancer-diagnostic.shuf.lrn.csv',
-  'breast-cancer-diagnostic.shuf.tes.csv'
-])
+def eval_prediction( x_test, y_test, y_pred ):
+  # Report some metrics on the model's quality
+  report(y_test, y_pred)
 
+  # Print the true and predicted labels
+  compare_labels(x_test, y_test, y_pred)
 
-# Remove non-feature columns and split columns into inputs and output
-x = data_df.drop(columns=['class', 'ID'])  
-y = data_df['class']
+def export_kaggle_results(ids_eval, y_eval):
+  eval_results_df= pd.DataFrame()
+  eval_results_df['ID']= ids_eval
+  eval_results_df['class']= y_eval
 
-# Create training/test split
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  # print( eval_results_df )
 
-
-# Train the model
-print('Training...')
-model = RandomForestClassifier(n_estimators=50, random_state=42)
-model.fit(x_train, y_train)
-
-# Put the test data into the model to see how well it works
-y_pred = model.predict(x_test)
+  # Serialize the results for uploading to Kaggle
+  eval_results_df.to_csv('./out/breast-cancer-diagnostic.sol.csv', index=False)
 
 
-# Report some metrics on the model's quality
-report(y_test, y_pred)
+############################################################################################
+# Dataset Breast Cancer:
+
+def dataset_breast_cancer_version_01( x, y, x_eval, ids_eval ):
+  # Create training/test split
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
 
-# Print the true and predicted labels
-compare_labels(x_test, y_test, y_pred)
+  # Train the model
+  print('Training...')
+  model = RandomForestClassifier(n_estimators=50, random_state=42)
+  model.fit(x_train, y_train)
 
-# Let the model predict the labels on the evaluation data set from Kaggle
-x_eval = eval_df.drop(columns=['ID'])
-y_eval = model.predict(x_eval)
+  # Put the test data into the model to see how well it works
+  y_pred = model.predict(x_test)
 
-eval_results_df= pd.DataFrame()
-eval_results_df['ID']= eval_df['ID']
-eval_results_df['class']= y_eval
+  eval_prediction( x_test, y_test, y_pred)
 
-print( eval_results_df )
 
-# Serialize the results for uploading to Kaggle
-eval_results_df.to_csv('./out/breast-cancer-diagnostic.sol.csv', index=False)
+  # Let the model predict the labels on the evaluation data set from Kaggle
+  y_eval = model.predict(x_eval)
+
+  export_kaggle_results(ids_eval, y_eval)
+
+
+
+def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
+  pass
+
+############################################################################################
+# Dataset Loan:
+#TODO:
+
+############################################################################################
+# Dataset Dota:
+#TODO:
+
+############################################################################################
+# Dataset Heart Disease:
+#TODO:
