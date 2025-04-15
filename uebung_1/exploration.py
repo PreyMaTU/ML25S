@@ -1,13 +1,14 @@
-from data_loader import load_csv_from_zip
 
-train_df, test_df= load_csv_from_zip('184-702-tu-ml-2025-s-breast-cancer-diagnostic.zip', [
-  'breast-cancer-diagnostic.shuf.lrn.csv',
-  'breast-cancer-diagnostic.shuf.tes.csv'
-])
+import pandas as pd
 
+def find_loan_dataset_outliers( numeric_cols, x_train ):
+  
 
+  lqs= x_train[numeric_cols].quantile(0.01)
+  uqs= x_train[numeric_cols].quantile(0.99)
 
-# print( train_df )
+  with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+    print( lqs )
+    print( uqs )
 
-print('Missing values in the training set:\n', train_df.isnull().sum())
-print('Missing values in the testing set:\n', test_df.isnull().sum())
+    print( ((x_train[numeric_cols] < lqs) | (x_train[numeric_cols] > uqs)).sum() )

@@ -1,5 +1,5 @@
 import sklearn.metrics as metrics
-
+import pandas as pd
 
 def report(y_test, y_pred):
   # Report some metrics on the model's quality
@@ -21,3 +21,7 @@ def compare_labels(x_test, y_test, y_pred):
   results_df['Correct'] = (results_df['Predicted_Label'] == results_df['True_Label'])
 
   print( results_df )
+
+def count_missing_values( df, name= 'dataset' ):
+  with pd.option_context('display.max_rows', None, 'display.max_columns', None):
+    print(f'Missing values in the {name}:\n', df.isnull().sum())
