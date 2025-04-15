@@ -44,6 +44,9 @@ def dataset_breast_cancer():
   x_eval = eval_df.drop(columns=['ID'])
   ids_eval= eval_df['ID']
 
+  # TODO: Handle missing values
+  # data_df = data_df.dropna()  # or use fillna()
+
   if config.neural_networks:
     nn.dataset_breast_cancer_version_01( x, y, x_eval, ids_eval )
     nn.dataset_breast_cancer_version_02( x, y, x_eval, ids_eval )
@@ -78,28 +81,28 @@ def dataset_loan():
   # count_missing_values( x, 'x' )
   # count_missing_values( y, 'y' )
 
-  print( x )
+  #print( x )
 
   # Category Columns: term, emp_length, home_ownership, verification_status, loan_status, pymnt_plan, purpose, 
   # addr_state, initial_list_status, application_type, hardship_flag, disbursement_method, debt_settlement_flag,
   # grade
   # ? policy_code ? years and months as numbers ?
 
-  print( 'term:', x['term'].unique() )
-  print( 'pymnt_plan:', x['pymnt_plan'].unique() )
-  print( 'initial_list_status:', x['initial_list_status'].unique() )
-  print( 'application_type:', x['application_type'].unique() )
-  print( 'hardship_flag:', x['hardship_flag'].unique() )
-  print( 'disbursement_method:', x['disbursement_method'].unique() )
-  print( 'debt_settlement_flag:', x['debt_settlement_flag'].unique() )
+  #print( 'term:', x['term'].unique() )
+  #print( 'pymnt_plan:', x['pymnt_plan'].unique() )
+  #print( 'initial_list_status:', x['initial_list_status'].unique() )
+  #print( 'application_type:', x['application_type'].unique() )
+  #print( 'hardship_flag:', x['hardship_flag'].unique() )
+  #print( 'disbursement_method:', x['disbursement_method'].unique() )
+  #print( 'debt_settlement_flag:', x['debt_settlement_flag'].unique() )
   
-  print( 'emp_length:', x['emp_length'].unique() )
-  print( 'home_ownership:', x['home_ownership'].unique() )
-  print( 'verification_status:', x['verification_status'].unique() )
-  print( 'loan_status:', x['loan_status'].unique() )
-  print( 'purpose:', x['purpose'].unique() )
-  print( 'addr_state:', x['addr_state'].unique() )
-  print( 'grade:', y.unique() )
+  #print( 'emp_length:', x['emp_length'].unique() )
+  #print( 'home_ownership:', x['home_ownership'].unique() )
+  #print( 'verification_status:', x['verification_status'].unique() )
+  #print( 'loan_status:', x['loan_status'].unique() )
+  #print( 'purpose:', x['purpose'].unique() )
+  #print( 'addr_state:', x['addr_state'].unique() )
+  #print( 'grade:', y.unique() )
 
   
   if config.neural_networks:
@@ -110,10 +113,11 @@ def dataset_loan():
 #    rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
 
   if config.knn:
-    knn.dataset_loan_version_01( x, y, x_eval, ids_eval )
-    knn.dataset_loan_version_02( x, y, x_eval, ids_eval )
-    knn.dataset_loan_version_03( x, y, x_eval, ids_eval )
-
+    knn.dataset_loan_k1(x, y, x, ids_eval)
+    knn.dataset_loan_k1_scaled(x, y, x, ids_eval)
+    knn.dataset_loan_k5_distance(x, y, x, ids_eval)
+    knn.dataset_loan_k5_distance_scaled(x, y, x, ids_eval)
+    
 
 
 def dataset_dota():
