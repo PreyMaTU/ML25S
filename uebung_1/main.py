@@ -127,7 +127,14 @@ def dataset_dota():
     'dota2Test.csv'
   ], False)
 
-  print(train_df.keys)
+  # Separate into features and target
+  x_train = train_df.drop(columns=[0]) 
+  y_train = train_df[0]
+
+  x_test = test_df.drop(columns=[0]) 
+  y_test = test_df[0]
+
+  print(x_train)
 
 
 def dataset_heart_disease():
