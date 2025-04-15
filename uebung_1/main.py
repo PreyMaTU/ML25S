@@ -5,6 +5,7 @@ import pandas as pd
 from data_loader import load_csv_from_zip
 import neural_networks as nn
 import random_forest as rf
+import knn
 # import k_nearest_neighbors as knn
 
 # Ensure output directory exists
@@ -51,16 +52,13 @@ def dataset_breast_cancer():
     rf.dataset_breast_cancer_version_01( x, y, x_eval, ids_eval )
     rf.dataset_breast_cancer_version_02( x, y, x_eval, ids_eval )
 
-#TODO:
-#  if config.knn:
-#    knn.dataset_breast_cancer_version_01( x, y, x_eval, ids_eval )
-#    knn.dataset_breast_cancer_version_02( x, y, x_eval, ids_eval )
+
+  if config.knn:
+    knn.dataset_breast_cancer_version_01( x, y, x_eval, ids_eval )
+    knn.dataset_breast_cancer_version_02( x, y, x_eval, ids_eval )
+    knn.dataset_breast_cancer_version_03( x, y, x_eval, ids_eval )
 
     
-
-def dataset_loan():
-  #TODO:
-  pass
 
 
 def dataset_dota():
