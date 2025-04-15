@@ -1,12 +1,18 @@
 import sklearn.metrics as metrics
 import pandas as pd
 
-def report(y_test, y_pred):
+def report(y_test, y_pred, multiclass= False):
   # Report some metrics on the model's quality
   print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
-  print("Precision:", metrics.precision_score(y_test, y_pred))
-  print("Recall:", metrics.recall_score(y_test, y_pred))
-  print("F1 Score:", metrics.f1_score(y_test, y_pred))
+  # Depending if the class is binary or multiclass
+  if multiclass:
+    print("F1 Score:", metrics.f1_score(y_test, y_pred, average='weighted'))
+    print("Precision:", metrics.precision_score(y_test, y_pred, average='weighted'))
+    print("Recall:", metrics.recall_score(y_test, y_pred, average='weighted'))
+  else:
+    print("Precision:", metrics.precision_score(y_test, y_pred))
+    print("Recall:", metrics.recall_score(y_test, y_pred))
+    print("F1 Score:", metrics.f1_score(y_test, y_pred))
 
   # Full report
   print("\nClassification Report:\n", metrics.classification_report(y_test, y_pred))
