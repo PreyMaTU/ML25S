@@ -1,4 +1,5 @@
 
+from dataset_constants import dataset_loan_numeric_distributed_columns, dataset_loan_numeric_ordinal_columns
 from reporting import report, compare_labels
 from sklearn.model_selection import train_test_split
 
@@ -124,84 +125,8 @@ def encode_dataset_loan( x: pd.DataFrame, y: pd.Series ):
   return x, y
 
 def prepare_numeric_dataset_loan( x_train, x_test, y_train, y_test ):
-  numeric_robust_scaled_columns= [
-    'loan_amnt',
-    'funded_amnt',
-    'funded_amnt_inv',
-    'int_rate',
-    'installment',
-    'annual_inc',
-    'dti',
-    'delinq_2yrs',
-    'fico_range_low',
-    'fico_range_high',
-    'inq_last_6mths',
-    'open_acc',
-    'pub_rec',
-    'revol_bal',
-    'revol_util',
-    'total_acc',
-    'out_prncp',
-    'out_prncp_inv',
-    'total_pymnt',
-    'total_pymnt_inv',
-    'total_rec_prncp',
-    'total_rec_int',
-    'total_rec_late_fee',
-    'recoveries',
-    'collection_recovery_fee',
-    'last_pymnt_amnt',
-    'last_fico_range_high',
-    'last_fico_range_low',
-    'collections_12_mths_ex_med',
-    'policy_code',
-    'acc_now_delinq',
-    'tot_coll_amt',
-    'tot_cur_bal',
-    'total_rev_hi_lim',
-    'acc_open_past_24mths',
-    'avg_cur_bal',
-    'bc_open_to_buy',
-    'bc_util',
-    'chargeoff_within_12_mths',
-    'delinq_amnt',
-    'mo_sin_old_il_acct',
-    'mo_sin_old_rev_tl_op',
-    'mo_sin_rcnt_rev_tl_op',
-    'mo_sin_rcnt_tl',
-    'mort_acc',
-    'mths_since_recent_bc',
-    'mths_since_recent_inq',
-    'num_accts_ever_120_pd',
-    'num_actv_bc_tl',
-    'num_actv_rev_tl',
-    'num_bc_sats',
-    'num_bc_tl',
-    'num_il_tl',
-    'num_op_rev_tl',
-    'num_rev_accts',
-    'num_rev_tl_bal_gt_0',
-    'num_sats',
-    'num_tl_120dpd_2m',
-    'num_tl_30dpd',
-    'num_tl_90g_dpd_24m',
-    'num_tl_op_past_12m',
-    'pct_tl_nvr_dlq',
-    'percent_bc_gt_75',
-    'pub_rec_bankruptcies',
-    'tax_liens',
-    'tot_hi_cred_lim',
-    'total_bal_ex_mort',
-    'total_bc_limit',
-    'total_il_high_credit_limit'
-  ]
-  numeric_minmax_scaled_columns= [
-    'issue_d',
-    'earliest_cr_line',
-    'last_pymnt_d',
-    'last_credit_pull_d',
-    'emp_length'
-  ]
+  numeric_robust_scaled_columns= dataset_loan_numeric_distributed_columns()
+  numeric_minmax_scaled_columns= dataset_loan_numeric_ordinal_columns()
 
 
   # Robust Scaling to handle outliers.
