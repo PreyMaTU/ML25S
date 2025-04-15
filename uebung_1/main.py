@@ -54,11 +54,39 @@ def dataset_breast_cancer():
 
 
   if config.knn:
-    knn.dataset_breast_cancer_version_01( x, y, x_eval, ids_eval )
-    knn.dataset_breast_cancer_version_02( x, y, x_eval, ids_eval )
-    knn.dataset_breast_cancer_version_03( x, y, x_eval, ids_eval )
-
+    knn.dataset_breast_cancer_k1( x, y, x_eval, ids_eval )
+    knn.dataset_breast_cancer_k1_scaled(x, y, x_eval, ids_eval)
+    knn.dataset_breast_cancer_k5_distance(x, y, x_eval, ids_eval)
+    knn.dataset_breast_cancer_k5_distance_scaled(x, y, x_eval, ids_eval)
     
+
+
+def dataset_loan():
+  # Load the data frames from the zip file
+  data_df, eval_df= load_csv_from_zip('184-702-tu-ml-2025-s-loan.zip', [
+    'loan-10k.lrn.csv',
+    'loan-10k.tes.csv'
+  ])
+
+  # Remove non-feature columns and split columns into inputs and output
+  x = data_df.drop(columns=['grade', 'ID'])  
+  y = data_df['grade']
+
+  x_eval = eval_df.drop(columns=['ID'])
+  ids_eval= eval_df['ID']
+
+#  if config.neural_networks:
+#    nn.dataset_loan_version_01( x, y, x_eval, ids_eval )
+#    nn.dataset_loan_version_02( x, y, x_eval, ids_eval )
+  
+#  if config.random_forests:
+#    rf.dataset_loan_version_01( x, y, x_eval, ids_eval )
+#    rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
+
+  if config.knn:
+    knn.dataset_loan_version_01( x, y, x_eval, ids_eval )
+    knn.dataset_loan_version_02( x, y, x_eval, ids_eval )
+    knn.dataset_loan_version_03( x, y, x_eval, ids_eval )
 
 
 def dataset_dota():
