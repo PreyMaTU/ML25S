@@ -121,8 +121,13 @@ def dataset_loan():
 
 
 def dataset_dota():
-  #TODO:
-  pass
+  # Load the data frames from the zip file
+  train_df, test_df= load_csv_from_zip('dota2+games+results.zip', [
+    'dota2Train.csv',
+    'dota2Test.csv'
+  ], False)
+
+  print(train_df.keys)
 
 
 def dataset_heart_disease():
