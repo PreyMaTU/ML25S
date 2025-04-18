@@ -7,15 +7,15 @@ def report(y_test, y_pred, multiclass= False):
   # Depending if the class is binary or multiclass
   if multiclass:
     print("F1 Score:", metrics.f1_score(y_test, y_pred, average='weighted'))
-    print("Precision:", metrics.precision_score(y_test, y_pred, average='weighted'))
+    print("Precision:", metrics.precision_score(y_test, y_pred, average='weighted', zero_division=1.0))
     print("Recall:", metrics.recall_score(y_test, y_pred, average='weighted'))
   else:
-    print("Precision:", metrics.precision_score(y_test, y_pred))
+    print("Precision:", metrics.precision_score(y_test, y_pred, zero_division=1.0))
     print("Recall:", metrics.recall_score(y_test, y_pred))
     print("F1 Score:", metrics.f1_score(y_test, y_pred))
 
   # Full report
-  print("\nClassification Report:\n", metrics.classification_report(y_test, y_pred))
+  print("\nClassification Report:\n", metrics.classification_report(y_test, y_pred, zero_division=1.0))
 
 def compare_labels(x_test, y_test, y_pred):
   results_df = x_test.copy()

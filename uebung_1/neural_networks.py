@@ -9,15 +9,15 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.utils import set_random_seed
 
 import pandas as pd
+import numpy as np
 
 
 
 
-def eval_prediction( x_test, y_test, y_pred ):
-  y_pred= y_pred.round().astype(int)
+def eval_prediction( x_test, y_test, y_pred, multiclass= False ):
 
   # Report some metrics on the model's quality
-  report(y_test, y_pred)
+  report(y_test, y_pred, multiclass)
 
   compare_labels(x_test, y_test, y_pred)
 
@@ -45,18 +45,21 @@ def dataset_breast_cancer_version_01( x ,y, x_eval, ids_eval ):
       #Dense(64, activation='relu'),
       #Dense(16, activation='relu'),
       #Dense(16, activation='relu'),
-      Dense(1, activation='sigmoid')  # binary classification
+      #Dense(1, activation='sigmoid')  # binary classification
+      Dense(2, activation='softmax')  # 2 classes
+
   ])
 
-  model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+  model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
   # Train
   model.fit(x_train_scaled, y_train, validation_data=(x_test_scaled, y_test), epochs=20, batch_size=32)
 
   # Put the test data into the model to see how well it works
   y_pred = model.predict(x_test_scaled)
-
-  eval_prediction( x_test, y_test, y_pred )
+  pred_classes = np.argmax(y_pred, axis=1)
+  
+  eval_prediction( x_test, y_test, pred_classes )
 
 
 def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
@@ -69,8 +72,6 @@ def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
 def encode_dataset_loan( x: pd.DataFrame, y: pd.Series ):
   y= y.to_frame(name='label')
   y['ord']= pd.Categorical( y.label ).codes
-
-  print( y )
 
   x= x.copy()
   
@@ -143,9 +144,9 @@ def prepare_numeric_dataset_loan( x_train, x_test, y_train, y_test ):
   x_test[numeric_minmax_scaled_columns] = minmax_scaler.transform(x_test[numeric_minmax_scaled_columns])
 
 
-  grade_scaler= MinMaxScaler()
-  y_train.ord= grade_scaler.fit_transform(y_train.ord)
-  y_test.ord= grade_scaler.transform(y_test.ord)
+  # grade_scaler= MinMaxScaler()
+  # y_train.ord= grade_scaler.fit_transform(y_train.ord)
+  # y_test.ord= grade_scaler.transform(y_test.ord)
 
   return x_train, x_test, y_train, y_test
 
@@ -154,33 +155,32 @@ def dataset_loan_version_01( x, y, x_eval, ids_eval ):
 
   x, y= encode_dataset_loan( x, y )
 
+  y = y.drop(['label'], axis=1)
+
   # Train-test split
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
 
   # Scale + Outlier
-  x_train, x_test, y_train, y_test = prepare_numeric_dataset_loan(x_train, x_test)
+  x_train, x_test, y_train, y_test = prepare_numeric_dataset_loan(x_train, x_test, y_train, y_test)
 
 
-  # TODO: Make model!
-
-#  # Build model
-#  model = Sequential([
-#      Dense(12, activation='relu', input_shape=(x_train_scaled.shape[1],)),
-#      #Dense(64, activation='relu'),
-#      #Dense(16, activation='relu'),
-#      #Dense(16, activation='relu'),
-#      Dense(1, activation='sigmoid')  # binary classification
-#  ])
-#
-#  model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-#
-#  # Train
-#  model.fit(x_train_scaled, y_train, validation_data=(x_test_scaled, y_test), epochs=20, batch_size=32)
-#
-#  # Put the test data into the model to see how well it works
-#  y_pred = model.predict(x_test_scaled)
-#
-#  eval_prediction( x_test, y_test, y_pred )
+  # Build model
+  model = Sequential([
+      Dense(128, activation='relu', input_shape=(x_train.shape[1],)),
+      Dense(64, activation='relu'),
+      Dense(32, activation='relu'),
+      Dense(7, activation='softmax')  # 7 classes
+  ])
+  model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+  # Train
+  model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=20, batch_size=32)
+  # Put the test data into the model to see how well it works
+  y_pred = model.predict(x_test)
+  pred_classes = np.argmax(y_pred, axis=1)
+  
+  print(pred_classes)
+  #labels = label_encoder.inverse_transform(pred_classes)
+  eval_prediction( x_test, y_test, pred_classes, True )
   
 
 
