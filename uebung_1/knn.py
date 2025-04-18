@@ -270,8 +270,16 @@ def dataset_loan_k5_distance_scaled( x, y):
 ############################################################################################
 # Dataset Heart Disease:
 
+def encode_dataset_heart_disease ( x ):
+
+  x = pd.get_dummies(x, columns=['cp', 'restecg', 'slope', 'thal'])
+
+  return x
+
+
 def dataset_heart_disease_k1( x, y ):
 
+  x = encode_dataset_heart_disease(x)
   # Create training/test split
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
@@ -287,6 +295,7 @@ def dataset_heart_disease_k1( x, y ):
 
 def dataset_heart_disease_k1_scaled( x, y):
 
+  x = encode_dataset_heart_disease(x)
   # Create training/test split
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
@@ -305,6 +314,7 @@ def dataset_heart_disease_k1_scaled( x, y):
   # TODO x_eval
 
 def dataset_heart_disease_k5_distance( x, y ):
+  x = encode_dataset_heart_disease(x)
   # Create training/test split
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
@@ -319,6 +329,7 @@ def dataset_heart_disease_k5_distance( x, y ):
 
 
 def dataset_heart_disease_k5_distance_scaled( x, y ):
+  x = encode_dataset_heart_disease(x)
   # Create training/test split
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
