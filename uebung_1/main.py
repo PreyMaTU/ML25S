@@ -113,10 +113,10 @@ def dataset_loan():
 #    rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
 
   if config.knn:
-    knn.dataset_loan_k1(x, y, x, ids_eval)
-    knn.dataset_loan_k1_scaled(x, y, x, ids_eval)
-    knn.dataset_loan_k5_distance(x, y, x, ids_eval)
-    knn.dataset_loan_k5_distance_scaled(x, y, x, ids_eval)
+    knn.dataset_loan_k1(x, y)
+    knn.dataset_loan_k1_scaled(x, y)
+    knn.dataset_loan_k5_distance(x, y)
+    knn.dataset_loan_k5_distance_scaled(x, y)
     
 
 
@@ -134,12 +134,22 @@ def dataset_dota():
   x_test = test_df.drop(columns=[0]) 
   y_test = test_df[0]
 
-  print(x_train)
+  #print(x_train)
 
 
 def dataset_heart_disease():
-  #TODO:
-  pass
+  # Load Cleevland data (acording to ics archive the only really used database from the dataset)
+  [data_df] = load_csv_from_zip('heart-disease-kaggle.zip', ['heart.csv'])
+  
+  # Remove non-feature columns and split columns into inputs and output
+  x = data_df.drop('target', axis= 1)  
+  y = data_df['target']
+
+  if config.knn:
+    knn.dataset_heart_disease_k1(x, y)
+    knn.dataset_heart_disease_k1_scaled(x, y)
+    knn.dataset_heart_disease_k5_distance(x, y)
+    knn.dataset_heart_disease_k5_distance_scaled(x, y)
 
 
 def main():
