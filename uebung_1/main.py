@@ -1,6 +1,8 @@
 from argparse import ArgumentParser
 from pathlib import Path
+import numpy as np
 import pandas as pd
+from ucimlrepo import fetch_ucirepo 
 
 from data_loader import load_csv_from_zip
 from reporting import count_missing_values
@@ -113,10 +115,10 @@ def dataset_loan():
 #    rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
 
   if config.knn:
-    knn.dataset_loan_k1(x, y)
     knn.dataset_loan_k1_scaled(x, y)
-    knn.dataset_loan_k5_distance(x, y)
-    knn.dataset_loan_k5_distance_scaled(x, y)
+    knn.dataset_loan_k5_distance_scaled_euclidean(x, y)
+    knn.dataset_loan_k5_distance_scaled_manhattan(x, y)
+    knn.dataset_loan_k5_distance_scaled_manhattan_one_feature(x, y)
     
 
 
@@ -138,18 +140,23 @@ def dataset_dota():
 
 
 def dataset_heart_disease():
-  # Load Cleevland data (acording to ics archive the only really used database from the dataset)
-  [data_df] = load_csv_from_zip('heart-disease-kaggle.zip', ['heart.csv'])
-  
-  # Remove non-feature columns and split columns into inputs and output
-  x = data_df.drop('target', axis= 1)  
-  y = data_df['target']
+  # fetch dataset 
+  heart_disease = fetch_ucirepo(id=45) 
+    
+  x = heart_disease.data.features 
+  # Target has 5 classes: 0-4
+  y = heart_disease.data.targets 
+
+  # Check the distriubution of the target labels in the dataset
+  #print(np.bincount(y.to_numpy()[:,0]))
+
+  # TODO handling missing values needs to be done for each classifier
+
 
   if config.knn:
-    knn.dataset_heart_disease_k1(x, y)
     knn.dataset_heart_disease_k1_scaled(x, y)
-    knn.dataset_heart_disease_k5_distance(x, y)
-    knn.dataset_heart_disease_k5_distance_scaled(x, y)
+    knn.dataset_heart_disease_k5_minmax_scaled(x, y)
+    knn.dataset_heart_disease_k5_standard_scaled(x, y)
 
 
 def main():
