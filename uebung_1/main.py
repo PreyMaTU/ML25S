@@ -6,15 +6,17 @@ from ucimlrepo import fetch_ucirepo
 
 from data_loader import load_csv_from_zip
 from reporting import count_missing_values
-import neural_networks as nn
-import random_forest as rf
-import knn
+
 # import k_nearest_neighbors as knn
 
 # Ensure output directory exists
 Path("./out").mkdir(parents=True, exist_ok=True)
 
 config= None
+
+rf= None
+nn= None
+knn= None
 
 def parse_arguments():
   parser= ArgumentParser()
@@ -31,8 +33,6 @@ def parse_arguments():
 
 
 def dataset_breast_cancer():
-  # No missing Values
-
   # Load the data frames from the zip file
   data_df, eval_df= load_csv_from_zip('184-702-tu-ml-2025-s-breast-cancer-diagnostic.zip', [
     'breast-cancer-diagnostic.shuf.lrn.csv',
@@ -160,9 +160,21 @@ def dataset_heart_disease():
 
 
 def main():
-  global config
+  global config, rf, nn, knn
 
   config= parse_arguments()
+
+  if config.neural_networks:
+    import neural_networks as neural_networks_module
+    nn= neural_networks_module
+  
+  if config.random_forests:
+    import random_forest as random_forest_module
+    rf= random_forest_module
+
+  if config.knn:
+    import knn as knn_module
+    knn= knn_module
 
   if config.breast_cancer:
     dataset_breast_cancer()
