@@ -1,5 +1,6 @@
 
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
+from dataset_heart_disease import encode_dataset_heart_disease, prepare_numeric_dataset_heart_disease
 from reporting import eval_prediction, print_classifier_header
 from sklearn.model_selection import train_test_split
 
@@ -103,4 +104,35 @@ def dataset_loan_version_01( x, y, x_eval, ids_eval ):
 
 ############################################################################################
 # Dataset Heart Disease:
-#TODO:
+
+def dataset_heart_disease_version_01( x, y ):
+  print_classifier_header()
+  set_random_seed(42)
+
+  x, y= encode_dataset_heart_disease( x, y )
+
+  # Train-test split
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
+
+  # Scale + Outlier
+  x_train, x_test = prepare_numeric_dataset_heart_disease(x_train, x_test)
+
+  # Build model
+  model = Sequential([
+      Dense(128, activation='relu', input_shape=(x_train.shape[1],)),
+      Dense(64, activation='relu'),
+      Dense(32, activation='relu'),
+      Dense(5, activation='softmax')  # 5 classes (0-4)
+  ])
+  model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+  
+  # Train
+  model.fit(x_train, y_train, validation_data=(x_test, y_test), epochs=20, batch_size=32)
+  
+  # Put the test data into the model to see how well it works
+  y_pred = model.predict(x_test)
+  pred_classes = np.argmax(y_pred, axis=1)
+  
+  #labels = label_encoder.inverse_transform(pred_classes)
+  eval_prediction( x_test, y_test, pred_classes, True )
+  

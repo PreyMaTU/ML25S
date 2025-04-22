@@ -1,11 +1,12 @@
 from reporting import eval_prediction, print_classifier_header
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
-from dataset_heart_disease import encode_dataset_heart_disease
 from sklearn.model_selection import train_test_split
+from dataset_heart_disease import encode_dataset_heart_disease, prepare_numeric_dataset_heart_disease
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
+from sklearn.preprocessing import RobustScaler, MinMaxScaler
 from sklearn.feature_selection import SelectKBest, f_classif
+import numpy as np
 import pandas as pd
 
 
@@ -211,7 +212,7 @@ def dataset_loan_k5_distance_scaled_manhattan_one_feature( x, y):
 # Dataset Heart Disease:
 
 
-def dataset_heart_disease_k1_scaled( x, y):
+def dataset_heart_disease_k1_scaled( x, y ):
   print_classifier_header()
 
   x, y = encode_dataset_heart_disease(x, y)
@@ -220,15 +221,7 @@ def dataset_heart_disease_k1_scaled( x, y):
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
-  # Handle missing Values
-  imputer = SimpleImputer(strategy='most_frequent')  # or 'median', 'most_frequent'
-  x_train = imputer.fit_transform(x_train)
-  x_test = imputer.transform(x_test)
-
-  # Scale/Normalize
-  scaler = MinMaxScaler()
-  x_train_scaled = scaler.fit_transform(x_train)
-  x_test_scaled = scaler.transform(x_test)
+  x_train_scaled, x_test_scaled= prepare_numeric_dataset_heart_disease(x_train, x_test)
 
   neigh = KNeighborsClassifier(n_neighbors=1, metric='manhattan', weights='distance')
   neigh.fit(x_train_scaled,y_train)
@@ -239,7 +232,7 @@ def dataset_heart_disease_k1_scaled( x, y):
   # TODO x_eval
 
 
-def dataset_heart_disease_k5_minmax_scaled( x, y ):
+def dataset_heart_disease_k5_scaled( x, y ):
   print_classifier_header()
 
   x, y = encode_dataset_heart_disease(x, y)
@@ -247,15 +240,7 @@ def dataset_heart_disease_k5_minmax_scaled( x, y ):
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
-  # Handle missing Values
-  imputer = SimpleImputer(strategy='most_frequent')  
-  x_train = imputer.fit_transform(x_train)
-  x_test = imputer.transform(x_test)
-
-  # Scale/Normalize
-  scaler = MinMaxScaler()
-  x_train_scaled = scaler.fit_transform(x_train)
-  x_test_scaled = scaler.transform(x_test)
+  x_train_scaled, x_test_scaled= prepare_numeric_dataset_heart_disease(x_train, x_test)
 
   neigh = KNeighborsClassifier(n_neighbors=5, weights='distance', metric='manhattan')
   neigh.fit(x_train_scaled,y_train)
@@ -265,29 +250,20 @@ def dataset_heart_disease_k5_minmax_scaled( x, y ):
 
   # TODO x_eval
 
-
-def dataset_heart_disease_k5_standard_scaled( x, y ):
+def dataset_heart_disease_scaled_crossval( x, y ):
   print_classifier_header()
 
   x, y = encode_dataset_heart_disease(x, y)
-  # Create training/test split
-  # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
-  # Handle missing Values
-  imputer = SimpleImputer(strategy='most_frequent')  # or 'median', 'most_frequent'
-  x_train = imputer.fit_transform(x_train)
-  x_test = imputer.transform(x_test)
+  x_scaled, _= prepare_numeric_dataset_heart_disease(x, x)
 
-  # Scale/Normalize
-  scaler = StandardScaler()
-  x_train_scaled = scaler.fit_transform(x_train)
-  x_test_scaled = scaler.transform(x_test)
+  scores = []
+  for i in range(1,16):
+    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+    #train model with cv of 5 
+    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    # append average accuracy for plotting
+    scores.append(np.mean(cv_scores))
 
-  neigh = KNeighborsClassifier(n_neighbors=5, weights='distance')
-  neigh.fit(x_train_scaled, y_train)
-  y_pred = neigh.predict(x_test_scaled)
 
-  eval_prediction(x_test, y_test, y_pred,True)
 
-  # TODO x_eval

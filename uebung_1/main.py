@@ -129,15 +129,20 @@ def dataset_heart_disease():
   y = heart_disease.data.targets 
 
   # Check the distriubution of the target labels in the dataset
+  # 164 55 36 35 13
   #print(np.bincount(y.to_numpy()[:,0]))
 
-  # TODO handling missing values needs to be done for each classifier
+  if config.neural_networks:
+    nn.dataset_heart_disease_version_01(x, y)
 
+  if config.random_forests:
+    rf.dataset_heart_disease_version_01(x, y)
 
   if config.knn:
+    y = np.ravel(y)
     knn.dataset_heart_disease_k1_scaled(x, y)
-    knn.dataset_heart_disease_k5_minmax_scaled(x, y)
-    knn.dataset_heart_disease_k5_standard_scaled(x, y)
+    knn.dataset_heart_disease_k5_scaled(x, y)
+    knn.dataset_heart_disease_scaled_crossval(x, y)
 
 
 def main():
