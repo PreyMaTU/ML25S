@@ -94,8 +94,8 @@ def dataset_loan():
     nn.dataset_loan_version_01( x, y, x_eval, ids_eval )
   
   if config.random_forests:
-   rf.dataset_loan_version_01( x, y, x_eval, ids_eval )
-   # rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
+    rf.dataset_loan_version_01( x, y, x_eval, ids_eval )
+    # rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
 
   if config.knn:
     knn.dataset_loan_k1_scaled(x, y)
