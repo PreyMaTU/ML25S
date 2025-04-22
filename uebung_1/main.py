@@ -29,7 +29,17 @@ def parse_arguments():
   parser.add_argument('-r', '--random_forests', action= 'store_true')
   parser.add_argument('-k', '--knn', action= 'store_true')
 
-  return parser.parse_args()
+  args= parser.parse_args()
+
+  if not args.knn and not args.random_forests and not args.neural_networks:
+    parser.print_help()
+    exit(1)
+
+  if not args.breast_cancer and not args.loan and not args.dota and not args.heart_disease:
+    parser.print_help()
+    exit(1)
+
+  return args
 
 
 def dataset_breast_cancer():
