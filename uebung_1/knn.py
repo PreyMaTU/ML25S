@@ -1,3 +1,5 @@
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
 from reporting import eval_prediction, classifier_header
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
 from dataset_heart_disease import encode_dataset_heart_disease, prepare_numeric_dataset_heart_disease
@@ -103,22 +105,24 @@ def dataset_breast_cancer_k5_distance_scaled( x, y, x_eval, ids_eval ):
 def dataset_breast_cancer_k5_scaled_crossval( x, y ):
   header()
   
-  scaler = RobustScaler()
-  x_scaled = scaler.fit_transform(x)
-  
   scores = []
-  for i in range(1,16):
-    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+  for i in range(1,25):
+    pipe = Pipeline([
+    ('scaler', MinMaxScaler()),  
+    ('selector', SelectKBest(score_func=f_classif, k=15)),
+    ('knn', KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan'))
+    ])
     #train model with cv of 5 
-    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    cv_scores = cross_val_score(pipe, x, y, cv=5, scoring='accuracy')
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
 
-  plt.plot(range(1,16), scores)
-  plt.title("Accuracy of various k for Breast cancer dataset")
+  plt.plot(range(1,25), scores)
+  plt.title("Accuracy of various k for breast cancer dataset")
   plt.xlabel("k")
   plt.ylabel("Accuracy")
   plt.savefig("./out/knn_breast_cancer_crossvalidation")
+  plt.clf()
 
 
 ############################################################################################
@@ -127,7 +131,6 @@ def dataset_breast_cancer_k5_scaled_crossval( x, y ):
 
 def select_k_best(x_train, x_test, y_train, k):
   # Select top k features
-  # k=1 is really good, but might be super overfitting
   selector = SelectKBest(score_func=f_classif, k=k)
 
   x_train_selected= selector.fit_transform(x_train, y_train)
@@ -208,27 +211,27 @@ def dataset_loan_k5_distance_scaled_manhattan( x, y):
 
 def dataset_loan_k5_distance_scaled_manhattan_crossval( x, y ):
   header()
-
+  
   x, y = encode_dataset_loan(x,y)
-
-  # ugly workaround, still use whole x for 'x_train'
-  x_scaled, x_dummy = prepare_numeric_dataset_loan(x, x)
-  # select only k "best" features
-  x_scaled, _ = select_k_best(x_scaled, x_dummy, y, 15)
-
+  
   scores = []
-  for i in range(1,16):
-    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+  for i in range(1,25):
+    pipe = Pipeline([
+    ('scaler', MinMaxScaler()),  
+    ('selector', SelectKBest(score_func=f_classif, k=15)),
+    ('knn', KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan'))
+  ] )
     #train model with cv of 5 
-    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    cv_scores = cross_val_score(pipe, x, y, cv=5, scoring='accuracy')
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
 
-  plt.plot(range(1,16), scores)
-  plt.title("Accuracy of various k for Loan dataset")
+  plt.plot(range(1,25), scores)
+  plt.title("Accuracy of various k for loan dataset")
   plt.xlabel("k")
   plt.ylabel("Accuracy")
   plt.savefig("./out/knn_loan_15_features_crossvalidation")
+  plt.clf()
 
   
 
@@ -258,25 +261,25 @@ def dataset_loan_k5_distance_scaled_manhattan_one_feature_crossval( x, y ):
   header()
   
   x, y = encode_dataset_loan(x,y)
-
-  # ugly workaround, still use whole x for 'x_train'
-  x_scaled, x_dummy = prepare_numeric_dataset_loan(x, x)
-  # select only k "best" features
-  x_scaled, _ = select_k_best(x_scaled, x_dummy, y, k=1)
-
+  
   scores = []
-  for i in range(1,16):
-    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+  for i in range(1,25):
+    pipe = Pipeline([
+    ('scaler', MinMaxScaler()),  
+    ('selector', SelectKBest(score_func=f_classif, k=1)),
+    ('knn', KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan'))
+  ] )
     #train model with cv of 5 
-    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    cv_scores = cross_val_score(pipe, x, y, cv=5, scoring='accuracy')
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
 
-  plt.plot(range(1,16), scores)
-  plt.title("Accuracy of various k for Loan dataset (one feature)")
+  plt.plot(range(1,25), scores)
+  plt.title("Accuracy of various k for loan dataset (one feature)")
   plt.xlabel("k")
   plt.ylabel("Accuracy")
   plt.savefig("./out/knn_loan_one_feature_crossvalidation")
+  plt.clf()
 
 ############################################################################################
 # Dataset Dota:
@@ -330,7 +333,7 @@ def dataset_heart_disease_k5_scaled( x, y ):
 
   x_train_scaled, x_test_scaled= prepare_numeric_dataset_heart_disease(x_train, x_test)
 
-  neigh = KNeighborsClassifier(n_neighbors=5, weights='distance', metric='manhattan')
+  neigh = KNeighborsClassifier(n_neighbors=10, weights='distance', metric='manhattan')
   neigh.fit(x_train_scaled,y_train)
   y_pred = neigh.predict(x_test_scaled)
 
@@ -343,21 +346,25 @@ def dataset_heart_disease_scaled_crossval( x, y ):
 
   x, y = encode_dataset_heart_disease(x, y)
 
-  x_scaled, _= prepare_numeric_dataset_heart_disease(x, x)
-
   scores = []
-  for i in range(1,16):
-    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+  for i in range(1,25):
+    pipe = Pipeline([
+    ('imputer', SimpleImputer()),
+    ('scaler', MinMaxScaler()),  
+    ('selector', SelectKBest(score_func=f_classif, k=15)),
+    ('knn', KNeighborsClassifier(n_neighbors=i, weights='distance'))
+  ] )
     #train model with cv of 5 
-    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    cv_scores = cross_val_score(pipe, x, y, cv=5, scoring='accuracy')
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
 
-  plt.plot(range(1,16), scores)
+  plt.plot(range(1,25), scores)
   plt.title("Accuracy of various k for Heart Disease dataset")
   plt.xlabel("k")
   plt.ylabel("Accuracy")
   plt.savefig("./out/knn_heart_disease_crossvalidation")
+  plt.show()
   
 
   

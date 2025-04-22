@@ -96,7 +96,7 @@ def dataset_loan():
   
   if config.random_forests:
     rf.dataset_loan_version_01( x, y, x_eval, ids_eval )
-    # rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
+    rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
 
   if config.knn:
     knn.dataset_loan_k1_scaled(x, y)
@@ -142,6 +142,7 @@ def dataset_dota():
 def dataset_heart_disease():
   # fetch dataset 
   heart_disease = fetch_ucirepo(id=45) 
+
     
   x = heart_disease.data.features 
   # Target has 5 classes: 0-4
@@ -155,6 +156,7 @@ def dataset_heart_disease():
     nn.dataset_heart_disease_version_01(x, y)
 
   if config.random_forests:
+    y = np.ravel(y)
     rf.dataset_heart_disease_version_01(x, y)
 
   if config.knn:
