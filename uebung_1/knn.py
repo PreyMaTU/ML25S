@@ -98,6 +98,20 @@ def dataset_breast_cancer_k5_distance_scaled( x, y, x_eval, ids_eval ):
   # TODO x_eval
 
 
+def dataset_breast_cancer_k5_scaled_crossval( x, y ):
+  print_classifier_header()
+  
+  scaler = RobustScaler()
+  x_scaled = scaler.fit_transform(x)
+  
+  scores = []
+  for i in range(1,16):
+    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+    #train model with cv of 5 
+    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    # append average accuracy for plotting
+    scores.append(np.mean(cv_scores))
+
 ############################################################################################
 # Dataset Loan:
 
@@ -183,6 +197,24 @@ def dataset_loan_k5_distance_scaled_manhattan( x, y):
   eval_prediction(x_test, y_test, y_pred,multiclass= True)
   # TODO x_eval
 
+def dataset_loan_k5_distance_scaled_manhattan_crossval( x, y ):
+  print_classifier_header()
+
+  x, y = encode_dataset_loan(x,y)
+
+  # ugly workaround, still use whole x for 'x_train'
+  x_scaled, x_dummy = prepare_numeric_dataset_loan(x, x)
+  # select only k "best" features
+  x_scaled, _ = select_k_best(x_scaled, x_dummy, y, 15)
+
+  scores = []
+  for i in range(1,16):
+    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+    #train model with cv of 5 
+    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    # append average accuracy for plotting
+    scores.append(np.mean(cv_scores))
+
 def dataset_loan_k5_distance_scaled_manhattan_one_feature( x, y):
   print_classifier_header()
 
@@ -203,6 +235,25 @@ def dataset_loan_k5_distance_scaled_manhattan_one_feature( x, y):
 
   eval_prediction(x_test, y_test, y_pred,multiclass= True)
   # TODO x_eval
+
+
+def dataset_loan_k5_distance_scaled_manhattan_one_feature_crossval( x, y ):
+  print_classifier_header()
+  
+  x, y = encode_dataset_loan(x,y)
+
+  # ugly workaround, still use whole x for 'x_train'
+  x_scaled, x_dummy = prepare_numeric_dataset_loan(x, x)
+  # select only k "best" features
+  x_scaled, _ = select_k_best(x_scaled, x_dummy, y, k=1)
+
+  scores = []
+  for i in range(1,16):
+    neigh = KNeighborsClassifier(n_neighbors=i, weights='distance', metric='manhattan')
+    #train model with cv of 5 
+    cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
+    # append average accuracy for plotting
+    scores.append(np.mean(cv_scores))
 
 ############################################################################################
 # Dataset Dota:

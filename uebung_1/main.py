@@ -73,6 +73,7 @@ def dataset_breast_cancer():
     knn.dataset_breast_cancer_k1_scaled(x, y, x_eval, ids_eval)
     knn.dataset_breast_cancer_k5_distance(x, y, x_eval, ids_eval)
     knn.dataset_breast_cancer_k5_distance_scaled(x, y, x_eval, ids_eval)
+    knn.dataset_breast_cancer_k5_scaled_crossval(x, y)
     
 
 
@@ -102,6 +103,9 @@ def dataset_loan():
     knn.dataset_loan_k5_distance_scaled_euclidean(x, y)
     knn.dataset_loan_k5_distance_scaled_manhattan(x, y)
     knn.dataset_loan_k5_distance_scaled_manhattan_one_feature(x, y)
+    knn.dataset_loan_k5_distance_scaled_manhattan_crossval(x, y)
+    knn.dataset_loan_k5_distance_scaled_manhattan_one_feature_crossval(x, y)
+    
     
 
 
