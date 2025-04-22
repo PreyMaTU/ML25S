@@ -1,4 +1,4 @@
-from reporting import eval_prediction
+from reporting import eval_prediction, print_classifier_header
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
 from dataset_heart_disease import encode_dataset_heart_disease
 from sklearn.model_selection import train_test_split
@@ -24,6 +24,7 @@ def export_kaggle_results(ids_eval, y_eval, dataset_name):
 # Dataset Breast Cancer:
 
 def dataset_breast_cancer_k1( x, y, x_eval, ids_eval ):
+  print_classifier_header()
 
   # Create training/test split
   # training in the sense that these are used for knn classification
@@ -39,6 +40,7 @@ def dataset_breast_cancer_k1( x, y, x_eval, ids_eval ):
 
 
 def dataset_breast_cancer_k1_scaled( x, y, x_eval, ids_eval ):
+  print_classifier_header()
 
   # Create training/test split
   # training in the sense that these are used for knn classification
@@ -59,6 +61,8 @@ def dataset_breast_cancer_k1_scaled( x, y, x_eval, ids_eval ):
 
 
 def dataset_breast_cancer_k5_distance( x, y, x_eval, ids_eval ):
+  print_classifier_header()
+
   # Create training/test split
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
@@ -73,6 +77,8 @@ def dataset_breast_cancer_k5_distance( x, y, x_eval, ids_eval ):
 
 
 def dataset_breast_cancer_k5_distance_scaled( x, y, x_eval, ids_eval ):
+  print_classifier_header()
+
   # Create training/test split
   # training in the sense that these are used for knn classification
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
@@ -111,6 +117,8 @@ def select_k_best(x_train, x_test, y_train, k):
 
 
 def dataset_loan_k1_scaled( x, y):
+  print_classifier_header()
+
   x, y = encode_dataset_loan(x,y)
 
   # Create training/test split
@@ -131,6 +139,8 @@ def dataset_loan_k1_scaled( x, y):
 
 
 def dataset_loan_k5_distance_scaled_euclidean( x, y ):
+  print_classifier_header()
+
   x, y = encode_dataset_loan(x,y)
 
   # Create training/test split
@@ -152,6 +162,8 @@ def dataset_loan_k5_distance_scaled_euclidean( x, y ):
 
 
 def dataset_loan_k5_distance_scaled_manhattan( x, y):
+  print_classifier_header()
+
   x, y = encode_dataset_loan(x,y)
 
   # Create training/test split
@@ -171,6 +183,8 @@ def dataset_loan_k5_distance_scaled_manhattan( x, y):
   # TODO x_eval
 
 def dataset_loan_k5_distance_scaled_manhattan_one_feature( x, y):
+  print_classifier_header()
+
   x, y = encode_dataset_loan(x,y)
 
   # Create training/test split
@@ -198,6 +212,7 @@ def dataset_loan_k5_distance_scaled_manhattan_one_feature( x, y):
 
 
 def dataset_heart_disease_k1_scaled( x, y):
+  print_classifier_header()
 
   x, y = encode_dataset_heart_disease(x, y)
 
@@ -225,6 +240,8 @@ def dataset_heart_disease_k1_scaled( x, y):
 
 
 def dataset_heart_disease_k5_minmax_scaled( x, y ):
+  print_classifier_header()
+
   x, y = encode_dataset_heart_disease(x, y)
   # Create training/test split
   # training in the sense that these are used for knn classification
@@ -250,6 +267,8 @@ def dataset_heart_disease_k5_minmax_scaled( x, y ):
 
 
 def dataset_heart_disease_k5_standard_scaled( x, y ):
+  print_classifier_header()
+
   x, y = encode_dataset_heart_disease(x, y)
   # Create training/test split
   # training in the sense that these are used for knn classification

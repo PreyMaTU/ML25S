@@ -1,4 +1,4 @@
-from reporting import eval_prediction
+from reporting import eval_prediction, print_classifier_header
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
@@ -19,6 +19,8 @@ def export_kaggle_results(ids_eval, y_eval):
 # Dataset Breast Cancer:
 
 def dataset_breast_cancer_version_01( x, y, x_eval, ids_eval ):
+  print_classifier_header()
+
   # Create training/test split
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
@@ -42,6 +44,8 @@ def dataset_breast_cancer_version_01( x, y, x_eval, ids_eval ):
 
 
 def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
+  print_classifier_header()
+
   pass
 
 ############################################################################################

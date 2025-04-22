@@ -1,6 +1,6 @@
 
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
-from reporting import eval_prediction
+from reporting import eval_prediction, print_classifier_header
 from sklearn.model_selection import train_test_split
 
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
@@ -16,6 +16,8 @@ import numpy as np
 # Dataset Breast Cancer:
 
 def dataset_breast_cancer_version_01( x ,y, x_eval, ids_eval ):
+  print_classifier_header()
+
   set_random_seed(42)
 
   # Convert types of columns to numerical values
@@ -53,6 +55,8 @@ def dataset_breast_cancer_version_01( x ,y, x_eval, ids_eval ):
 
 
 def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
+  print_classifier_header()
+  
   pass
 
 
@@ -60,6 +64,8 @@ def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
 # Dataset Loan:
 
 def dataset_loan_version_01( x, y, x_eval, ids_eval ):
+  print_classifier_header()
+
   set_random_seed(42)
 
   x, y= encode_dataset_loan( x, y )

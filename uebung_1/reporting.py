@@ -1,5 +1,6 @@
 import sklearn.metrics as metrics
 import pandas as pd
+import sys
 
 def eval_prediction( x_test, y_test, y_pred, multiclass= False ):
   # Report some metrics on the model's quality
@@ -37,3 +38,13 @@ def compare_labels(x_test, y_test, y_pred):
 def count_missing_values( df, name= 'dataset' ):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(f'Missing values in the {name}:\n', df.isnull().sum())
+
+def print_classifier_header():
+  function_name= '<Unknown Classifier>'
+  try:
+    function_name= sys._getframe(1).f_code.co_name
+  except e:
+    print('Could not lookup function name')
+
+  print('\n' + '='*(8+ len(function_name)) + '\n' )
+  print('    '+ function_name + '\n')
