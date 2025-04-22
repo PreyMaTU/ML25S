@@ -1,6 +1,12 @@
 import sklearn.metrics as metrics
 import pandas as pd
 
+def eval_prediction( x_test, y_test, y_pred, multiclass= False ):
+  # Report some metrics on the model's quality
+  report(y_test, y_pred, multiclass)
+  compare_labels(x_test, y_test, y_pred)
+
+
 def report(y_test, y_pred, multiclass= False):
   # Report some metrics on the model's quality
   print("Accuracy:", metrics.accuracy_score(y_test, y_pred))
@@ -18,7 +24,7 @@ def report(y_test, y_pred, multiclass= False):
   print("\nClassification Report:\n", metrics.classification_report(y_test, y_pred, zero_division=1.0))
 
 def compare_labels(x_test, y_test, y_pred):
-  results_df = x_test.copy()
+  results_df = pd.DataFrame( x_test.copy() )
   results_df['True_Label'] = y_test
 
   results_df.reset_index(drop=True, inplace=True)

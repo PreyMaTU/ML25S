@@ -1,6 +1,6 @@
 
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
-from reporting import report, compare_labels
+from reporting import eval_prediction
 from sklearn.model_selection import train_test_split
 
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
@@ -10,16 +10,6 @@ from tensorflow.keras.utils import set_random_seed
 
 import pandas as pd
 import numpy as np
-
-
-
-
-def eval_prediction( x_test, y_test, y_pred, multiclass= False ):
-
-  # Report some metrics on the model's quality
-  report(y_test, y_pred, multiclass)
-
-  compare_labels(x_test, y_test, y_pred)
 
 
 ############################################################################################

@@ -1,4 +1,4 @@
-from reporting import compare_labels, report
+from reporting import eval_prediction
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
 from dataset_heart_disease import encode_dataset_heart_disease
 from sklearn.model_selection import train_test_split
@@ -7,14 +7,6 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 from sklearn.feature_selection import SelectKBest, f_classif
 import pandas as pd
-
-
-def eval_prediction( x_test, y_test, y_pred, multiclass= False ):
-  # Report some metrics on the model's quality
-  report(y_test, y_pred,multiclass)
-
-  # Print the true and predicted labels
-  #compare_labels(x_test, y_test, y_pred)
 
 
 def export_kaggle_results(ids_eval, y_eval, dataset_name):

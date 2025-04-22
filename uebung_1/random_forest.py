@@ -1,15 +1,8 @@
-from reporting import compare_labels, report
+from reporting import eval_prediction
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 
-
-def eval_prediction( x_test, y_test, y_pred ):
-  # Report some metrics on the model's quality
-  report(y_test, y_pred)
-
-  # Print the true and predicted labels
-  compare_labels(x_test, y_test, y_pred)
 
 def export_kaggle_results(ids_eval, y_eval):
   eval_results_df= pd.DataFrame()
