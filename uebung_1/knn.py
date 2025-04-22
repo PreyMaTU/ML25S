@@ -1,11 +1,11 @@
 from reporting import eval_prediction, print_classifier_header
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
-from sklearn.model_selection import train_test_split
 from dataset_heart_disease import encode_dataset_heart_disease, prepare_numeric_dataset_heart_disease
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import RobustScaler, MinMaxScaler
 from sklearn.feature_selection import SelectKBest, f_classif
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -112,6 +112,13 @@ def dataset_breast_cancer_k5_scaled_crossval( x, y ):
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
 
+  plt.plot(range(1,16), scores)
+  plt.title("Accuracy of various k for Breast cancer dataset")
+  plt.xlabel("k")
+  plt.ylabel("Accuracy")
+  plt.savefig("./out/knn_breast_cancer_crossvalidation")
+
+
 ############################################################################################
 # Dataset Loan:
 
@@ -215,6 +222,14 @@ def dataset_loan_k5_distance_scaled_manhattan_crossval( x, y ):
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
 
+  plt.plot(range(1,16), scores)
+  plt.title("Accuracy of various k for Loan dataset")
+  plt.xlabel("k")
+  plt.ylabel("Accuracy")
+  plt.savefig("./out/knn_loan_15_features_crossvalidation")
+
+  
+
 def dataset_loan_k5_distance_scaled_manhattan_one_feature( x, y):
   print_classifier_header()
 
@@ -254,6 +269,12 @@ def dataset_loan_k5_distance_scaled_manhattan_one_feature_crossval( x, y ):
     cv_scores = cross_val_score(neigh, x_scaled, y, cv=5)
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
+
+  plt.plot(range(1,16), scores)
+  plt.title("Accuracy of various k for Loan dataset (one feature)")
+  plt.xlabel("k")
+  plt.ylabel("Accuracy")
+  plt.savefig("./out/knn_loan_one_feature_crossvalidation")
 
 ############################################################################################
 # Dataset Dota:
@@ -316,5 +337,15 @@ def dataset_heart_disease_scaled_crossval( x, y ):
     # append average accuracy for plotting
     scores.append(np.mean(cv_scores))
 
+  plt.plot(range(1,16), scores)
+  plt.title("Accuracy of various k for Heart Disease dataset")
+  plt.xlabel("k")
+  plt.ylabel("Accuracy")
+  plt.savefig("./out/knn_heart_disease_crossvalidation")
+  
+
+  
+
+  
 
 
