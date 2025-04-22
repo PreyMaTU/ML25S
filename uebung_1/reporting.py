@@ -39,12 +39,17 @@ def count_missing_values( df, name= 'dataset' ):
   with pd.option_context('display.max_rows', None, 'display.max_columns', None):
     print(f'Missing values in the {name}:\n', df.isnull().sum())
 
-def print_classifier_header():
+def print_classifier_header( classifier='?', stack_depth= 1):
   function_name= '<Unknown Classifier>'
   try:
-    function_name= sys._getframe(1).f_code.co_name
+    function_name= sys._getframe(stack_depth).f_code.co_name
   except e:
     print('Could not lookup function name')
 
-  print('\n' + '='*(8+ len(function_name)) + '\n' )
-  print('    '+ function_name + '\n')
+  title= f'({classifier}) {function_name}'
+
+  print('\n' + '='*(8+ len(title)) + '\n' )
+  print('    '+ title + '\n')
+
+def classifier_header( classifier ):
+  return lambda: print_classifier_header( classifier, stack_depth= 2)

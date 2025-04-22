@@ -1,4 +1,4 @@
-from reporting import eval_prediction, print_classifier_header
+from reporting import eval_prediction, classifier_header
 from dataset_loan import encode_dataset_loan
 from dataset_heart_disease import encode_dataset_heart_disease, prepare_numeric_dataset_heart_disease
 from dataset_dota import encode_dataset_dota
@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 
+header= classifier_header('RF')
 
 def export_kaggle_results(ids_eval, y_eval):
   eval_results_df= pd.DataFrame()
@@ -22,7 +23,7 @@ def export_kaggle_results(ids_eval, y_eval):
 # Dataset Breast Cancer:
 
 def dataset_breast_cancer_version_01( x, y, x_eval, ids_eval ):
-  print_classifier_header()
+  header()
 
   # Create training/test split
   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
@@ -47,7 +48,7 @@ def dataset_breast_cancer_version_01( x, y, x_eval, ids_eval ):
 
 
 def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
-  print_classifier_header()
+  header()
 
   pass
 
@@ -55,7 +56,7 @@ def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
 # Dataset Loan:
 
 def dataset_loan_version_01( x, y, x_eval, ids_eval ):
-  print_classifier_header()
+  header()
   
   x, y= encode_dataset_loan( x, y )
 
@@ -78,7 +79,7 @@ def dataset_loan_version_01( x, y, x_eval, ids_eval ):
 # Dataset Dota:
 
 def dataset_dota_version_01( x, y ):
-  print_classifier_header()
+  header()
   
   x, y= encode_dataset_dota( x, y )
 
@@ -101,7 +102,7 @@ def dataset_dota_version_01( x, y ):
 
 
 def dataset_heart_disease_version_01( x, y ):
-  print_classifier_header()
+  header()
   
   x, y= encode_dataset_heart_disease( x, y )
 
