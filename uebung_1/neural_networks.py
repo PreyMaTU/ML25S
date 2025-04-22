@@ -22,7 +22,7 @@ def dataset_breast_cancer_version_01( x ,y, x_eval, ids_eval ):
   y = y.astype(int)  # convert True/False to 1/0
 
   # Train-test split
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y,  random_state=42)
 
   # Scale/Normalize
   scaler = StandardScaler()
@@ -65,7 +65,7 @@ def dataset_loan_version_01( x, y, x_eval, ids_eval ):
   x, y= encode_dataset_loan( x, y )
 
   # Train-test split
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   # Scale + Outlier
   x_train, x_test = prepare_numeric_dataset_loan(x_train, x_test)

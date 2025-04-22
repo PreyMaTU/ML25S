@@ -27,7 +27,7 @@ def dataset_breast_cancer_k1( x, y, x_eval, ids_eval ):
 
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   neigh = KNeighborsClassifier(n_neighbors=1)
   neigh.fit(x_train,y_train)
@@ -42,7 +42,7 @@ def dataset_breast_cancer_k1_scaled( x, y, x_eval, ids_eval ):
 
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   # Scale/Normalize
   scaler = MinMaxScaler()
@@ -61,7 +61,7 @@ def dataset_breast_cancer_k1_scaled( x, y, x_eval, ids_eval ):
 def dataset_breast_cancer_k5_distance( x, y, x_eval, ids_eval ):
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   neigh = KNeighborsClassifier(n_neighbors=5, weights='distance')
   neigh.fit(x_train,y_train)
@@ -75,7 +75,7 @@ def dataset_breast_cancer_k5_distance( x, y, x_eval, ids_eval ):
 def dataset_breast_cancer_k5_distance_scaled( x, y, x_eval, ids_eval ):
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   # Scale/Normalize
   scaler = RobustScaler()
@@ -115,7 +115,7 @@ def dataset_loan_k1_scaled( x, y):
 
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   x_train, x_test = prepare_numeric_dataset_loan(x_train, x_test)
 
@@ -135,7 +135,7 @@ def dataset_loan_k5_distance_scaled_euclidean( x, y ):
 
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   x_train, x_test = prepare_numeric_dataset_loan(x_train, x_test)
 
@@ -156,7 +156,7 @@ def dataset_loan_k5_distance_scaled_manhattan( x, y):
 
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   x_train, x_test = prepare_numeric_dataset_loan(x_train, x_test)
 
@@ -175,7 +175,7 @@ def dataset_loan_k5_distance_scaled_manhattan_one_feature( x, y):
 
   # Create training/test split
   # training in the sense that these are used for knn classification
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
 
   x_train, x_test = prepare_numeric_dataset_loan(x_train, x_test)
 
