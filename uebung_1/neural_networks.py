@@ -91,7 +91,6 @@ def dataset_loan_version_01( x, y, x_eval, ids_eval ):
   y_pred = model.predict(x_test)
   pred_classes = np.argmax(y_pred, axis=1)
   
-  print(pred_classes)
   #labels = label_encoder.inverse_transform(pred_classes)
   eval_prediction( x_test, y_test, pred_classes, True )
   
