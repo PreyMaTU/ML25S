@@ -1,6 +1,7 @@
 from reporting import eval_prediction, print_classifier_header
 from dataset_loan import encode_dataset_loan, prepare_numeric_dataset_loan
 from dataset_heart_disease import encode_dataset_heart_disease, prepare_numeric_dataset_heart_disease
+from dataset_dota import encode_dataset_dota
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.preprocessing import RobustScaler, MinMaxScaler
@@ -278,7 +279,21 @@ def dataset_loan_k5_distance_scaled_manhattan_one_feature_crossval( x, y ):
 
 ############################################################################################
 # Dataset Dota:
-#TODO:
+
+def dataset_dota_k1( x, y ):
+  print_classifier_header()
+
+  x, y= encode_dataset_dota(x, y)
+
+  # scaling not needed, as everything [-1,1]
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
+
+  neigh = KNeighborsClassifier(n_neighbors=5, weights='distance')
+  neigh.fit(x_train,y_train)
+  y_pred = neigh.predict(x_test)
+
+  eval_prediction(x_test, y_test, y_pred)
+
 
 ############################################################################################
 # Dataset Heart Disease:

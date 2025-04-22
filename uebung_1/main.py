@@ -111,17 +111,32 @@ def dataset_loan():
 
 def dataset_dota():
   # Load the data frames from the zip file
-  train_df, test_df= load_csv_from_zip('dota2+games+results.zip', [
-    'dota2Train.csv',
-    'dota2Test.csv'
-  ], False)
+  [data_df]= load_csv_from_zip('dota2+games+results.zip', ['dota2Train.csv'], False)
+
+  # Make sure all column names are strings
+  data_df.columns = data_df.columns.astype(str)
+
+  # Dataset structure: win, clusterid, gamemode, gametype, hero1, ..., heroX
+  data_df.rename(columns={
+    '0': 'win',
+    '1' : 'clusterid',
+    '2' : 'gamemode',
+    '3': 'gametype'
+  }, inplace= True)
 
   # Separate into features and target
-  x_train = train_df.drop(columns=[0]) 
-  y_train = train_df[0]
+  x = data_df.drop(columns=['win']) 
+  y = data_df['win']
 
-  x_test = test_df.drop(columns=[0]) 
-  y_test = test_df[0]
+  if config.neural_networks:
+    nn.dataset_dota_version_01(x, y)
+
+  if config.random_forests:
+    rf.dataset_dota_version_01(x, y)
+
+  if config.knn:
+    knn.dataset_dota_k1(x, y)
+    
 
 
 def dataset_heart_disease():
