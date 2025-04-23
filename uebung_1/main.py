@@ -66,20 +66,27 @@ def dataset_breast_cancer():
   # data_df = data_df.dropna()  # or use fillna()
 
   if config.neural_networks:
-    nn.dataset_breast_cancer_version_01( x, y, x_eval, ids_eval )
-    nn.dataset_breast_cancer_version_02( x, y, x_eval, ids_eval )
-  
+    nn.dataset_breast_cancer_cv_various_learningrates_minmax(x, y)
+    nn.dataset_breast_cancer_cv_various_learningrates_standard(x, y)
+    nn.dataset_breast_cancer_cv_various_learningrates_robust(x, y)
+    nn.dataset_breast_cancer_cv_various_learningrates_noscale(x, y)
+    
+    nn.dataset_breast_cancer_cv_various_layersizes_minmax(x, y)
+    nn.dataset_breast_cancer_cv_various_layersizes_standard(x, y)
+    nn.dataset_breast_cancer_cv_various_layersizes_robust(x, y)
+    nn.dataset_breast_cancer_cv_various_layersizes_noscale(x, y)
+
+
   if config.random_forests:
-    rf.dataset_breast_cancer_version_01( x, y, x_eval, ids_eval )
-    rf.dataset_breast_cancer_version_02( x, y, x_eval, ids_eval )
+    rf.dataset_breast_cancer_crossval_various_depths( x, y, x_eval, ids_eval )
+    rf.dataset_breast_cancer_crossval_unscaled_various_estimators( x, y )
+    rf.dataset_breast_cancer_crossval_various_estimators( x, y )
 
 
   if config.knn:
-    knn.dataset_breast_cancer_k1( x, y, x_eval, ids_eval )
-    knn.dataset_breast_cancer_k1_scaled(x, y, x_eval, ids_eval)
-    knn.dataset_breast_cancer_k5_distance(x, y, x_eval, ids_eval)
-    knn.dataset_breast_cancer_k5_distance_scaled(x, y, x_eval, ids_eval)
-    knn.dataset_breast_cancer_k5_scaled_crossval(x, y)
+    knn.dataset_breast_cancer_no_scale_cv_various_k(x, y)
+    knn.dataset_breast_cancer_minmax_cv_various_k(x, y)
+    knn.dataset_breast_cancer_standard_cv_various_k(x, y)
     
 
 
@@ -98,20 +105,18 @@ def dataset_loan():
   ids_eval= eval_df['ID']
   
   if config.neural_networks:
-    nn.dataset_loan_version_01( x, y, x_eval, ids_eval )
+    nn.dataset_loan_cv_various_learningrates_minmax(x, y)
+    nn.dataset_loan_cv_various_layersizes_minmax(x, y)
   
   if config.random_forests:
-    rf.dataset_loan_version_01( x, y, x_eval, ids_eval )
-    rf.dataset_loan_version_02( x, y, x_eval, ids_eval )
+    rf.dataset_loan_crossval_various_depths( x, y )
+    rf.dataset_loan_crossval_unscaled_various_estimators( x, y )
+    rf.dataset_loan_crossval_various_estimators( x, y )
 
   if config.knn:
-    knn.dataset_loan_k1_scaled(x, y)
-    knn.dataset_loan_k5_distance_scaled_euclidean(x, y)
-    knn.dataset_loan_k5_distance_scaled_manhattan(x, y)
-    knn.dataset_loan_k5_distance_scaled_manhattan_one_feature(x, y)
-    knn.dataset_loan_k5_distance_scaled_manhattan_crossval(x, y)
-    knn.dataset_loan_k5_distance_scaled_manhattan_one_feature_crossval(x, y)
-    
+    knn.dataset_loan_minmax_one_feature_cv_various_k(x, y)
+    knn.dataset_loan_minmax_cv_various_k(x, y) 
+    knn.dataset_loan_standard_cv_various_k(x, y)   
     
 
 
@@ -135,13 +140,16 @@ def dataset_dota():
   y = data_df['win']
 
   if config.neural_networks:
-    nn.dataset_dota_version_01(x, y)
-
+    nn.dataset_dota_cv_various_learningrates_minmax(x, y)
+    nn.dataset_dota_cv_various_layersizes_minmax(x, y)
+  
   if config.random_forests:
-    rf.dataset_dota_version_01(x, y)
+    rf.dataset_dota_crossval_various_depths( x, y )
+    rf.dataset_dota_crossval_unscaled_various_estimators( x, y )
+    rf.dataset_dota_crossval_various_estimators( x, y )
 
   if config.knn:
-    knn.dataset_dota_k1(x, y)
+    knn.dataset_dota_minmax_cv_various_k(x, y)
     
 
 
@@ -159,17 +167,25 @@ def dataset_heart_disease():
   #print(np.bincount(y.to_numpy()[:,0]))
 
   if config.neural_networks:
-    nn.dataset_heart_disease_version_01(x, y)
-
+    y = np.ravel(y)
+    nn.dataset_heart_disease_cv_various_learningrates_minmax(x, y)
+    nn.dataset_heart_disease_cv_various_layersizes_minmax(x, y)
+  
   if config.random_forests:
     y = np.ravel(y)
-    rf.dataset_heart_disease_version_01(x, y)
+    rf.dataset_heart_disease_crossval_various_depths( x, y )
+    rf.dataset_heart_disease_crossval_unscaled_various_estimators( x, y )
+    rf.dataset_heart_disease_crossval_various_estimators( x, y )
 
   if config.knn:
     y = np.ravel(y)
-    knn.dataset_heart_disease_k1_scaled(x, y)
-    knn.dataset_heart_disease_k5_scaled(x, y)
-    knn.dataset_heart_disease_scaled_crossval(x, y)
+    knn.dataset_heart_disease_standard_cv_various_k(x, y)
+    knn.dataset_heart_disease_minmax_cv_various_k(x, y)
+
+
+
+
+
 
 
 def main():
