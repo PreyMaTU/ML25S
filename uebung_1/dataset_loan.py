@@ -141,23 +141,3 @@ def encode_dataset_loan( x: pd.DataFrame, y: pd.Series ):
 
   return x, y
 
-def prepare_numeric_dataset_loan( x_train, x_test ):
-  numeric_robust_scaled_columns= dataset_loan_numeric_distributed_columns()
-  numeric_minmax_scaled_columns= dataset_loan_numeric_ordinal_columns()
-
-
-  # Robust Scaling to handle outliers.
-  # Why robust scaling and not deleting outliers or capping the value?
-  # As we think that the loan data should not contain errors, the outliers should also not be errors in the data
-  # Hence we do not want to distort the outliers (by deleting or capping) for the training but just want to make sure
-  # that they do not influence the scaling of the data.
-  robust_scaler= RobustScaler()
-  x_train[numeric_robust_scaled_columns] = robust_scaler.fit_transform(x_train[numeric_robust_scaled_columns])
-  x_test[numeric_robust_scaled_columns] = robust_scaler.transform(x_test[numeric_robust_scaled_columns])
-
-  minmax_scaler= MinMaxScaler()
-  x_train[numeric_minmax_scaled_columns] = minmax_scaler.fit_transform(x_train[numeric_minmax_scaled_columns])
-  x_test[numeric_minmax_scaled_columns] = minmax_scaler.transform(x_test[numeric_minmax_scaled_columns])
-
-
-  return x_train, x_test

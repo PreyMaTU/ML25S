@@ -15,6 +15,3 @@ def encode_dataset_dota( x: pd.DataFrame, y: pd.Series ):
   return x, y
 
 
-
-# def prepare_numeric_dataset_dota( x_train, x_test ):
-#   return x_train, x_test

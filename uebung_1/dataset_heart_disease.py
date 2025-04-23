@@ -34,23 +34,3 @@ def encode_dataset_heart_disease ( x: pd.DataFrame, y: pd.Series ):
   return x, y
 
 
-def prepare_numeric_dataset_heart_disease( x_train, x_test, imputer_strategy= 'median', scale_values= True ):
-
-  numeric_robust_scaled_columns= dataset_heart_disease_numeric_distributed_columns()
-  categorical_binary_columns= dataset_heart_disease_categorical_binary_columns()
-
-  numeric_imputer = SimpleImputer(strategy=imputer_strategy)
-  x_train[numeric_robust_scaled_columns] = numeric_imputer.fit_transform(x_train[numeric_robust_scaled_columns])
-  x_test[numeric_robust_scaled_columns] = numeric_imputer.transform(x_test[numeric_robust_scaled_columns])
-
-  # No need to impute the one-hot-encoded features, as 'get_dummies' has already replaced them with False
-  categorical_imputer = SimpleImputer(strategy='most_frequent')
-  x_train[categorical_binary_columns] = categorical_imputer.fit_transform(x_train[categorical_binary_columns])
-  x_test[categorical_binary_columns] = categorical_imputer.transform(x_test[categorical_binary_columns])
-
-  if scale_values:
-    robust_scaler= RobustScaler()
-    x_train[numeric_robust_scaled_columns] = robust_scaler.fit_transform(x_train[numeric_robust_scaled_columns])
-    x_test[numeric_robust_scaled_columns] = robust_scaler.transform(x_test[numeric_robust_scaled_columns])
-
-  return x_train, x_test

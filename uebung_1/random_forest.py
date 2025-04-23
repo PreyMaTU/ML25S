@@ -1,10 +1,16 @@
 from reporting import eval_prediction, classifier_header
 from dataset_loan import encode_dataset_loan
-from dataset_heart_disease import encode_dataset_heart_disease, prepare_numeric_dataset_heart_disease
+from dataset_heart_disease import encode_dataset_heart_disease
 from dataset_dota import encode_dataset_dota
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.preprocessing import RobustScaler
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import f1_score, accuracy_score
 import pandas as pd
+import numpy as np
+import time
 
 header= classifier_header('RF')
 
@@ -22,103 +28,334 @@ def export_kaggle_results(ids_eval, y_eval):
 ############################################################################################
 # Dataset Breast Cancer:
 
-def dataset_breast_cancer_version_01( x, y, x_eval, ids_eval ):
+# def dataset_breast_cancer_crossval_various_estimators( x, y, x_eval, ids_eval ):
+#   header()
+# 
+#   # Create training/test split
+#   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
+# 
+# 
+#   # Train the model
+#   print('Training...')
+#   model = RandomForestClassifier(n_estimators=50, random_state=42)
+#   model.fit(x_train, y_train)
+# 
+#   # Put the test data into the model to see how well it works
+#   y_pred = model.predict(x_test)
+# 
+#   eval_prediction( x_test, y_test, y_pred)
+# 
+# 
+#   # Let the model predict the labels on the evaluation data set from Kaggle
+#   y_eval = model.predict(x_eval)
+# 
+#   export_kaggle_results(ids_eval, y_eval)
+
+
+
+def dataset_breast_cancer_crossval_various_depths( x, y, x_eval, ids_eval ):
   header()
+  
+  scores= []
+  depths= []
 
-  # Create training/test split
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+    ] )
 
-
-  # Train the model
-  print('Training...')
-  model = RandomForestClassifier(n_estimators=50, random_state=42)
-  model.fit(x_train, y_train)
-
-  # Put the test data into the model to see how well it works
-  y_pred = model.predict(x_test)
-
-  eval_prediction( x_test, y_test, y_pred)
-
-
-  # Let the model predict the labels on the evaluation data set from Kaggle
-  y_eval = model.predict(x_eval)
-
-  export_kaggle_results(ids_eval, y_eval)
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    depths.append( i )
 
 
 
-def dataset_breast_cancer_version_02( x, y, x_eval, ids_eval ):
+def dataset_breast_cancer_crossval_unscaled_various_estimators( x, y ):
   header()
+  
+  scores= []
+  num_estimators= []
 
-  pass
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+
+
+
+
+def dataset_breast_cancer_crossval_various_estimators( x, y ):
+  header()
+  
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+
+
+
 
 ############################################################################################
 # Dataset Loan:
 
-def dataset_loan_version_01( x, y, x_eval, ids_eval ):
+def dataset_loan_crossval_various_depths( x, y ):
   header()
   
   x, y= encode_dataset_loan( x, y )
 
-  # Create training/test split
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
+  scores= []
+  depths= []
 
-  # Train the model
-  print('Training...')
-  model = RandomForestClassifier(n_estimators=50, random_state=42)
-  model.fit(x_train, y_train)
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+    ] )
 
-  # Put the test data into the model to see how well it works
-  y_pred = model.predict(x_test)
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    depths.append( i )
 
-  eval_prediction( x_test, y_test, y_pred, True)
+
+
+def dataset_loan_crossval_unscaled_various_estimators( x, y ):
+  header()
+  
+  x, y= encode_dataset_loan( x, y )
+
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+
+
+
+
+def dataset_loan_crossval_various_estimators( x, y ):
+  header()
+  
+  x, y= encode_dataset_loan( x, y )
+
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
 
 
 
 ############################################################################################
 # Dataset Dota:
 
-def dataset_dota_version_01( x, y ):
+def dataset_dota_crossval_various_depths( x, y ):
   header()
   
   x, y= encode_dataset_dota( x, y )
 
-  # Create training/test split
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
+  scores= []
+  depths= []
 
-  # Train the model
-  print('Training...')
-  model = RandomForestClassifier(n_estimators=50, random_state=42)
-  model.fit(x_train, y_train)
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+    ] )
 
-  # Put the test data into the model to see how well it works
-  y_pred = model.predict(x_test)
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    depths.append( i )
 
-  eval_prediction( x_test, y_test, y_pred )
+
+
+def dataset_dota_crossval_unscaled_various_estimators( x, y ):
+  header()
+  
+  x, y= encode_dataset_dota( x, y )
+
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+
+
+
+
+def dataset_dota_crossval_various_estimators( x, y ):
+  header()
+  
+  x, y= encode_dataset_dota( x, y )
+
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+
 
 
 ############################################################################################
 # Dataset Heart Disease:
 
 
-def dataset_heart_disease_version_01( x, y ):
+def dataset_heart_disease_crossval_various_depths( x, y ):
   header()
   
   x, y= encode_dataset_heart_disease( x, y )
 
+  scores= []
+  depths= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    depths.append( i )
+
+
+
+def dataset_heart_disease_crossval_unscaled_various_estimators( x, y ):
+  header()
+  
+  x, y= encode_dataset_heart_disease( x, y )
+
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+
+
+
+
+def dataset_heart_disease_crossval_various_estimators( x, y ):
+  header()
+  
+  x, y= encode_dataset_heart_disease( x, y )
+
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, 25):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+
+
+
+def dataset_heart_disease_holdout_with_split( x, y, split_ratio ):
+  
   # Create training/test split
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size= split_ratio, stratify=y, random_state=42)
+  
+  pipe = Pipeline([
+    ('imputer', SimpleImputer(strategy = 'most_frequent')),
+    ('scaler', RobustScaler()),
+  ] )
 
-  x_train, x_test = prepare_numeric_dataset_heart_disease(x_train, x_test, scale_values= False)
-
-  # Train the model
-  print('Training...')
+  x_train= pipe.fit_transform( x_train )
+  x_test= pipe.transform( x_test )
+  
   model = RandomForestClassifier(n_estimators=50, random_state=42)
+
+  start_time= time.time_ns()
   model.fit(x_train, y_train)
 
-  # Put the test data into the model to see how well it works
+  end_time= time.time_ns()
+  fit_time= (end_time - start_time) / (10 ** 6)
+
   y_pred = model.predict(x_test)
 
-  eval_prediction( x_test, y_test, y_pred, True)
+  diy_cv_scores= {
+    'split_ratio': split_ratio,
+    'fit_time': fit_time,
+    'test_f1_weighted': f1_score(y_test, y_pred, average='macro', zero_division=0),
+    'test_accuracy': accuracy_score(y_test, y_pred)
+  }
 
+  return diy_cv_scores
+
+def dataset_heart_disease_holdout( x, y ):
+  header()
+
+  x, y= encode_dataset_heart_disease( x, y )
+
+  scores= []
+
+  scores.append( dataset_heart_disease_holdout_with_split(x, y, 0.2) )
+  scores.append( dataset_heart_disease_holdout_with_split(x, y, 0.3) )
+  scores.append( dataset_heart_disease_holdout_with_split(x, y, 0.4) )
+
+  scores= pd.DataFrame(scores)
+
+  print( scores )
+
+  return scores
 
