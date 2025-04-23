@@ -83,3 +83,86 @@ def plotting():
   ]
 
   ########### RF ###########
+
+  all_rf_scaled= [
+    ('rf', 'Breast Cancer Scaled', 'Breast Cancer'),
+    ('rf', 'Loan Scaled', ' Loan'),
+    ('rf', 'Dota Scaled', 'Dota'),
+    ('rf', 'Heart Disease Scaled', 'Heart Disease'),
+  ]
+  
+  all_rf_depths= [
+    ('rf', 'Breast Cancer Depth', 'Breast Cancer'),
+    ('rf', 'Loan Depth', ' Loan'),
+    ('rf', 'Dota Depth', 'Dota'),
+    ('rf', 'Heart Disease Depth', 'Heart Disease'),
+  ]
+
+  rf_loan_all_scalers= [
+    ('rf', 'Loan Scaled', 'Scaled'),
+    ('rf', 'Loan Unscaled', 'Unscaled'),
+  ]
+  
+  rf_dota_all_scalers= [
+    ('rf', 'Dota Scaled', 'Scaled'),
+    ('rf', 'Dota Unscaled', 'Unscaled'),
+  ]
+
+  rf_breast_cancer_all_scalers= [
+    ('rf', 'Breast Cancer Scaled', 'Scaled'),
+    ('rf', 'Breast Cancer Unscaled', 'Unscaled'),
+  ]
+
+  # plot all rf metrics over all datasets 
+  plot_stored_crossval_scores(all_rf_scaled,
+    score_type= 'test_f1_weighted',
+    title= 'RF F1 score over #estimators (Robust Scaler)',
+    xlabel= 'estimators',
+    ylabel= 'F1'
+  )
+
+  plot_stored_crossval_scores(all_rf_scaled,
+    score_type= 'test_accuracy',
+    title= 'RF Accuracy over #estimators (Robust Scaler)',
+    xlabel= 'estimators',
+    ylabel= 'accuracy'
+  )
+
+  plot_stored_crossval_scores(all_rf_scaled,
+    score_type= 'fit_time',
+    title= 'RF fit time over #estimators (Robust Scaler)',
+    xlabel= 'estimators',
+    ylabel= 'fit time'
+  )
+
+  # plot accuracy over depth for all datasets
+  plot_stored_crossval_scores(all_rf_depths,
+    score_type= 'test_accuracy',
+    title= 'RF Accuracy over depth (Robust Scaler)',
+    xlabel= 'depth',
+    ylabel= 'accuracy'
+  )
+
+  # plot comparison of scaled vs unscaled for loan data set
+  plot_stored_crossval_scores(rf_loan_all_scalers,
+    score_type= 'test_accuracy',
+    title= 'RF Accuracy over #estimators (Loan)',
+    xlabel= 'depth',
+    ylabel= 'accuracy'
+  )
+
+  # plot comparison of scaled vs unscaled for dota data set
+  plot_stored_crossval_scores(rf_dota_all_scalers,
+    score_type= 'test_accuracy',
+    title= 'RF Accuracy over #estimators (Dota)',
+    xlabel= 'depth',
+    ylabel= 'accuracy'
+  )
+
+  # plot comparison of scaled vs unscaled for breat cancer data set
+  plot_stored_crossval_scores(rf_breast_cancer_all_scalers,
+    score_type= 'test_accuracy',
+    title= 'RF Accuracy over #estimators (Breast Cancer)',
+    xlabel= 'depth',
+    ylabel= 'accuracy'
+  )

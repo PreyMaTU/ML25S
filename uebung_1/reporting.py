@@ -61,9 +61,11 @@ only_word_chars_pattern = re.compile('[^\\w ]')
 
 def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, line_label= None, show= False, stacked= False ):
 
+  # Use numbers from 1...N by default
   if not x_values:
     x_values= range(1,len(scores)+1)
 
+  # Only add legend if we have a label
   line, = plt.plot(x_values, scores)
   if line_label:
     line.set_label( line_label )
@@ -76,6 +78,7 @@ def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, li
   if show and not stacked:
     plt.show()
 
+  # Export the plot as an image file
   if not stacked:
     filename= re.sub(only_word_chars_pattern, '', title.lower()).replace(' ', '_')
     xlabel= xlabel.lower().replace(' ', '-')
@@ -98,6 +101,7 @@ def store_crossval_scores( classifier, config_name, x_values, scores ):
 def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabel, show= False):
   available_config_indices= []
 
+  # Find out first which score entries are actually available in the stored data
   for i in range(len(score_entries)):
     (classifier, config, line_label) = score_entries[i]
 
@@ -113,10 +117,12 @@ def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabe
 
     available_config_indices.append( i )
 
+  # Nothing to plot
   if len(available_config_indices) < 1:
     print(f'WARNING! Plot is empty: {title}')
     return
 
+  # Plot the configuration data as a stacked plot
   for i in range(len(available_config_indices)):
     (classifier, config, line_label) = score_entries[available_config_indices[i]]
     
