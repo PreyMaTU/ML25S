@@ -186,7 +186,8 @@ def dataset_dota_minmax_cv_various_k( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer()),
       ('scaler', StandardScaler()),
-      ('knn', KNeighborsClassifier(n_neighbors=i, weights='distance'))
+      ('selector', SelectKBest(score_func=f_classif, k=30)),
+      ('knn', KNeighborsClassifier(n_neighbors=i, weights='distance',n_jobs=-1))
     ] )
 
     #train model with cv of 5 
