@@ -153,10 +153,10 @@ def plotting():
   ]
   
   all_rf_depths= [
-    ('rf', 'Breast Cancer Depth', 'Breast Cancer'),
-    ('rf', 'Loan Depth', ' Loan'),
-    ('rf', 'Dota Depth', 'Dota'),
-    ('rf', 'Heart Disease Depth', 'Heart Disease'),
+    ('rf', 'Breast Cancer Depths', 'Breast Cancer'),
+    ('rf', 'Loan Depths', ' Loan'),
+    ('rf', 'Dota Depths', 'Dota'),
+    ('rf', 'Heart Disease Depths', 'Heart Disease'),
   ]
 
   rf_loan_all_scalers= [
@@ -208,7 +208,7 @@ def plotting():
   plot_stored_crossval_scores(rf_loan_all_scalers,
     score_type= 'test_accuracy',
     title= 'RF Accuracy over #estimators (Loan)',
-    xlabel= 'depth',
+    xlabel= 'estimators',
     ylabel= 'accuracy'
   )
 
@@ -216,7 +216,7 @@ def plotting():
   plot_stored_crossval_scores(rf_dota_all_scalers,
     score_type= 'test_accuracy',
     title= 'RF Accuracy over #estimators (Dota)',
-    xlabel= 'depth',
+    xlabel= 'estimators',
     ylabel= 'accuracy'
   )
 
@@ -224,6 +224,6 @@ def plotting():
   plot_stored_crossval_scores(rf_breast_cancer_all_scalers,
     score_type= 'test_accuracy',
     title= 'RF Accuracy over #estimators (Breast Cancer)',
-    xlabel= 'depth',
+    xlabel= 'estimators',
     ylabel= 'accuracy'
   )
