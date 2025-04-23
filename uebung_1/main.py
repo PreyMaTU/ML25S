@@ -2,6 +2,7 @@ from argparse import ArgumentParser
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import time
 from ucimlrepo import fetch_ucirepo 
 
 from data_loader import load_csv_from_zip
@@ -193,6 +194,8 @@ def dataset_heart_disease():
 def main():
   global config, rf, nn, knn
 
+  start_time= time.time()
+
   config= parse_arguments()
 
   if config.neural_networks:
@@ -221,6 +224,9 @@ def main():
 
   if config.plotting:
     plotting()
+
+  run_time= time.time()- start_time
+  print(f'\nDone. Script took {run_time}s')
 
 if __name__ == '__main__':
   main()
