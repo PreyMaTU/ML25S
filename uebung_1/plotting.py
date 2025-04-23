@@ -22,6 +22,11 @@ def plotting():
     ('knn', 'Loan MinMax 1 Feature', '1 Feature'),
   ]
 
+  knn_heart_disease_binary= [
+    ('knn', 'Heart Disease MinMax' , '5 Classes'),
+    ('knn', 'Heart Disease MinMax Binary' , '2 Classes'),
+  ]
+
   # plot all knn metrics over all datasets 
   plot_stored_crossval_scores(all_knn_minmax,
     score_type= 'test_f1_weighted',
@@ -54,6 +59,14 @@ def plotting():
   plot_stored_crossval_scores(knn_loan_feature_selection,
     score_type= 'test_accuracy',
     title= 'KNN of Loan data',
+    xlabel= 'k',
+    ylabel= 'Accuracy'
+  )
+
+  # plot class collapsing for heart disease dataset
+  plot_stored_crossval_scores(knn_heart_disease_binary,
+    score_type= 'test_accuracy',
+    title= 'KNN of Heart Disease data',
     xlabel= 'k',
     ylabel= 'Accuracy'
   )
