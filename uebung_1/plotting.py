@@ -95,6 +95,54 @@ def plotting():
     ('NN', 'Breast Cancer Layer Sizes No Scale', 'No Scale')
   ]
 
+  # plot all NN metrics over all datasets with varying learning rate
+  plot_stored_crossval_scores(all_nn_minmax_learningrate,
+    score_type= 'test_f1_weighted',
+    title= 'NN F1 score over learning rate (Minmax)',
+    xlabel= 'learning rate',
+    ylabel= 'F1'
+  )
+  plot_stored_crossval_scores(all_nn_minmax_learningrate,
+    score_type= 'test_accuracy',
+    title= 'NN Accuracy over learning rate (Minmax)',
+    xlabel= 'learning rate',
+    ylabel= 'Accuracy'
+  )
+  plot_stored_crossval_scores(all_nn_minmax_learningrate,
+    score_type= 'fit_time',
+    title= 'NN fit time over learning rate (Minmax)',
+    xlabel= 'learning rate',
+    ylabel= 'fit time'
+  )
+
+    # plot all NN metrics over all datasets with varying layer structure
+  plot_stored_crossval_scores(all_nn_minmax_hiddenlayers,
+    score_type= 'test_f1_weighted',
+    title= 'NN F1 score over hidden layers (Minmax)',
+    xlabel= 'hidden layers',
+    ylabel= 'F1'
+  )
+  plot_stored_crossval_scores(all_nn_minmax_hiddenlayers,
+    score_type= 'test_accuracy',
+    title= 'NN Accuracy over hidden layers (Minmax)',
+    xlabel= 'hidden layers',
+    ylabel= 'Accuracy'
+  )
+  plot_stored_crossval_scores(all_nn_minmax_hiddenlayers,
+    score_type= 'fit_time',
+    title= 'NN fit time over hidden layers (Minmax)',
+    xlabel= 'hidden layers',
+    ylabel= 'fit time'
+  )
+
+  # plot feature selection for breast cancer dataset
+  plot_stored_crossval_scores(nn_breast_cancer_all_scalers,
+    score_type= 'test_accuracy',
+    title= 'NN of Breast Cancer data',
+    xlabel= 'hidden layers',
+    ylabel= 'Accuracy'
+  )
+
   ########### RF ###########
 
   all_rf_scaled= [
