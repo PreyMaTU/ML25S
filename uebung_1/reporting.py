@@ -1,6 +1,9 @@
 import sklearn.metrics as metrics
+import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 import sys
+import re
 
 def eval_prediction( x_test, y_test, y_pred, multiclass= False ):
   # Report some metrics on the model's quality
@@ -53,3 +56,25 @@ def print_classifier_header( classifier='?', stack_depth= 1):
 
 def classifier_header( classifier ):
   return lambda: print_classifier_header( classifier, stack_depth= 2)
+    
+stored_crossval_scores= {}
+def store_crossval_scores( classifier, config_name, x_values, scores ):
+  storage= stored_crossval_scores.setdefault(classifier, {})
+
+  if config_name in storage:
+    raise ValueError(f'Duplicated configuration name {config_name} in classifier {classifier}')
+  
+  storage[config_name]= (x_values, scores)
+
+def append_averaged_cv_scores( scores, cv_scores, silent= False ):
+  if not silent and len(scores) == 0:
+    print('  ', '   -   '.join(list(cv_scores.keys())) )
+
+  for k in cv_scores.keys():
+    cv_scores[k]= np.mean(cv_scores[k])
+
+  scores.append(cv_scores)
+
+  if not silent:
+    values= [ str(float(x)) for x in list(scores[-1].values()) ]
+    print(len(scores), '  '.join(values))

@@ -3,7 +3,7 @@ from dataset_loan import encode_dataset_loan
 from dataset_heart_disease import encode_dataset_heart_disease
 from dataset_dota import encode_dataset_dota
 
-from reporting import eval_prediction, classifier_header
+from reporting import eval_prediction, classifier_header, plot_crossval_scores, append_averaged_cv_scores
 from sklearn.model_selection import train_test_split, cross_validate
 from sklearn.preprocessing import StandardScaler, RobustScaler, MinMaxScaler
 from sklearn.neural_network import MLPClassifier
@@ -66,6 +66,11 @@ def dataset_breast_cancer_cv_various_layersizes( x, y, scaler_type="none" ):
 
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+
+    append_averaged_cv_scores( scores, cv_scores )
+
+  scores= pd.DataFrame(scores)
+
   x_values= [ str(x) for x in hidden_layer_size_array ]
   return x_values, scores
 
@@ -106,7 +111,10 @@ def dataset_breast_cancer_cv_various_learningrates( x, y, scaler_type="none" ):
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
 
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  return learning_rates, scores
 
 
 def dataset_breast_cancer_cv_various_learningrates_minmax(x, y):
@@ -188,6 +196,10 @@ def dataset_loan_cv_various_layersizes( x, y, scaler_type="none" ):
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
 
+    append_averaged_cv_scores( scores, cv_scores )
+
+  scores= pd.DataFrame(scores)
+
   x_values= [ str(x) for x in hidden_layer_size_array ]
   return x_values, scores
 
@@ -227,7 +239,10 @@ def dataset_loan_cv_various_learningrates( x, y, scaler_type="none" ):
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
 
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  return learning_rates, scores
 
 def dataset_loan_cv_various_learningrates_minmax(x, y):
   learning_rates, scores = dataset_loan_cv_various_learningrates(x, y, 'minmax')
@@ -283,6 +298,11 @@ def dataset_dota_cv_various_layersizes( x, y, scaler_type="none" ):
 
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+
+    append_averaged_cv_scores( scores, cv_scores )
+
+  scores= pd.DataFrame(scores)
+
   x_values= [ str(x) for x in hidden_layer_size_array ]
   return x_values, scores
 
@@ -324,7 +344,9 @@ def dataset_dota_cv_various_learningrates( x, y, scaler_type="none" ):
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
 
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
   return learning_rates, scores
 
 def dataset_dota_cv_various_learningrates_minmax(x, y):
@@ -379,6 +401,11 @@ def dataset_heart_disease_cv_various_layersizes( x, y, scaler_type="none" ):
 
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+
+    append_averaged_cv_scores( scores, cv_scores )
+
+  scores= pd.DataFrame(scores)
+
   x_values= [ str(x) for x in hidden_layer_size_array ]
   return x_values, scores
 
@@ -416,6 +443,10 @@ def dataset_heart_disease_cv_various_learningrates( x, y, scaler_type="none" ):
 
     #train model with cv of 5 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+
+    append_averaged_cv_scores( scores, cv_scores )
+
+  scores= pd.DataFrame(scores)
   return learning_rates, scores
 
 

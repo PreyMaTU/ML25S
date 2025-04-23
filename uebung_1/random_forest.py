@@ -1,4 +1,4 @@
-from reporting import eval_prediction, classifier_header
+from reporting import eval_prediction, classifier_header, append_averaged_cv_scores, store_crossval_scores
 from dataset_loan import encode_dataset_loan
 from dataset_heart_disease import encode_dataset_heart_disease
 from dataset_dota import encode_dataset_dota
@@ -69,7 +69,10 @@ def dataset_breast_cancer_crossval_various_depths( x, y, x_eval, ids_eval ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     depths.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Breast Cancer Depths', depths, scores)
 
 
 def dataset_breast_cancer_crossval_unscaled_various_estimators( x, y ):
@@ -87,7 +90,10 @@ def dataset_breast_cancer_crossval_unscaled_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Breast Cancer Unscaled', num_estimators, scores)
 
 
 
@@ -107,7 +113,10 @@ def dataset_breast_cancer_crossval_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Breast Cancer Scaled', num_estimators, scores)
 
 
 
@@ -132,7 +141,10 @@ def dataset_loan_crossval_various_depths( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     depths.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Loan Depths', depths, scores)
 
 
 def dataset_loan_crossval_unscaled_various_estimators( x, y ):
@@ -152,7 +164,10 @@ def dataset_loan_crossval_unscaled_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Loan Unscaled', num_estimators, scores)
 
 
 
@@ -174,7 +189,10 @@ def dataset_loan_crossval_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Loan Scaled', num_estimators, scores)
 
 
 ############################################################################################
@@ -198,7 +216,10 @@ def dataset_dota_crossval_various_depths( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     depths.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Dota Depths', depths, scores)
 
 
 def dataset_dota_crossval_unscaled_various_estimators( x, y ):
@@ -218,7 +239,10 @@ def dataset_dota_crossval_unscaled_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Dota Unscaled', num_estimators, scores)
 
 
 
@@ -240,7 +264,10 @@ def dataset_dota_crossval_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Dota Scaled', num_estimators, scores)
 
 
 ############################################################################################
@@ -265,7 +292,10 @@ def dataset_heart_disease_crossval_various_depths( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     depths.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Heart Disease Depths', depths, scores)
 
 
 def dataset_heart_disease_crossval_unscaled_various_estimators( x, y ):
@@ -285,7 +315,10 @@ def dataset_heart_disease_crossval_unscaled_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Heart Disease Unscaled', num_estimators, scores)
 
 
 
@@ -307,7 +340,10 @@ def dataset_heart_disease_crossval_various_estimators( x, y ):
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
   
     num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
 
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Heart Disease Scaled', num_estimators, scores)
 
 
 def dataset_heart_disease_holdout_with_split( x, y, split_ratio ):
