@@ -46,7 +46,7 @@ def print_classifier_header( classifier='?', stack_depth= 1):
   function_name= '<Unknown Classifier>'
   try:
     function_name= sys._getframe(stack_depth).f_code.co_name
-  except e:
+  except Exception as e:
     print('Could not lookup function name')
 
   title= f'({classifier}) {function_name}'
