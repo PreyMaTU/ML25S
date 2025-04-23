@@ -1,4 +1,4 @@
-from reporting import plot_stored_crossval_scores
+from reporting import plot_stored_crossval_scores, plot_stored_crossval_boxplots
 
 
 def plotting():
@@ -226,4 +226,29 @@ def plotting():
     title= 'RF Accuracy over #estimators (Breast Cancer)',
     xlabel= 'estimators',
     ylabel= 'accuracy'
+  )
+
+  
+
+  ###############  Boxplots  ##################
+
+  #
+  # TODO: Instead of comparing different configurations for one classifier,
+  #       we need to compare the same dataset across differen classifieres
+  #       eg like this:
+  #      [
+  #        ('knn', 'Breast Cancer MinMax', 'KNN MinMax'),
+  #        ('rf', 'Breast Cancer Scaled', 'RF Scaled'),
+  #        ('nn', 'Breast Cancer kek', 'NN kek'),
+  #      ]
+
+  plot_stored_crossval_boxplots([
+      ('knn', 'Heart Disease MinMax', 'Heart Disease'),
+      ('knn', 'Breast Cancer MinMax', 'Breast Cancer'),
+      ('knn', 'Heart Disease MinMax Binary', 'Heart Disease 2'),
+    ],
+    score_type='test_f1_weighted',
+    title='Comparison of F1 score distribution',
+    ylabel= 'F1',
+    show= True
   )

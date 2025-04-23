@@ -58,6 +58,17 @@ def classifier_header( classifier ):
   return lambda: print_classifier_header( classifier, stack_depth= 2)
 
 only_word_chars_pattern = re.compile('[^\\w ]')
+def snakeify( text, sep= '_' ):
+  return re.sub(only_word_chars_pattern, '', text.lower()).replace(' ', sep)
+
+def export_current_plot_with_title_name( title, xlabel, ylabel ):
+  title= snakeify(title)
+  xlabel= snakeify(xlabel, '-')
+  ylabel= snakeify(ylabel, '-')
+  path= f"./out/{title}_{xlabel}_{ylabel}"
+
+  print('Exporting plot:', path)
+  plt.savefig(path)
 
 def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, line_label= None, show= False, stacked= False ):
 
@@ -75,19 +86,16 @@ def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, li
   plt.xlabel(xlabel)
   plt.ylabel(ylabel)
 
-  if show and not stacked:
-    plt.show()
 
   # Export the plot as an image file
   if not stacked:
-    filename= re.sub(only_word_chars_pattern, '', title.lower()).replace(' ', '_')
-    xlabel= xlabel.lower().replace(' ', '-')
-    ylabel= ylabel.lower().replace(' ', '-')
-    path= f"./out/{filename}_{xlabel}_{ylabel}"
+    export_current_plot_with_title_name( title, xlabel, ylabel)
 
-    print('Exporting plot:', path)
-    plt.savefig(path)
-    plt.clf()
+    if show:
+      plt.show()
+    else:
+      plt.clf()
+
     
 stored_crossval_scores= {}
 def store_crossval_scores( classifier, config_name, x_values, scores ):
@@ -98,7 +106,8 @@ def store_crossval_scores( classifier, config_name, x_values, scores ):
   
   storage[config_name]= (x_values, scores)
 
-def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabel, show= False):
+
+def filter_available_score_entries( score_entries, title ):
   available_config_indices= []
 
   # Find out first which score entries are actually available in the stored data
@@ -120,17 +129,23 @@ def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabe
   # Nothing to plot
   if len(available_config_indices) < 1:
     print(f'WARNING! Plot is empty: {title}')
-    return
+  
+  return available_config_indices
+
+
+def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabel, show= False):
+  available_config_indices= filter_available_score_entries( score_entries, title )
 
   # Plot the configuration data as a stacked plot
   for i in range(len(available_config_indices)):
     (classifier, config, line_label) = score_entries[available_config_indices[i]]
     
     config_data= stored_crossval_scores[classifier][config]
-    (x_values, scores)= config_data
+    (x_values, score_df)= config_data
+    scores= score_df[score_type]
 
     plot_crossval_scores(
-      scores[score_type],
+      scores,
       x_values= x_values,
       title= title,
       xlabel= xlabel,
@@ -141,6 +156,43 @@ def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabe
     )
 
 
+def plot_stored_crossval_boxplots(score_entries, score_type, title, ylabel, show= False ):
+  available_config_indices= filter_available_score_entries( score_entries, title )
+  if len(available_config_indices) < 1:
+    return
+
+  data= []
+  labels= []
+
+  # Gether the configuration data into a 2D list
+  for i in range(len(available_config_indices)):
+    (classifier, config, line_label) = score_entries[available_config_indices[i]]
+    
+    config_data= stored_crossval_scores[classifier][config]
+    (x_values, score_df)= config_data
+    scores= score_df[score_type]
+
+    data.append( scores )
+    labels.append( line_label )
+
+  # Plot all boxplots into a single chart
+  plt.clf()
+
+  plt.boxplot(data)
+  plt.xticks(range(1, len(data)+1),  labels= labels)
+
+  plt.title(title)
+  plt.ylabel(ylabel)
+
+  export_current_plot_with_title_name(title, 'boxplots', ylabel)
+
+  if show:
+    plt.show()
+  else:
+    plt.clf()
+
+
+  
 
 
 
