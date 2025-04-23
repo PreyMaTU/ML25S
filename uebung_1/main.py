@@ -28,8 +28,14 @@ def parse_arguments():
   parser.add_argument('-n', '--neural_networks', action= 'store_true')
   parser.add_argument('-r', '--random_forests', action= 'store_true')
   parser.add_argument('-k', '--knn', action= 'store_true')
+  parser.add_argument('-C', '--compare_models', action= 'store_true')
 
   args= parser.parse_args()
+
+  if args.compare_models:
+    args.knn= True
+    args.random_forests= True
+    args.neural_networks= True
 
   if not args.knn and not args.random_forests and not args.neural_networks:
     parser.print_help()
