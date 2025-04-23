@@ -37,7 +37,7 @@ def export_kaggle_results(ids_eval, y_eval):
 # 
 #   # Train the model
 #   print('Training...')
-#   model = RandomForestClassifier(n_estimators=50, random_state=42)
+#   model = RandomForestClassifier(n_estimators=50, random_state=42, n_jobs=-1)
 #   model.fit(x_train, y_train)
 # 
 #   # Put the test data into the model to see how well it works
@@ -63,7 +63,7 @@ def dataset_breast_cancer_crossval_various_depths( x, y, x_eval, ids_eval ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -84,7 +84,7 @@ def dataset_breast_cancer_crossval_unscaled_various_estimators( x, y ):
   for i in range(10, 500, 25):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -107,7 +107,7 @@ def dataset_breast_cancer_crossval_various_estimators( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -135,7 +135,7 @@ def dataset_loan_crossval_various_depths( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -158,7 +158,7 @@ def dataset_loan_crossval_unscaled_various_estimators( x, y ):
   for i in range(10, 500, 25):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -183,7 +183,7 @@ def dataset_loan_crossval_various_estimators( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -210,7 +210,7 @@ def dataset_dota_crossval_various_depths( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -233,7 +233,7 @@ def dataset_dota_crossval_unscaled_various_estimators( x, y ):
   for i in range(10, 500, 25):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -258,7 +258,7 @@ def dataset_dota_crossval_various_estimators( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -286,7 +286,7 @@ def dataset_heart_disease_crossval_various_depths( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=300, max_depth= i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -309,7 +309,7 @@ def dataset_heart_disease_crossval_unscaled_various_estimators( x, y ):
   for i in range(10, 500, 25):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -334,7 +334,7 @@ def dataset_heart_disease_crossval_various_estimators( x, y ):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
-      ('rf', RandomForestClassifier(n_estimators=i, random_state=42))
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
     ] )
 
     cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
@@ -359,7 +359,7 @@ def dataset_heart_disease_holdout_with_split( x, y, split_ratio ):
   x_train= pipe.fit_transform( x_train )
   x_test= pipe.transform( x_test )
   
-  model = RandomForestClassifier(n_estimators=50, random_state=42)
+  model = RandomForestClassifier(n_estimators=50, random_state=42, n_jobs=-1)
 
   start_time= time.time_ns()
   model.fit(x_train, y_train)
