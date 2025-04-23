@@ -162,31 +162,32 @@ def dataset_heart_disease():
     
   x = heart_disease.data.features 
   # Target has 5 classes: 0-4
-  y = heart_disease.data.targets 
+  y = heart_disease.data.targets
+
+  # combine heart disease to single class, essentially binary classification
+  y_binary = y.copy()
+  y_binary[y_binary > 0] = 1
 
   # Check the distriubution of the target labels in the dataset
   # 164 55 36 35 13
   #print(np.bincount(y.to_numpy()[:,0]))
 
+  y = np.ravel(y)
+  y_binary = np.ravel(y_binary)
+
   if config.neural_networks:
-    y = np.ravel(y)
     nn.dataset_heart_disease_cv_various_learningrates_minmax(x, y)
     nn.dataset_heart_disease_cv_various_layersizes_minmax(x, y)
   
   if config.random_forests:
-    y = np.ravel(y)
     rf.dataset_heart_disease_crossval_various_depths( x, y )
     rf.dataset_heart_disease_crossval_unscaled_various_estimators( x, y )
     rf.dataset_heart_disease_crossval_various_estimators( x, y )
 
   if config.knn:
-    y = np.ravel(y)
     knn.dataset_heart_disease_standard_cv_various_k(x, y)
     knn.dataset_heart_disease_minmax_cv_various_k(x, y)
-
-
-
-
+    knn.dataset_heart_disease_minmax_cv_various_k_binary(x, y_binary)
 
 
 
