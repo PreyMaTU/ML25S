@@ -56,6 +56,35 @@ def print_classifier_header( classifier='?', stack_depth= 1):
 
 def classifier_header( classifier ):
   return lambda: print_classifier_header( classifier, stack_depth= 2)
+
+only_word_chars_pattern = re.compile('[^\\w ]')
+
+def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, line_label= None, show= False, stacked= False ):
+
+  if not x_values:
+    x_values= range(1,len(scores)+1)
+
+  line, = plt.plot(x_values, scores)
+  if line_label:
+    line.set_label( line_label )
+    plt.legend(framealpha = 0.6)
+
+  plt.title(title)
+  plt.xlabel(xlabel)
+  plt.ylabel(ylabel)
+
+  if show and not stacked:
+    plt.show()
+
+  if not stacked:
+    filename= re.sub(only_word_chars_pattern, '', title.lower()).replace(' ', '_')
+    xlabel= xlabel.lower().replace(' ', '-')
+    ylabel= ylabel.lower().replace(' ', '-')
+    path= f"./out/{filename}_{xlabel}_{ylabel}"
+
+    print('Exporting plot:', path)
+    plt.savefig(path)
+    plt.clf()
     
 stored_crossval_scores= {}
 def store_crossval_scores( classifier, config_name, x_values, scores ):
@@ -65,6 +94,49 @@ def store_crossval_scores( classifier, config_name, x_values, scores ):
     raise ValueError(f'Duplicated configuration name {config_name} in classifier {classifier}')
   
   storage[config_name]= (x_values, scores)
+
+def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabel, show= False):
+  available_config_indices= []
+
+  for i in range(len(score_entries)):
+    (classifier, config, line_label) = score_entries[i]
+
+    if not classifier in stored_crossval_scores:
+      print(f'Skipped missing classifier {classifier} when plotting')
+      continue
+
+    classifier_data= stored_crossval_scores[classifier]
+
+    if not config in classifier_data:
+      print(f'Skipped missing configuration {config} for classifier {classifier} when plotting')
+      continue
+
+    available_config_indices.append( i )
+
+  if len(available_config_indices) < 1:
+    print(f'WARNING! Plot is empty: {title}')
+    return
+
+  for i in range(len(available_config_indices)):
+    (classifier, config, line_label) = score_entries[available_config_indices[i]]
+    
+    config_data= stored_crossval_scores[classifier][config]
+    (x_values, scores)= config_data
+
+    plot_crossval_scores(
+      scores[score_type],
+      x_values= x_values,
+      title= title,
+      xlabel= xlabel,
+      ylabel= ylabel,
+      line_label= line_label,
+      stacked= i < (len(available_config_indices) - 1),
+      show= show
+    )
+
+
+
+
 
 def append_averaged_cv_scores( scores, cv_scores, silent= False ):
   if not silent and len(scores) == 0:

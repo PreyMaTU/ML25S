@@ -5,7 +5,7 @@ import pandas as pd
 from ucimlrepo import fetch_ucirepo 
 
 from data_loader import load_csv_from_zip
-from reporting import count_missing_values
+from plotting import plotting
 
 # import k_nearest_neighbors as knn
 
@@ -29,6 +29,8 @@ def parse_arguments():
   parser.add_argument('-r', '--random_forests', action= 'store_true')
   parser.add_argument('-k', '--knn', action= 'store_true')
   parser.add_argument('-C', '--compare_models', action= 'store_true')
+
+  parser.add_argument('-p', '--plotting', action='store_true')
 
   args= parser.parse_args()
 
@@ -216,6 +218,9 @@ def main():
     
   if config.heart_disease:
     dataset_heart_disease()
+
+  if config.plotting:
+    plotting()
 
 if __name__ == '__main__':
   main()
