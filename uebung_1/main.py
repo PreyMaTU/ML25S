@@ -7,11 +7,13 @@ from ucimlrepo import fetch_ucirepo
 
 from data_loader import load_csv_from_zip
 from plotting import plotting
+from stored_scores import export_stored_crossval_scores, import_stored_crossval_scores
 
 # import k_nearest_neighbors as knn
 
-# Ensure output directory exists
+# Ensure working directories exist
 Path("./out").mkdir(parents=True, exist_ok=True)
+Path("./data").mkdir(parents=True, exist_ok=True)
 
 config= None
 
@@ -33,6 +35,9 @@ def parse_arguments():
 
   parser.add_argument('-p', '--plotting', action='store_true')
 
+  parser.add_argument('--load', nargs='+')
+  parser.add_argument('--save')
+
   args= parser.parse_args()
 
   if args.compare_models:
@@ -40,11 +45,11 @@ def parse_arguments():
     args.random_forests= True
     args.neural_networks= True
 
-  if not args.knn and not args.random_forests and not args.neural_networks:
+  if not args.knn and not args.random_forests and not args.neural_networks and not args.load:
     parser.print_help()
     exit(1)
 
-  if not args.breast_cancer and not args.loan and not args.dota and not args.heart_disease:
+  if not args.breast_cancer and not args.loan and not args.dota and not args.heart_disease and not args.load:
     parser.print_help()
     exit(1)
 
@@ -211,6 +216,10 @@ def main():
     import knn as knn_module
     knn= knn_module
 
+  if config.load:
+    for file_name in config.load:
+      import_stored_crossval_scores( file_name )
+
   if config.breast_cancer:
     dataset_breast_cancer()
     
@@ -222,6 +231,9 @@ def main():
     
   if config.heart_disease:
     dataset_heart_disease()
+
+  if config.save:
+    export_stored_crossval_scores( config.save )
 
   if config.plotting:
     plotting()

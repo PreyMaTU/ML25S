@@ -250,5 +250,5 @@ def plotting():
     score_type='test_f1_weighted',
     title='Comparison of F1 score distribution',
     ylabel= 'F1',
-    show= True
+    show= False
   )

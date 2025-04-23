@@ -5,6 +5,8 @@ import numpy as np
 import sys
 import re
 
+from stored_scores import *
+
 def eval_prediction( x_test, y_test, y_pred, multiclass= False ):
   # Report some metrics on the model's quality
   report(y_test, y_pred, multiclass)
@@ -96,15 +98,7 @@ def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, li
     else:
       plt.clf()
 
-    
-stored_crossval_scores= {}
-def store_crossval_scores( classifier, config_name, x_values, scores ):
-  storage= stored_crossval_scores.setdefault(classifier, {})
 
-  if config_name in storage:
-    raise ValueError(f'Duplicated configuration name {config_name} in classifier {classifier}')
-  
-  storage[config_name]= (x_values, scores)
 
 
 def filter_available_score_entries( score_entries, title ):
@@ -142,6 +136,7 @@ def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabe
     
     config_data= stored_crossval_scores[classifier][config]
     (x_values, score_df)= config_data
+
     scores= score_df[score_type]
 
     plot_crossval_scores(
@@ -190,9 +185,6 @@ def plot_stored_crossval_boxplots(score_entries, score_type, title, ylabel, show
     plt.show()
   else:
     plt.clf()
-
-
-  
 
 
 
