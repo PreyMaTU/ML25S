@@ -120,7 +120,7 @@ def plotting():
   # plot feature selection for loan dataset
   plot_stored_crossval_scores(knn_loan_feature_selection,
     score_type= 'test_accuracy',
-    title= 'KNN of Loan data',
+    title= 'KNN of Loan data (Features)',
     xlabel= 'k',
     ylabel= 'Accuracy'
   )
