@@ -9,6 +9,7 @@ def plotting():
       ('knn', 'Loan MinMax 10 Features', ' Loan'),
       ('knn', 'Dota MinMax', 'Dota'),
       ('knn', 'Heart Disease MinMax', 'Heart Disease'),
+      ('knn', 'Heart Disease MinMax Binary' , 'Heart Disease Binary'),
     ]
   
   knn_breast_cancer_all_scales= [
@@ -17,15 +18,28 @@ def plotting():
     ('knn', 'Breast Cancer No Scale', 'No Scale'),
   ]
 
+  knn_loan_all_scales= [
+    ('knn', 'Loan MinMax 10 Features', 'MinMax'),
+    ('knn', 'Loan Standard 10 Features', 'Standard'),
+    ('knn', 'Loan No Scale 10 Features', 'No Scale'),
+  ]
+
+  knn_dota_all_scales= [
+    ('knn', 'Dota No scale', 'No Scale'),
+    ('knn', 'Dota MinMax', 'MinMax'),
+  ]
+
+  knn_heart_disease_all_scales= [
+    ('knn', 'Heart Disease MinMax', 'MinMax'),
+    ('knn', 'Heart Disease Standard', 'Standard'),
+    ('knn', 'Heart Disease No Scale', 'No Scale'),
+  ]
+
   knn_loan_feature_selection= [
     ('knn', 'Loan MinMax 10 Features', '10 Features'),
     ('knn', 'Loan MinMax 1 Feature', '1 Feature'),
   ]
 
-  knn_heart_disease_binary= [
-    ('knn', 'Heart Disease MinMax' , '5 Classes'),
-    ('knn', 'Heart Disease MinMax Binary' , '2 Classes'),
-  ]
 
   # plot all knn metrics over all datasets 
   plot_stored_crossval_scores(all_knn_minmax,
@@ -54,6 +68,54 @@ def plotting():
     xlabel= 'k',
     ylabel= 'Accuracy'
   )
+  plot_stored_crossval_scores(knn_breast_cancer_all_scales,
+    score_type= 'test_f1_weighted',
+    title= 'KNN of Breast Cancer data',
+    xlabel= 'k',
+    ylabel= 'F1'
+  )
+
+  # plot all scaling methods for knn for loan dataset
+  plot_stored_crossval_scores(knn_loan_all_scales,
+    score_type= 'test_accuracy',
+    title= 'KNN of Loan data',
+    xlabel= 'k',
+    ylabel= 'Accuracy'
+  )
+  plot_stored_crossval_scores(knn_loan_all_scales,
+    score_type= 'test_f1_weighted',
+    title= 'KNN of Loan data',
+    xlabel= 'k',
+    ylabel= 'F1'
+  )
+
+  # plot all scaling methods for knn for dota dataset
+  plot_stored_crossval_scores(knn_dota_all_scales,
+    score_type= 'test_accuracy',
+    title= 'KNN of Dota data',
+    xlabel= 'k',
+    ylabel= 'Accuracy'
+  )
+  plot_stored_crossval_scores(knn_dota_all_scales,
+    score_type= 'test_f1_weighted',
+    title= 'KNN of Dota data',
+    xlabel= 'k',
+    ylabel= 'F1'
+  )
+
+  # plot all scaling methods for knn for heart disease dataset
+  plot_stored_crossval_scores(knn_heart_disease_all_scales,
+    score_type= 'test_accuracy',
+    title= 'KNN of Heart Disease data',
+    xlabel= 'k',
+    ylabel= 'Accuracy'
+  )
+  plot_stored_crossval_scores(knn_heart_disease_all_scales,
+    score_type= 'test_f1_weighted',
+    title= 'KNN of Heart Disease data',
+    xlabel= 'k',
+    ylabel= 'F1'
+  )
 
   # plot feature selection for loan dataset
   plot_stored_crossval_scores(knn_loan_feature_selection,
@@ -63,13 +125,7 @@ def plotting():
     ylabel= 'Accuracy'
   )
 
-  # plot class collapsing for heart disease dataset
-  plot_stored_crossval_scores(knn_heart_disease_binary,
-    score_type= 'test_accuracy',
-    title= 'KNN of Heart Disease data',
-    xlabel= 'k',
-    ylabel= 'Accuracy'
-  )
+  
 
 
   ########### NN ###########

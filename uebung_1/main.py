@@ -124,7 +124,8 @@ def dataset_loan():
   if config.knn:
     knn.dataset_loan_minmax_one_feature_cv_various_k(x, y)
     knn.dataset_loan_minmax_cv_various_k(x, y) 
-    knn.dataset_loan_standard_cv_various_k(x, y)   
+    knn.dataset_loan_standard_cv_various_k(x, y)  
+    knn.dataset_loan_no_scale_cv_various_k(x, y) 
     
 
 
@@ -157,6 +158,7 @@ def dataset_dota():
     rf.dataset_dota_crossval_various_estimators( x, y )
 
   if config.knn:
+    knn.dataset_dota_no_scale_cv_various_k(x, y)
     knn.dataset_dota_minmax_cv_various_k(x, y)
     
 
@@ -191,6 +193,7 @@ def dataset_heart_disease():
     rf.dataset_heart_disease_crossval_various_estimators( x, y )
 
   if config.knn:
+    knn.dataset_heart_disease_no_scale_cv_various_k(x, y)
     knn.dataset_heart_disease_standard_cv_various_k(x, y)
     knn.dataset_heart_disease_minmax_cv_various_k(x, y)
     knn.dataset_heart_disease_minmax_cv_various_k_binary(x, y_binary)
