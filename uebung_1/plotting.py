@@ -36,6 +36,7 @@ def plotting():
   ]
 
   knn_loan_feature_selection= [
+    ('knn', 'Loan MinMax All Features', 'All'),
     ('knn', 'Loan MinMax 10 Features', '10 Features'),
     ('knn', 'Loan MinMax 1 Feature', '1 Feature'),
   ]

@@ -131,6 +131,28 @@ def dataset_loan_standard_cv_various_k( x, y ):
   store_crossval_scores( 'knn', 'Loan Standard 10 Features', None, scores)
 
 
+def dataset_loan_minmax_all_features_cv_various_k( x, y ):
+  header()
+  
+  x, y = encode_dataset_loan(x,y)
+  
+  scores= []
+  for i in range(1,42):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer()),
+      ('scaler', MinMaxScaler()),  
+      ('knn', KNeighborsClassifier(n_neighbors=i, weights='distance'))
+    ] )
+
+    #train model with cv of 5 
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+
+    append_averaged_cv_scores( scores, cv_scores )
+
+  scores= pd.DataFrame(scores)
+
+  store_crossval_scores( 'knn', 'Loan MinMax All Features', None, scores)
+
 def dataset_loan_minmax_cv_various_k( x, y ):
   header()
   

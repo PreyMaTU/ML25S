@@ -122,6 +122,7 @@ def dataset_loan():
     rf.dataset_loan_crossval_various_estimators( x, y )
 
   if config.knn:
+    knn.dataset_loan_minmax_all_features_cv_various_k(x, y)
     knn.dataset_loan_minmax_one_feature_cv_various_k(x, y)
     knn.dataset_loan_minmax_cv_various_k(x, y) 
     knn.dataset_loan_standard_cv_various_k(x, y)  
