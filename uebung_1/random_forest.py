@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import time
 
-SWEEP_STEPS= 100 # 25
+SWEEP_STEPS= 25 # 25
 
 header= classifier_header('RF')
 
