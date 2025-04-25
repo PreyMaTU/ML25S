@@ -59,7 +59,7 @@ def plotting():
     score_type= 'fit_time',
     title= 'KNN fit time over k (Minmax)',
     xlabel= 'k',
-    ylabel= 'fit time'
+    ylabel= 'fit time [s]'
   )
 
   # plot all scaling methods for knn for Breast Cancer dataset
@@ -171,7 +171,7 @@ def plotting():
     score_type= 'fit_time',
     title= 'NN fit time over learning rate (Minmax)',
     xlabel= 'learning rate',
-    ylabel= 'fit time',
+    ylabel= 'fit time  [s]',
     logarithmicX= True	
   )
 
@@ -192,7 +192,7 @@ def plotting():
     score_type= 'fit_time',
     title= 'NN fit time over hidden layers (Minmax)',
     xlabel= 'hidden layers',
-    ylabel= 'fit time'
+    ylabel= 'fit time [s]'
   )
 
   # plot feature selection for breast cancer dataset
@@ -253,7 +253,7 @@ def plotting():
     score_type= 'fit_time',
     title= 'RF fit time over #estimators (Robust Scaler)',
     xlabel= 'estimators',
-    ylabel= 'fit time'
+    ylabel= 'fit time [s]'
   )
 
   # plot accuracy over depth for all datasets
