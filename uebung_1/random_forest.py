@@ -12,7 +12,8 @@ import pandas as pd
 import numpy as np
 import time
 
-SWEEP_STEPS= 25 # 25
+SWEEP_STEPS_DEPTH= 10 # 25
+SWEEP_STEPS_ESTIMATORS= 25 # 25
 
 header= classifier_header('RF')
 
@@ -61,7 +62,7 @@ def dataset_breast_cancer_crossval_various_depths( x, y, x_eval, ids_eval ):
   scores= []
   depths= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(1, 110, SWEEP_STEPS_DEPTH):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
@@ -83,7 +84,7 @@ def dataset_breast_cancer_crossval_unscaled_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
@@ -105,7 +106,7 @@ def dataset_breast_cancer_crossval_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
@@ -133,7 +134,7 @@ def dataset_loan_crossval_various_depths( x, y ):
   scores= []
   depths= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(1, 110, SWEEP_STEPS_DEPTH):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
@@ -157,7 +158,7 @@ def dataset_loan_crossval_unscaled_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
@@ -181,7 +182,7 @@ def dataset_loan_crossval_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
@@ -208,7 +209,7 @@ def dataset_dota_crossval_various_depths( x, y ):
   scores= []
   depths= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(1, 110, SWEEP_STEPS_DEPTH):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
@@ -232,7 +233,7 @@ def dataset_dota_crossval_unscaled_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
@@ -256,7 +257,7 @@ def dataset_dota_crossval_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
@@ -284,7 +285,7 @@ def dataset_heart_disease_crossval_various_depths( x, y ):
   scores= []
   depths= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(1, 110, SWEEP_STEPS_DEPTH):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
@@ -308,7 +309,7 @@ def dataset_heart_disease_crossval_unscaled_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
@@ -332,7 +333,7 @@ def dataset_heart_disease_crossval_various_estimators( x, y ):
   scores= []
   num_estimators= []
 
-  for i in range(10, 500, SWEEP_STEPS):
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
     pipe = Pipeline([
       ('imputer', SimpleImputer(strategy = 'most_frequent')),
       ('scaler', RobustScaler()),
