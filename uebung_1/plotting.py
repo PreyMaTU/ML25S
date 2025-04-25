@@ -289,16 +289,16 @@ def plotting():
   # plot comparison of scaled vs unscaled
   # Loan
   plot_stored_crossval_scores(rf_loan_all_scalers,
-    score_type= 'test_accuracy',
-    title= 'RF Accuracy over #estimators (Loan)',
+    score_type= 'test_f1_weighted',
+    title= 'RF F1 score over #estimators (Loan)',
     xlabel= 'estimators',
-    ylabel= 'accuracy'
+    ylabel= 'F1'
   )
 
   # Dota
   plot_stored_crossval_scores(rf_dota_all_scalers,
     score_type= 'test_f1_weighted',
-    title= 'RF F1 over #estimators (Dota)',
+    title= 'RF F1 score over #estimators (Dota)',
     xlabel= 'estimators',
     ylabel= 'F1'
   )
@@ -306,7 +306,7 @@ def plotting():
   # Breast cancer
   plot_stored_crossval_scores(rf_breast_cancer_all_scalers,
     score_type= 'test_f1_weighted',
-    title= 'RF F1 over #estimators (Breast Cancer)',
+    title= 'RF F1 score over #estimators (Breast Cancer)',
     xlabel= 'estimators',
     ylabel= 'F1'
   )
@@ -314,7 +314,7 @@ def plotting():
   # Heart Disease
   plot_stored_crossval_scores(rf_heart_disease_all_scalers,
     score_type= 'test_f1_weighted',
-    title= 'RF F1 over #estimators (Heart Disease)',
+    title= 'RF F1 score over #estimators (Heart Disease)',
     xlabel= 'estimators',
     ylabel= 'F1'
   )
