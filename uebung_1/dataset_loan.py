@@ -93,12 +93,12 @@ def encode_dataset_loan( x: pd.DataFrame, y: pd.Series ):
   
   # Binary categories
   x['term_60months'] = x.term.map( lambda t : 1 if t.strip() == '60 months' else 0 )
-  x['pymnt_plan'] = x.term.map( lambda t : 1 if t.strip().lower() == 'y' else 0 )
-  x['hardship_flag'] = x.term.map( lambda t : 1 if t.strip().lower() == 'y' else 0 )
-  x['debt_settlement_flag'] = x.term.map( lambda t : 1 if t.strip().lower() == 'y' else 0 )
-  x['initial_list_status_whole'] = x.term.map( lambda t : 1 if t.strip().lower() == 'w' else 0 )
-  x['application_type_individual'] = x.term.map( lambda t : 1 if t.strip() == 'Individual' else 0 )
-  x['disbursement_method_cash'] = x.term.map( lambda t : 1 if t.strip() == 'Cash' else 0 )
+  x['pymnt_plan'] = x.pymnt_plan.map( lambda t : 1 if t.strip().lower() == 'y' else 0 )
+  x['hardship_flag'] = x.hardship_flag.map( lambda t : 1 if t.strip().lower() == 'y' else 0 )
+  x['debt_settlement_flag'] = x.debt_settlement_flag.map( lambda t : 1 if t.strip().lower() == 'y' else 0 )
+  x['initial_list_status_whole'] = x.initial_list_status.map( lambda t : 1 if t.strip().lower() == 'w' else 0 )
+  x['application_type_individual'] = x.application_type.map( lambda t : 1 if t.strip() == 'Individual' else 0 )
+  x['disbursement_method_cash'] = x.disbursement_method.map( lambda t : 1 if t.strip() == 'Cash' else 0 )
 
   # Drop all the binary columns that were renamed
   x = x.drop([
