@@ -20,6 +20,7 @@ config= None
 rf= None
 nn= None
 knn= None
+nb= None
 
 def parse_arguments():
   parser= ArgumentParser()
@@ -31,6 +32,7 @@ def parse_arguments():
   parser.add_argument('-n', '--neural_networks', action= 'store_true')
   parser.add_argument('-r', '--random_forests', action= 'store_true')
   parser.add_argument('-k', '--knn', action= 'store_true')
+  parser.add_argument('-v', '--naive_bayes', action= 'store_true')
   parser.add_argument('-C', '--compare_models', action= 'store_true')
 
   parser.add_argument('-p', '--plotting', action='store_true')
@@ -44,8 +46,9 @@ def parse_arguments():
     args.knn= True
     args.random_forests= True
     args.neural_networks= True
+    args.naive_bayes= True
 
-  if not args.knn and not args.random_forests and not args.neural_networks and not args.load:
+  if not args.knn and not args.random_forests and not args.neural_networks and not args.naive_bayes and not args.load:
     parser.print_help()
     exit(1)
 
@@ -161,6 +164,9 @@ def dataset_dota():
   if config.knn:
     knn.dataset_dota_no_scale_cv_various_k(x, y)
     knn.dataset_dota_minmax_cv_various_k(x, y)
+
+  if config.naive_bayes:
+    nb.dataset_dota_naive_bayes_default(x, y)
     
 
 
@@ -203,7 +209,7 @@ def dataset_heart_disease():
 
 
 def main():
-  global config, rf, nn, knn
+  global config, rf, nn, knn, nb
 
   start_time= time.time()
 
@@ -220,6 +226,10 @@ def main():
   if config.knn:
     import knn as knn_module
     knn= knn_module
+
+  if config.naive_bayes:
+    import naive_bayes as naive_bayes_module
+    nb= naive_bayes_module
 
   if config.load:
     for file_name in config.load:
