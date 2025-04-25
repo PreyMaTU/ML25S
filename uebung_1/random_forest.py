@@ -349,6 +349,30 @@ def dataset_heart_disease_crossval_various_estimators( x, y ):
   store_crossval_scores( 'rf', 'Heart Disease Scaled', num_estimators, scores)
 
 
+def dataset_heart_disease_binary_crossval_various_estimators( x, y_binary ):
+  header()
+  
+  x, y_binary= encode_dataset_heart_disease( x, y_binary )
+
+  scores= []
+  num_estimators= []
+
+  for i in range(10, 500, SWEEP_STEPS_ESTIMATORS):
+    pipe = Pipeline([
+      ('imputer', SimpleImputer(strategy = 'most_frequent')),
+      ('scaler', RobustScaler()),
+      ('rf', RandomForestClassifier(n_estimators=i, random_state=42, n_jobs=-1))
+    ] )
+
+    cv_scores = cross_validate(pipe, x, y_binary, cv=5, scoring=['accuracy','f1_weighted'])
+  
+    num_estimators.append( i )
+    append_averaged_cv_scores( scores, cv_scores )
+
+  scores= pd.DataFrame(scores)
+  store_crossval_scores( 'rf', 'Heart Disease Binary Scaled', num_estimators, scores)
+
+
 def dataset_heart_disease_holdout_with_split( x, y, split_ratio ):
   
   # Create training/test split

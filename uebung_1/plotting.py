@@ -210,6 +210,7 @@ def plotting():
     ('rf', 'Loan Scaled', ' Loan'),
     ('rf', 'Dota Scaled', 'Dota'),
     ('rf', 'Heart Disease Scaled', 'Heart Disease'),
+    ('rf', 'Heart Disease Binary Scaled', 'Heart Disease Binary'),
   ]
   
   all_rf_depths= [

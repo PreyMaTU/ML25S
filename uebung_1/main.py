@@ -192,6 +192,7 @@ def dataset_heart_disease():
     rf.dataset_heart_disease_crossval_various_depths( x, y )
     rf.dataset_heart_disease_crossval_unscaled_various_estimators( x, y )
     rf.dataset_heart_disease_crossval_various_estimators( x, y )
+    rf.dataset_heart_disease_binary_crossval_various_estimators(x, y_binary)
 
   if config.knn:
     knn.dataset_heart_disease_no_scale_cv_various_k(x, y)
