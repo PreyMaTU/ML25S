@@ -157,19 +157,22 @@ def plotting():
     score_type= 'test_f1_weighted',
     title= 'NN F1 score over learning rate (Minmax)',
     xlabel= 'learning rate',
-    ylabel= 'F1'
+    ylabel= 'F1',
+    logarithmicX= True	
   )
   plot_stored_crossval_scores(all_nn_minmax_learningrate,
     score_type= 'test_accuracy',
     title= 'NN Accuracy over learning rate (Minmax)',
     xlabel= 'learning rate',
-    ylabel= 'Accuracy'
+    ylabel= 'Accuracy',
+    logarithmicX= True	
   )
   plot_stored_crossval_scores(all_nn_minmax_learningrate,
     score_type= 'fit_time',
     title= 'NN fit time over learning rate (Minmax)',
     xlabel= 'learning rate',
-    ylabel= 'fit time'
+    ylabel= 'fit time',
+    logarithmicX= True	
   )
 
     # plot all NN metrics over all datasets with varying layer structure

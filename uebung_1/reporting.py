@@ -72,7 +72,7 @@ def export_current_plot_with_title_name( title, xlabel, ylabel ):
   print('Exporting plot:', path)
   plt.savefig(path)
 
-def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, line_label= None, show= False, stacked= False ):
+def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, line_label= None, show= False, stacked= False, logarithmicX= False ):
 
   # Use numbers from 1...N by default
   if not x_values:
@@ -83,6 +83,9 @@ def plot_crossval_scores( scores, title: str, xlabel, ylabel, x_values= None, li
   if line_label:
     line.set_label( line_label )
     plt.legend(framealpha = 0.6)
+
+  if logarithmicX:
+      plt.xscale('log')
 
   plt.title(title)
   plt.xlabel(xlabel)
@@ -127,7 +130,7 @@ def filter_available_score_entries( score_entries, title ):
   return available_config_indices
 
 
-def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabel, show= False):
+def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabel, show= False, logarithmicX= False):
   available_config_indices= filter_available_score_entries( score_entries, title )
 
   # Plot the configuration data as a stacked plot
@@ -147,7 +150,8 @@ def plot_stored_crossval_scores( score_entries, score_type, title, xlabel, ylabe
       ylabel= ylabel,
       line_label= line_label,
       stacked= i < (len(available_config_indices) - 1),
-      show= show
+      show= show,
+      logarithmicX = logarithmicX
     )
 
 
