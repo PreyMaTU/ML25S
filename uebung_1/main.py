@@ -9,8 +9,6 @@ from data_loader import load_csv_from_zip
 from plotting import plotting
 from stored_scores import export_stored_crossval_scores, import_stored_crossval_scores
 
-# import k_nearest_neighbors as knn
-
 # Ensure working directories exist
 Path("./out").mkdir(parents=True, exist_ok=True)
 Path("./data").mkdir(parents=True, exist_ok=True)
@@ -72,9 +70,6 @@ def dataset_breast_cancer():
 
   x_eval = eval_df.drop(columns=['ID'])
   ids_eval= eval_df['ID']
-
-  # TODO: Handle missing values
-  # data_df = data_df.dropna()  # or use fillna()
 
   if config.neural_networks:
     nn.dataset_breast_cancer_cv_various_learningrates_minmax(x, y)
@@ -186,10 +181,6 @@ def dataset_heart_disease():
   # combine heart disease to single class, essentially binary classification
   y_binary = y.copy()
   y_binary[y_binary > 0] = 1
-
-  # Check the distriubution of the target labels in the dataset
-  # 164 55 36 35 13
-  #print(np.bincount(y.to_numpy()[:,0]))
 
   y = np.ravel(y)
   y_binary = np.ravel(y_binary)
