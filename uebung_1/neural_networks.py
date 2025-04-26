@@ -21,7 +21,6 @@ def generate_learning_rates():
 ############################################################################################
 # Dataset Breast Cancer:
 def dataset_breast_cancer_cv_various_layersizes( x, y, scaler_type="none" ):
-  header()
   
   # Convert types of columns to numerical values
   y = y.astype(int)  # convert True/False to 1/0
@@ -71,7 +70,6 @@ def dataset_breast_cancer_cv_various_layersizes( x, y, scaler_type="none" ):
 
 
 def dataset_breast_cancer_cv_various_learningrates( x, y, scaler_type="none" ):
-  header()
 
   # Convert types of columns to numerical values
   y = y.astype(int)  # convert True/False to 1/0
@@ -113,36 +111,44 @@ def dataset_breast_cancer_cv_various_learningrates( x, y, scaler_type="none" ):
 
 
 def dataset_breast_cancer_cv_various_learningrates_minmax(x, y):
+  header()
   learning_rates, scores = dataset_breast_cancer_cv_various_learningrates(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Breast Cancer Learning Rate MinMax', learning_rates, scores)
 
 def dataset_breast_cancer_cv_various_learningrates_standard(x, y):
+  header()
   learning_rates, scores = dataset_breast_cancer_cv_various_learningrates(x, y, 'standard')
   store_crossval_scores( 'NN', 'Breast Cancer Learning Rate Standard', learning_rates, scores)
 
 def dataset_breast_cancer_cv_various_learningrates_robust(x, y):
+  header()
   learning_rates, scores = dataset_breast_cancer_cv_various_learningrates(x, y, 'robust')
   store_crossval_scores( 'NN', 'Breast Cancer Learning Rate Robust', learning_rates, scores)
 
 def dataset_breast_cancer_cv_various_learningrates_noscale(x, y):
+  header()
   learning_rates, scores = dataset_breast_cancer_cv_various_learningrates(x, y)
   store_crossval_scores( 'NN', 'Breast Cancer Learning Rate No Scale', learning_rates, scores)
 
 
 
 def dataset_breast_cancer_cv_various_layersizes_minmax(x, y):
+  header()
   x_values, scores = dataset_breast_cancer_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Breast Cancer Layer Sizes MinMax', x_values, scores)
 
 def dataset_breast_cancer_cv_various_layersizes_standard(x, y):
+  header()
   x_values, scores = dataset_breast_cancer_cv_various_layersizes(x, y, 'standard')
   store_crossval_scores( 'NN', 'Breast Cancer Layer Sizes Standard', x_values, scores)
 
 def dataset_breast_cancer_cv_various_layersizes_robust(x, y):
+  header()
   x_values, scores = dataset_breast_cancer_cv_various_layersizes(x, y, 'robust')
   store_crossval_scores( 'NN', 'Breast Cancer Layer Sizes Robust', x_values, scores)
 
 def dataset_breast_cancer_cv_various_layersizes_noscale(x, y):
+  header()
   x_values, scores = dataset_breast_cancer_cv_various_layersizes(x, y)
   store_crossval_scores( 'NN', 'Breast Cancer Layer Sizes No Scale', x_values, scores)
 
@@ -151,8 +157,7 @@ def dataset_breast_cancer_cv_various_layersizes_noscale(x, y):
 # Dataset Loan:
 
 def dataset_loan_cv_various_layersizes( x, y, scaler_type="none" ):
-  header()
-  
+    
   x, y= encode_dataset_loan( x, y )
   
   scaler = None
@@ -200,8 +205,6 @@ def dataset_loan_cv_various_layersizes( x, y, scaler_type="none" ):
 
 
 def dataset_loan_cv_various_learningrates( x, y, scaler_type="none" ):
-  header()
-
   x, y= encode_dataset_loan( x, y )
   
   scaler = None
@@ -240,10 +243,12 @@ def dataset_loan_cv_various_learningrates( x, y, scaler_type="none" ):
   return learning_rates, scores
 
 def dataset_loan_cv_various_learningrates_minmax(x, y):
+  header()
   learning_rates, scores = dataset_loan_cv_various_learningrates(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Loan Learning Rate MinMax', learning_rates, scores)
 
 def dataset_loan_cv_various_layersizes_minmax(x, y):
+  header()
   x_values, scores = dataset_loan_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Loan Layer Sizes MinMax', x_values, scores)
 
@@ -252,8 +257,6 @@ def dataset_loan_cv_various_layersizes_minmax(x, y):
 # Dataset Dota:
 
 def dataset_dota_cv_various_layersizes( x, y, scaler_type="none" ):
-  header()
-  
   x, y= encode_dataset_dota( x, y )
   x = x.astype(float)
   y = y.astype(float)
@@ -303,7 +306,6 @@ def dataset_dota_cv_various_layersizes( x, y, scaler_type="none" ):
 
 
 def dataset_dota_cv_various_learningrates( x, y, scaler_type="none" ):
-  header()
 
   x, y= encode_dataset_dota( x, y )
   x = x.astype(float)
@@ -345,10 +347,12 @@ def dataset_dota_cv_various_learningrates( x, y, scaler_type="none" ):
   return learning_rates, scores
 
 def dataset_dota_cv_various_learningrates_minmax(x, y):
+  header()
   learning_rates, scores = dataset_dota_cv_various_learningrates(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Dota Learning Rate MinMax', learning_rates, scores)
 
 def dataset_dota_cv_various_layersizes_minmax(x, y):
+  header()
   x_values, scores = dataset_dota_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Dota Layer Sizes MinMax', x_values, scores)
 
@@ -358,7 +362,6 @@ def dataset_dota_cv_various_layersizes_minmax(x, y):
 
 ############################ Hyperparameter Tweaking ############################
 def dataset_heart_disease_cv_various_layersizes( x, y, scaler_type="none" ):
-  header()
   x, y = encode_dataset_heart_disease(x, y)
   
   scaler = None
@@ -406,7 +409,6 @@ def dataset_heart_disease_cv_various_layersizes( x, y, scaler_type="none" ):
 
 
 def dataset_heart_disease_cv_various_learningrates( x, y, scaler_type="none" ):
-  header()
   x, y = encode_dataset_heart_disease(x, y)
   
   scaler = None
@@ -446,20 +448,24 @@ def dataset_heart_disease_cv_various_learningrates( x, y, scaler_type="none" ):
 
 
 def dataset_heart_disease_cv_various_learningrates_minmax(x, y):
+  header()
   learning_rates, scores = dataset_heart_disease_cv_various_learningrates(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Heart Disease Learning Rate MinMax', learning_rates, scores)
 
 
 def dataset_heart_disease_cv_various_layersizes_minmax(x, y):
+  header()
   x_values, scores = dataset_heart_disease_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Heart Disease Layer Sizes MinMax', x_values, scores)
 
 
 def dataset_heart_disease_binary_cv_various_learningrates_minmax(x, y):
+  header()
   learning_rates, scores = dataset_heart_disease_cv_various_learningrates(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Heart Disease Binary Learning Rate MinMax', learning_rates, scores)
 
 
 def dataset_heart_disease_binary_cv_various_layersizes_minmax(x, y):
+  header()
   x_values, scores = dataset_heart_disease_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Heart Disease Binary Layer Sizes MinMax', x_values, scores)
