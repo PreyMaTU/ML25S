@@ -328,23 +328,86 @@ def plotting():
 
   ###############  Boxplots  ##################
 
-  #
-  # TODO: Instead of comparing different configurations for one classifier,
-  #       we need to compare the same dataset across differen classifieres
-  #       eg like this:
-  #      [
-  #        ('knn', 'Breast Cancer MinMax', 'KNN MinMax'),
-  #        ('rf', 'Breast Cancer Scaled', 'RF Scaled'),
-  #        ('nn', 'Breast Cancer kek', 'NN kek'),
-  #      ]
+  classifier_boxplot_breast_cancer= [
+    ('knn', 'Breast Cancer MinMax', 'KNN'),
+    ('rf', 'Breast Cancer Scaled', 'RF'),
+    ('NN', 'Breast Cancer Layer Sizes MinMax', 'NN'),
+  ]
 
-  plot_stored_crossval_boxplots([
-      ('knn', 'Heart Disease MinMax', 'Heart Disease'),
-      ('knn', 'Breast Cancer MinMax', 'Breast Cancer'),
-      ('knn', 'Heart Disease MinMax Binary', 'Heart Disease 2'),
-    ],
+  classifier_boxplot_loan= [
+    ('knn', 'Loan MinMax 10 Features', 'KNN'),
+    ('rf', 'Loan Scaled', 'RF'),
+    ('NN', 'Loan Layer Sizes MinMax', 'NN'),
+  ]
+
+  classifier_boxplot_dota= [
+    ('knn', 'Dota MinMax', 'KNN'),
+    ('rf', 'Dota Scaled', 'RF'),
+    ('NN', 'Dota Layer Sizes MinMax', 'NN'),
+  ]
+  
+  classifier_boxplot_heart_disease= [
+    ('knn', 'Heart Disease MinMax', 'KNN'),
+    ('rf', 'Heart Disease Scaled', 'RF'),
+    ('NN', 'Heart Disease Layer Sizes MinMax', 'NN'),
+  ]
+  
+  # Compare F1 scores
+  plot_stored_crossval_boxplots( classifier_boxplot_breast_cancer,
     score_type='test_f1_weighted',
-    title='Comparison of F1 score distribution',
+    title='Comparison of F1 score distribution on Breast Cancer',
     ylabel= 'F1',
+    show= False
+  )
+
+
+  plot_stored_crossval_boxplots( classifier_boxplot_loan,
+    score_type='test_f1_weighted',
+    title='Comparison of F1 score distribution on Loan',
+    ylabel= 'F1',
+    show= False
+  )
+  
+  plot_stored_crossval_boxplots(classifier_boxplot_dota,
+    score_type='test_f1_weighted',
+    title='Comparison of F1 score distribution on Dota',
+    ylabel= 'F1',
+    show= False
+  )
+
+  plot_stored_crossval_boxplots(classifier_boxplot_heart_disease,
+    score_type='test_f1_weighted',
+    title='Comparison of F1 score distribution Heart Disease',
+    ylabel= 'F1',
+    show= False
+  )
+
+  # Compare fit times
+
+  plot_stored_crossval_boxplots( classifier_boxplot_breast_cancer,
+    score_type='fit_time',
+    title='Comparison of fit time distribution on Breast Cancer',
+    ylabel= 'fit time [s]',
+    show= False
+  )
+
+  plot_stored_crossval_boxplots( classifier_boxplot_loan,
+    score_type='fit_time',
+    title='Comparison of fit time distribution on Loan',
+    ylabel= 'fit time [s]',
+    show= False
+  )
+  
+  plot_stored_crossval_boxplots(classifier_boxplot_dota,
+    score_type='fit_time',
+    title='Comparison of fit time distribution on Dota',
+    ylabel= 'fit time [s]',
+    show= False
+  )
+
+  plot_stored_crossval_boxplots(classifier_boxplot_heart_disease,
+    score_type='fit_time',
+    title='Comparison of fit time distribution Heart Disease',
+    ylabel= 'fit time [s]',
     show= False
   )
