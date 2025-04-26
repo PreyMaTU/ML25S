@@ -86,8 +86,9 @@ def dataset_loan_numeric_ordinal_columns():
 
 
 def encode_dataset_loan( x: pd.DataFrame, y: pd.Series ):
-  y = y.to_frame(name='label')
-  y = pd.Categorical( y.label ).codes  # convert classes A-G to numbers
+  if y is not None:
+    y = y.to_frame(name='label')
+    y = pd.Categorical( y.label ).codes  # convert classes A-G to numbers
 
   x= x.copy()
   

@@ -153,6 +153,46 @@ def dataset_breast_cancer_cv_various_layersizes_noscale(x, y):
   store_crossval_scores( 'NN', 'Breast Cancer Layer Sizes No Scale', x_values, scores)
 
 
+
+def dataset_breast_cancer_kaggle(x, y, x_eval, ids_eval, validate_before= True):
+  header()
+
+  model=  MLPClassifier(
+    solver='adam',
+    activation='relu',
+    learning_rate='constant',
+    max_iter=2000,
+    hidden_layer_sizes= (128, 64, 32, 16)
+  )
+
+  pipe = Pipeline([
+    ('imputer', SimpleImputer()),
+    ('scaler', MinMaxScaler()),  
+    ('nn', model)
+  ] )
+
+  if validate_before:
+    #train model with cv of 5 
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+
+    for metric in ['test_accuracy', 'test_f1_weighted', 'fit_time']:
+      print(f"{metric}: {cv_scores[metric].mean():.4f}")
+
+  pipe.fit(x, y)
+
+
+  # Let the model predict the labels on the evaluation data set from Kaggle
+  y_eval = pipe.predict(x_eval)
+  
+  eval_results_df= pd.DataFrame()
+  eval_results_df['ID']= ids_eval
+  eval_results_df['class']= y_eval
+  eval_results_df['class']= eval_results_df['class'].apply(lambda x: str(x).lower())
+
+  # Serialize the results for uploading to Kaggle
+  eval_results_df.to_csv('./out/breast-cancer-diagnostic.sol.ex.csv', index=False)
+
+
 ############################################################################################
 # Dataset Loan:
 
@@ -251,6 +291,54 @@ def dataset_loan_cv_various_layersizes_minmax(x, y):
   header()
   x_values, scores = dataset_loan_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Loan Layer Sizes MinMax', x_values, scores)
+
+
+def dataset_loan_kaggle(x, y, x_eval, ids_eval, validate_before= True):
+  header()
+
+  x, y= encode_dataset_loan( x, y )
+
+  model=  MLPClassifier(
+    solver='adam',
+    activation='relu',
+    learning_rate='constant',
+    max_iter=2000,
+    hidden_layer_sizes= (32, 16)
+  )
+
+  pipe = Pipeline([
+    ('imputer', SimpleImputer()),
+    ('scaler', MinMaxScaler()),  
+    ('nn', model)
+  ] )
+
+  if validate_before:
+    #train model with cv of 5 
+    cv_scores = cross_validate(pipe, x, y, cv=5, scoring=['accuracy','f1_weighted'])
+
+    for metric in ['test_accuracy', 'test_f1_weighted', 'fit_time']:
+      print(f"{metric}: {cv_scores[metric].mean():.4f}")
+
+  pipe.fit(x, y)
+
+  # Hack: The evaluation set contains some weirdness we have to fix
+  x_eval['loan_status']= x_eval['loan_status'].apply(lambda x: None if x.lower() == 'default' else x)
+  x_eval['home_ownership']= x_eval['home_ownership'].apply(lambda x: 'OTHER' if x.lower() == 'none' else x)
+
+  # Let the model predict the labels on the evaluation data set from Kaggle
+  x_eval, _= encode_dataset_loan( x_eval, None )
+  y_eval = pipe.predict(x_eval)
+  
+  grade_mapping = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G'}
+
+  eval_results_df= pd.DataFrame()
+  eval_results_df['ID']= ids_eval
+  eval_results_df['grade']= y_eval
+  eval_results_df['grade']= eval_results_df['grade'].map( grade_mapping )
+
+  # Serialize the results for uploading to Kaggle
+  eval_results_df.to_csv('./out/loan-10k.sol.ex.csv', index=False)
+
 
 
 ############################################################################################
@@ -356,6 +444,7 @@ def dataset_dota_cv_various_layersizes_minmax(x, y):
   header()
   x_values, scores = dataset_dota_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Dota Layer Sizes MinMax', x_values, scores)
+
 
 
 ############################################################################################

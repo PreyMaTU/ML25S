@@ -1,0 +1,22 @@
+Breast Cancer Description:
+Software used: python 3.12.6 (scikit)
+OS: Windows 11 Home
+Algorithm: Multi-Layer-Perceptron
+Parameter Settings:
+	solver='adam', activation='relu', learning_rate='constant', max_iter=2000, hidden_layer_sizes= (128, 64, 32, 16)
+Processing: MinMax Scaler, Simple Imputer
+
+
+
+Loan Description:
+Software used: python 3.12.6 (scikit)
+OS: Windows 11 Home
+Algorithm: Multi-Layer-Perceptron
+Parameter Settings:
+	solver='adam', activation='relu', learning_rate='constant', max_iter=2000, hidden_layer_sizes= (32, 16)
+Processing: MinMax Scaler, Simple Imputer
+Encoding: 
+    emp_length: mapped to ordinal 0-10
+    binary mapping (e.g. either 0 or 1) of the following columns: term, pymnt_plan, hardship_flag, debt_settlement_flag, initial_list_status, application_type, disbursement_method
+    one-hot-encoding of the following columns: home_ownership, loan_status, verification_status, purpose, addr_state
+    Combined year + month columns into single float: (issue_d_year, issue_d_month), (earliest_cr_line_year, earliest_cr_line_month), (last_pymnt_d_year, last_pymnt_d_month), (last_credit_pull_d_year, last_credit_pull_d_month)

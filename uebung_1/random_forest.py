@@ -17,43 +17,9 @@ SWEEP_STEPS_ESTIMATORS= 25 # 25
 
 header= classifier_header('RF')
 
-def export_kaggle_results(ids_eval, y_eval):
-  eval_results_df= pd.DataFrame()
-  eval_results_df['ID']= ids_eval
-  eval_results_df['class']= y_eval
-
-  # print( eval_results_df )
-
-  # Serialize the results for uploading to Kaggle
-  eval_results_df.to_csv('./out/breast-cancer-diagnostic.sol.csv', index=False)
-
 
 ############################################################################################
 # Dataset Breast Cancer:
-
-# def dataset_breast_cancer_crossval_various_estimators( x, y, x_eval, ids_eval ):
-#   header()
-# 
-#   # Create training/test split
-#   x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, stratify=y, random_state=42)
-# 
-# 
-#   # Train the model
-#   print('Training...')
-#   model = RandomForestClassifier(n_estimators=50, random_state=42, n_jobs=-1)
-#   model.fit(x_train, y_train)
-# 
-#   # Put the test data into the model to see how well it works
-#   y_pred = model.predict(x_test)
-# 
-#   eval_prediction( x_test, y_test, y_pred)
-# 
-# 
-#   # Let the model predict the labels on the evaluation data set from Kaggle
-#   y_eval = model.predict(x_eval)
-# 
-#   export_kaggle_results(ids_eval, y_eval)
-
 
 
 def dataset_breast_cancer_crossval_various_depths( x, y, x_eval, ids_eval ):

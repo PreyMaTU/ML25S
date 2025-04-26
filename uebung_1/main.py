@@ -34,11 +34,15 @@ def parse_arguments():
   parser.add_argument('-C', '--compare_models', action= 'store_true')
 
   parser.add_argument('-p', '--plotting', action='store_true')
+  parser.add_argument('-g', '--kaggle', action='store_true')
 
   parser.add_argument('--load', nargs='+')
   parser.add_argument('--save')
 
   args= parser.parse_args()
+
+  if args.kaggle:
+    args.neural_networks= True
 
   if args.compare_models:
     args.knn= True
@@ -70,6 +74,10 @@ def dataset_breast_cancer():
 
   x_eval = eval_df.drop(columns=['ID'])
   ids_eval= eval_df['ID']
+
+  if config.kaggle:
+    nn.dataset_breast_cancer_kaggle(x, y, x_eval, ids_eval)
+    return
 
   if config.neural_networks:
     nn.dataset_breast_cancer_cv_various_learningrates_minmax(x, y)
@@ -114,6 +122,10 @@ def dataset_loan():
   x_eval = eval_df.drop(columns=['ID'])
   ids_eval= eval_df['ID']
   
+  if config.kaggle:
+    nn.dataset_loan_kaggle(x, y, x_eval, ids_eval, validate_before= False)
+    return
+
   if config.neural_networks:
     nn.dataset_loan_cv_various_learningrates_minmax(x, y)
     nn.dataset_loan_cv_various_layersizes_minmax(x, y)
