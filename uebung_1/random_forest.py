@@ -122,6 +122,74 @@ def dataset_breast_cancer_crossval_various_estimators( x, y ):
   store_crossval_scores( 'rf', 'Breast Cancer Scaled', num_estimators, scores)
 
 
+def dataset_breast_cancer_crossval_with_fold( x, y, folds ):
+  pipe = Pipeline([
+    ('imputer', SimpleImputer(strategy = 'most_frequent')),
+    ('scaler', RobustScaler()),
+    ('rf', RandomForestClassifier(n_estimators=300, random_state=42, n_jobs=-1))
+  ] )
+
+  cv_scores = cross_validate(pipe, x, y, cv=folds, scoring=['accuracy','f1_weighted'])
+
+  scores= pd.DataFrame(cv_scores)
+
+  print( scores )
+
+def dataset_breast_cancer_crossval_5_fold( x, y ):
+  header()
+  dataset_breast_cancer_crossval_with_fold( x, y, 5 )
+
+def dataset_breast_cancer_crossval_10_fold( x, y ):
+  header()
+  dataset_breast_cancer_crossval_with_fold( x, y, 10 )
+
+def dataset_breast_cancer_holdout_with_split( x, y, split_ratio ):
+  
+  # Create training/test split
+  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size= split_ratio, stratify=y, random_state=42)
+  
+  pipe = Pipeline([
+    ('imputer', SimpleImputer(strategy = 'most_frequent')),
+    ('scaler', RobustScaler()),
+  ] )
+
+  x_train= pipe.fit_transform( x_train )
+  x_test= pipe.transform( x_test )
+  
+  model = RandomForestClassifier(n_estimators=50, random_state=42, n_jobs=-1)
+
+  start_time= time.time_ns()
+  model.fit(x_train, y_train)
+
+  end_time= time.time_ns()
+  fit_time= (end_time - start_time) / (10 ** 9)
+
+  y_pred = model.predict(x_test)
+
+  diy_cv_scores= {
+    'split_ratio': split_ratio,
+    'fit_time': fit_time,
+    'test_f1_weighted': f1_score(y_test, y_pred, average='macro', zero_division=0),
+    'test_accuracy': accuracy_score(y_test, y_pred)
+  }
+
+  return diy_cv_scores
+
+def dataset_breast_cancer_holdout( x, y ):
+  header()
+
+  scores= []
+
+  scores.append( dataset_breast_cancer_holdout_with_split(x, y, 0.2) )
+  scores.append( dataset_breast_cancer_holdout_with_split(x, y, 0.3) )
+  scores.append( dataset_breast_cancer_holdout_with_split(x, y, 0.4) )
+
+  scores= pd.DataFrame(scores)
+
+  print( scores )
+
+  return scores
+
 
 ############################################################################################
 # Dataset Loan:
@@ -372,53 +440,4 @@ def dataset_heart_disease_binary_crossval_various_estimators( x, y_binary ):
   scores= pd.DataFrame(scores)
   store_crossval_scores( 'rf', 'Heart Disease Binary Scaled', num_estimators, scores)
 
-
-def dataset_heart_disease_holdout_with_split( x, y, split_ratio ):
-  
-  # Create training/test split
-  x_train, x_test, y_train, y_test = train_test_split(x, y, test_size= split_ratio, stratify=y, random_state=42)
-  
-  pipe = Pipeline([
-    ('imputer', SimpleImputer(strategy = 'most_frequent')),
-    ('scaler', RobustScaler()),
-  ] )
-
-  x_train= pipe.fit_transform( x_train )
-  x_test= pipe.transform( x_test )
-  
-  model = RandomForestClassifier(n_estimators=50, random_state=42, n_jobs=-1)
-
-  start_time= time.time_ns()
-  model.fit(x_train, y_train)
-
-  end_time= time.time_ns()
-  fit_time= (end_time - start_time) / (10 ** 6)
-
-  y_pred = model.predict(x_test)
-
-  diy_cv_scores= {
-    'split_ratio': split_ratio,
-    'fit_time': fit_time,
-    'test_f1_weighted': f1_score(y_test, y_pred, average='macro', zero_division=0),
-    'test_accuracy': accuracy_score(y_test, y_pred)
-  }
-
-  return diy_cv_scores
-
-def dataset_heart_disease_holdout( x, y ):
-  header()
-
-  x, y= encode_dataset_heart_disease( x, y )
-
-  scores= []
-
-  scores.append( dataset_heart_disease_holdout_with_split(x, y, 0.2) )
-  scores.append( dataset_heart_disease_holdout_with_split(x, y, 0.3) )
-  scores.append( dataset_heart_disease_holdout_with_split(x, y, 0.4) )
-
-  scores= pd.DataFrame(scores)
-
-  print( scores )
-
-  return scores
 

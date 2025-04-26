@@ -93,6 +93,10 @@ def dataset_breast_cancer():
     rf.dataset_breast_cancer_crossval_unscaled_various_estimators( x, y )
     rf.dataset_breast_cancer_crossval_various_estimators( x, y )
 
+    rf.dataset_breast_cancer_crossval_5_fold( x, y )
+    rf.dataset_breast_cancer_crossval_10_fold( x, y )
+    rf.dataset_breast_cancer_holdout( x, y )
+
 
   if config.knn:
     knn.dataset_breast_cancer_no_scale_cv_various_k(x, y)
