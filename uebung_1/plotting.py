@@ -134,14 +134,16 @@ def plotting():
     ('NN', 'Breast Cancer Learning Rate MinMax', 'Breast Cancer'),
     ('NN', 'Loan Learning Rate MinMax', 'Loan'),
     ('NN', 'Dota Learning Rate MinMax', 'Dota'),
-    ('NN', 'Heart Disease Learning Rate MinMax', 'Heart Disease')
+    ('NN', 'Heart Disease Learning Rate MinMax', 'Heart Disease'),
+    ('NN', 'Heart Disease Binary Learning Rate MinMax', 'Heart Disease Binary')
   ]
 
   all_nn_minmax_hiddenlayers= [
     ('NN', 'Breast Cancer Layer Sizes MinMax', 'Breast Cancer'),
     ('NN', 'Loan Layer Sizes MinMax', 'Loan'),
     ('NN', 'Dota Layer Sizes MinMax', 'Dota'),
-    ('NN', 'Heart Disease Layer Sizes MinMax', 'Heart Disease')
+    ('NN', 'Heart Disease Layer Sizes MinMax', 'Heart Disease'),
+    ('NN', 'Heart Disease Binary Layer Sizes MinMax', 'Heart Disease Binary')
 
   ]
 
@@ -171,7 +173,7 @@ def plotting():
     score_type= 'fit_time',
     title= 'NN fit time over learning rate (Minmax)',
     xlabel= 'learning rate',
-    ylabel= 'fit time  [s]',
+    ylabel= 'fit time [s]',
     logarithmicX= True	
   )
 

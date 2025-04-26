@@ -453,3 +453,13 @@ def dataset_heart_disease_cv_various_learningrates_minmax(x, y):
 def dataset_heart_disease_cv_various_layersizes_minmax(x, y):
   x_values, scores = dataset_heart_disease_cv_various_layersizes(x, y, 'minmax')
   store_crossval_scores( 'NN', 'Heart Disease Layer Sizes MinMax', x_values, scores)
+
+
+def dataset_heart_disease_binary_cv_various_learningrates_minmax(x, y):
+  learning_rates, scores = dataset_heart_disease_cv_various_learningrates(x, y, 'minmax')
+  store_crossval_scores( 'NN', 'Heart Disease Binary Learning Rate MinMax', learning_rates, scores)
+
+
+def dataset_heart_disease_binary_cv_various_layersizes_minmax(x, y):
+  x_values, scores = dataset_heart_disease_cv_various_layersizes(x, y, 'minmax')
+  store_crossval_scores( 'NN', 'Heart Disease Binary Layer Sizes MinMax', x_values, scores)

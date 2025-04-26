@@ -193,6 +193,8 @@ def dataset_heart_disease():
   if config.neural_networks:
     nn.dataset_heart_disease_cv_various_learningrates_minmax(x, y)
     nn.dataset_heart_disease_cv_various_layersizes_minmax(x, y)
+    nn.dataset_heart_disease_binary_cv_various_layersizes_minmax(x, y_binary)
+    nn.dataset_heart_disease_binary_cv_various_learningrates_minmax(x, y_binary)
   
   if config.random_forests:
     rf.dataset_heart_disease_crossval_various_depths( x, y )
