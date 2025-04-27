@@ -95,7 +95,8 @@ def dataset_breast_cancer_cv_various_learningrates( x, y, scaler_type="none" ):
       ('scaler', scaler),  
       ('nn', MLPClassifier(solver='adam',
                           activation='relu',
-                          learning_rate=learning_rate,
+                          learning_rate='constant',
+                          learning_rate_init=learning_rate,
                           max_iter=2000,
                           hidden_layer_sizes= (64, 32, 16)
                           ))
@@ -268,7 +269,8 @@ def dataset_loan_cv_various_learningrates( x, y, scaler_type="none" ):
       ('scaler', scaler),  
       ('nn', MLPClassifier(solver='adam',
                           activation='relu',
-                          learning_rate=learning_rate,
+                          learning_rate='constant',
+                          learning_rate_init=learning_rate,
                           max_iter=300,
                           hidden_layer_sizes= (64, 32, 16)
                           ))
@@ -421,7 +423,8 @@ def dataset_dota_cv_various_learningrates( x, y, scaler_type="none" ):
       ('scaler', scaler),  
       ('nn', MLPClassifier(solver='adam',
                           activation='relu',
-                          learning_rate=learning_rate,
+                          learning_rate='constant',
+                          learning_rate_init=learning_rate,
                           max_iter=30,
                           hidden_layer_sizes= (64, 32, 16)
                           ))
@@ -522,7 +525,8 @@ def dataset_heart_disease_cv_various_learningrates( x, y, scaler_type="none" ):
       ('scaler', scaler),  
       ('nn', MLPClassifier(solver='adam',
                           activation='relu',
-                          learning_rate=learning_rate,
+                          learning_rate='constant',
+                          learning_rate_init=learning_rate,
                           max_iter=2000,
                           hidden_layer_sizes= (64, 32, 16)
                           ))
