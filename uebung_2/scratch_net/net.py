@@ -23,15 +23,22 @@ class Layer:
       self.shape= (self.perceptron_count, input_layer_size)
       self.reset()
 
+  def _clear_gradients(self):
+    self.last_input= None
+    self.last_net= None
+    self.last_output= None
+    self.d_weights= None
+
   def connect_to(self, previous: Self):
     self.shape= (self.perceptron_count, previous.perceptron_count)
-    self._reset()
+    self.reset()
 
   def reset(self):
     # weights = row vector
     self.weights= np.random.rand( self.shape[0], self.shape[1] ) - 0.5 # weights in range [-0.5, 0.5]
-    print( self.shape, self.weights )
     self.weights= np.append( self.weights, np.zeros([self.shape[0],1]), axis= 1) # Add a column of zeros for the bias weights
+    
+    self._clear_gradients()
 
   # x = batch of several samples where each sample is a column vector output from the previous layer
   def forward(self, x: np.ndarray, keep_output= False):
@@ -44,10 +51,7 @@ class Layer:
       self.last_net= n
       self.last_output= y
     else:
-      self.last_input= None
-      self.last_net= None
-      self.last_output= None
-      self.d_weights= None
+      self._clear_gradients()
     
     return y
   
@@ -100,16 +104,27 @@ class Net:
 
     # Go backwards through other layers
     for i in reversed(range(len(self.layers) - 1)):
-      delta = self.layers[i].backward(delta, self.layers[i + 1].weights)
+      delta = self.layers[i].backward(self.layers[i + 1], delta)
+
+  def _shape_data(self, d: np.ndarray, name: str):
+    # transpose data, because the net expects each sample to be a column rather than a row
+    d= d.T
+
+    # make sure the data is a 2D array
+    if len(d.shape) == 1:
+      d= np.reshape(d, [1,d.shape[0]])
+    elif len(d.shape) > 2:
+      raise ValueError(f'{name} has too many dimension')
+    
+    return d
 
 
   def train(self, x, y_true, optimizer: Optimizer, epochs=100, learning_rate= 0.01, batch_size= 32, verbose=True):
     self._reset()
 
-    # transpose data, because the net expects each sample to be a column rather than a row
-    x= x.T
-    y_true= y_true.T
-    
+    x= self._shape_data( x, name= 'x' )
+    y_true= self._shape_data( y_true, name= 'y' )
+
     # optimizer.initialize()
 
     sample_count = x.shape[1]  # assuming x shape is (input_dim, num_samples)
@@ -132,15 +147,15 @@ class Net:
         for layer in self.layers:
           layer.weights -= learning_rate * layer.d_weights
       
-      if verbose and (epoch % 50 == 0 or epoch == epochs - 1):
+      if verbose and (epoch % 20 == 0 or epoch == epochs - 1):
         y_pred_epoch = self._forward(x, keep_output=False)
         loss = self.loss_function.forward(y_true, y_pred_epoch)
         print(f"Epoch {epoch}: Loss = {loss:.4f}")
     
 
   def predict(self, x):
-    # transpose data, because the net expects each sample to be a column rather than a row
-    x = x.T
+    x= self._shape_data( x, name= 'x' )
+
     prediction= self._forward(x)
     return prediction.T
 

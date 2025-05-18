@@ -29,7 +29,7 @@ net = Net(
     loss_function=MSE()
 )
 
-net.train(x, labels, optimizer=None, epochs=1000, learning_rate=0.05, verbose=True)
+net.train(x, labels, optimizer=None, epochs=200, learning_rate=0.05, verbose=True)
 
 # Test on new unseen data
 np.random.seed(99)  
