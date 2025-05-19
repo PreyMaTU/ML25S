@@ -1,7 +1,7 @@
 from scratch_net.data import train_test_split
 from scratch_net.activation import ReLu, Sigmoid, Tanh
 from scratch_net.net import Net, Layer
-from scratch_net.optimizer import SGD,Adam
+from scratch_net.optimizer import GradientDecent
 from scratch_net.loss import MSE
 
 from data_loader import load_csv_from_zip
@@ -31,7 +31,7 @@ net= Net([
   Layer( 1, ReLu() )
 ], loss_function= MSE() )
 
-net.train( train_x, train_y, None, epochs= 1000 )
+net.train( train_x, train_y, GradientDecent(), epochs= 1000 )
 
 pred_y = net.predict( test_x )
 
