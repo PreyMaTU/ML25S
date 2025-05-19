@@ -2,7 +2,7 @@
 from scratch_net.data import train_test_split
 from scratch_net.activation import ReLu, Sigmoid, Tanh
 from scratch_net.net import Net, Layer
-from scratch_net.optimizer import SGD,Adam
+from scratch_net.optimizer import GradientDecent
 from scratch_net.loss import MSE
 
 import numpy as np
@@ -29,7 +29,7 @@ net = Net(
     loss_function=MSE()
 )
 
-net.train(x, labels, optimizer=None, epochs=200, learning_rate=0.05, verbose=True)
+net.train(x, labels, optimizer=GradientDecent(), epochs=200, learning_rate=0.05, verbose=True)
 
 # Test on new unseen data
 np.random.seed(99)  

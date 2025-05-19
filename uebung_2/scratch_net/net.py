@@ -125,7 +125,7 @@ class Net:
     x= self._shape_data( x, name= 'x' )
     y_true= self._shape_data( y_true, name= 'y' )
 
-    # optimizer.initialize()
+    optimizer.initialize( self.layers )
 
     sample_count = x.shape[1]  # assuming x shape is (input_dim, num_samples)
 
@@ -144,8 +144,7 @@ class Net:
         self._forward(x_batch, keep_output=True)
         self._backward(y_batch)
 
-        for layer in self.layers:
-          layer.weights -= learning_rate * layer.d_weights
+        optimizer.update( self.layers, learning_rate )
       
       if verbose and (epoch % 20 == 0 or epoch == epochs - 1):
         y_pred_epoch = self._forward(x, keep_output=False)
