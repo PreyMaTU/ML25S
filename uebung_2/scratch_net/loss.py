@@ -12,11 +12,10 @@ class LossFunction:
 # Mean Squared Error
 class MSE(LossFunction):
   def forward(self, y_true, y_pred):
-    return np.mean((y_true - y_pred) ** 2)
+    return np.mean((y_pred - y_true) ** 2)
   
   def backward(self, y_true, y_pred):
-    output_count= np.shape(y_pred)[1]
-    return 2.0 / output_count * (y_pred - y_true)
+    return 2.0 * (y_pred - y_true)
 
 
 # TODO: Check correctness of calculation for BCE and CCE
