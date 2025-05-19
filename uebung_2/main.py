@@ -2,7 +2,8 @@ from scratch_net.data import train_test_split
 from scratch_net.activation import ReLu, Sigmoid, Tanh
 from scratch_net.net import Net, Layer
 from scratch_net.optimizer import GradientDecent
-from scratch_net.loss import MSE
+from scratch_net.loss import MSE, BinaryCrossEntropy
+from sklearn.preprocessing import MinMaxScaler
 
 from data_loader import load_csv_from_zip
 
@@ -23,19 +24,25 @@ train_y= train_y.to_numpy()
 test_x= test_x.to_numpy()
 test_y= test_y.to_numpy()
 
-print(train_x)
+scaler = MinMaxScaler()
+train_x = scaler.fit_transform(train_x)
+test_x = scaler.transform(test_x)
 
 net= Net([
   Layer( 10, ReLu(), input_layer_size= 30),
   Layer( 10, ReLu() ),
-  Layer( 1, ReLu() )
-], loss_function= MSE() )
+  Layer( 1, Sigmoid() )
+], loss_function= MSE())
 
-net.train( train_x, train_y, GradientDecent(), epochs= 1000 )
+net.train( train_x, train_y, GradientDecent(), epochs= 100, batch_size=32)
+
+
 
 pred_y = net.predict( test_x )
 
-# Evaluation
-accuracy = np.mean(pred_y == test_y)
-print(f"\nAccuracy on test set: {accuracy * 100:.2f}%")
 
+# Evaluation
+pred_y_binary = (pred_y > 0.5).astype(int)
+accuracy = np.mean(pred_y_binary == test_y)
+
+print(f"\nAccuracy on test set: {accuracy * 100:.2f}%")
