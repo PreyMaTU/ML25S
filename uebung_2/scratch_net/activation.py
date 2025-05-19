@@ -21,7 +21,8 @@ class Sigmoid(ActivationFunction):
     return 1.0 / (1 + np.exp(-x))
   
   def backward(self, y):
-    return y * (1 - y)
+    s = self.forward(y)
+    return s * (1 - s)
 
 
 class Tanh(ActivationFunction):
@@ -31,5 +32,3 @@ class Tanh(ActivationFunction):
   def backward(self, y):
     t= self.forward( y )
     return 1 - t ** 2
-
-
