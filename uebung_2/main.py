@@ -20,7 +20,9 @@ import numpy as np
 
 # Remove non-feature columns and split columns into inputs and output
 x = data_df.drop(columns=['class', 'ID'])  
-y = data_df['class']
+
+data_df['class_inv']= ~data_df['class']
+y = data_df[['class', 'class_inv']]
 
 train_x, train_y, test_x, test_y= train_test_split(x, y, split=0.7, random_state=42)
 
@@ -29,6 +31,7 @@ train_y= train_y.to_numpy()
 test_x= test_x.to_numpy()
 test_y= test_y.to_numpy()
 
+
 scaler = StandardScaler()
 train_x = scaler.fit_transform(train_x)
 test_x = scaler.transform(test_x)
@@ -36,24 +39,29 @@ test_x = scaler.transform(test_x)
 net= Net([
   Layer( 10, ReLu(), input_layer_size= 30),
   Layer( 10, ReLu() ),
-  Layer( 1, Sigmoid() )
+  Layer( 2, Sigmoid() )
 ], loss_function= MSE())
 
 
 net.train(train_x, train_y, GradientDecent(), epochs=200, batch_size=16)
 
 pred_train = net.predict ( train_x )
-pred_y = net.predict( test_x )
+pred_test = net.predict( test_x )
 
 
 # Evaluation
-pred_train_binary = (pred_train > 0.5).astype(int).flatten()
-print(pred_train_binary)
-print(train_y)
-accuracy_train = np.mean(pred_train_binary == train_y)
+
+pred_train_classified= np.argmax( pred_train, axis= 1)
+train_truth= np.argmax( train_y, axis= 1)
+
+
+accuracy_train = np.mean(pred_train_classified == train_truth)
 print(f"\nAccuracy on train set: {accuracy_train * 100:.2f}%")
-pred_y_binary = (pred_y > 0.5).astype(int).flatten()
-accuracy = np.mean(pred_y_binary == test_y)
+
+pred_test_classified= np.argmax( pred_test, axis= 1)
+test_truth= np.argmax( test_y, axis= 1)
+
+accuracy = np.mean(pred_test_classified == test_truth)
 print(f"\nAccuracy on test set: {accuracy * 100:.2f}%")
 
 

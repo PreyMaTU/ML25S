@@ -146,14 +146,15 @@ class Net:
         optimizer.update(self.layers, learning_rate)
 
       # Calculate accuracy per epoch
-      y_pred_epoch = self._forward(x, keep_output=False)
-      loss = self.loss_function.forward(y_true, y_pred_epoch)
-
-      # Convert predictions to binary classification (assuming sigmoid output)
-      y_pred_binary = (y_pred_epoch > 0.5).astype(int)
-      accuracy = np.mean(y_pred_binary == y_true)
-
       if verbose and (epoch % 20 == 0 or epoch == epochs - 1):
+        y_pred_epoch = self._forward(x, keep_output=False)
+        loss = self.loss_function.forward(y_true, y_pred_epoch)
+
+        # Convert predictions to classification by finding the neuron with
+        # the largest activation
+        y_pred_classified= np.argmax( y_pred_epoch, axis= 0 )
+        y_true_classified= np.argmax( y_true, axis= 0 )
+        accuracy = np.mean(y_pred_classified == y_true_classified)
         print(f"Epoch {epoch}: Loss = {loss:.4f}, Accuracy = {accuracy * 100:.2f}%")
 
     
