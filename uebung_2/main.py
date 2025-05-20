@@ -3,7 +3,7 @@ from scratch_net.activation import ReLu, Sigmoid, Tanh
 from scratch_net.net import Net, Layer
 from scratch_net.optimizer import GradientDecent
 from scratch_net.loss import MSE, BinaryCrossEntropy
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 ## for pytorch version
 import torch
 from torch.utils.data import TensorDataset, DataLoader
@@ -29,7 +29,7 @@ train_y= train_y.to_numpy()
 test_x= test_x.to_numpy()
 test_y= test_y.to_numpy()
 
-scaler = MinMaxScaler()
+scaler = StandardScaler()
 train_x = scaler.fit_transform(train_x)
 test_x = scaler.transform(test_x)
 
@@ -39,18 +39,20 @@ net= Net([
   Layer( 1, Sigmoid() )
 ], loss_function= MSE())
 
-net.train( train_x, train_y, GradientDecent(), epochs= 100, batch_size=32)
 
-
+net.train(train_x, train_y, GradientDecent(), epochs=200, batch_size=16)
 
 pred_train = net.predict ( train_x )
 pred_y = net.predict( test_x )
 
+
 # Evaluation
-pred_train_binary = (pred_train > 0.5).astype(int)
+pred_train_binary = (pred_train > 0.5).astype(int).flatten()
+print(pred_train_binary)
+print(train_y)
 accuracy_train = np.mean(pred_train_binary == train_y)
 print(f"\nAccuracy on train set: {accuracy_train * 100:.2f}%")
-pred_y_binary = (pred_y > 0.5).astype(int)
+pred_y_binary = (pred_y > 0.5).astype(int).flatten()
 accuracy = np.mean(pred_y_binary == test_y)
 print(f"\nAccuracy on test set: {accuracy * 100:.2f}%")
 

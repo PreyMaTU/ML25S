@@ -119,13 +119,13 @@ class Net:
     return d
 
 
-  def train(self, x, y_true, optimizer: Optimizer, epochs=100, learning_rate= 0.01, batch_size= 32, verbose=True):
+  def train(self, x, y_true, optimizer: Optimizer, epochs=100, learning_rate=0.01, batch_size=32, verbose=True):
     self._reset()
 
-    x= self._shape_data( x, name= 'x' )
-    y_true= self._shape_data( y_true, name= 'y' )
+    x = self._shape_data(x, name='x')
+    y_true = self._shape_data(y_true, name='y')
 
-    optimizer.initialize( self.layers )
+    optimizer.initialize(self.layers)
 
     sample_count = x.shape[1]  # assuming x shape is (input_dim, num_samples)
 
@@ -135,7 +135,6 @@ class Net:
       x_shuffled = x[:, indices]
       y_shuffled = y_true[:, indices]
 
-
       for start in range(0, sample_count, batch_size):
         end = start + batch_size
         x_batch = x_shuffled[:, start:end]
@@ -144,12 +143,19 @@ class Net:
         self._forward(x_batch, keep_output=True)
         self._backward(y_batch)
 
-        optimizer.update( self.layers, learning_rate )
-      
+        optimizer.update(self.layers, learning_rate)
+
+      # Calculate accuracy per epoch
+      y_pred_epoch = self._forward(x, keep_output=False)
+      loss = self.loss_function.forward(y_true, y_pred_epoch)
+
+      # Convert predictions to binary classification (assuming sigmoid output)
+      y_pred_binary = (y_pred_epoch > 0.5).astype(int)
+      accuracy = np.mean(y_pred_binary == y_true)
+
       if verbose and (epoch % 20 == 0 or epoch == epochs - 1):
-        y_pred_epoch = self._forward(x, keep_output=False)
-        loss = self.loss_function.forward(y_true, y_pred_epoch)
-        print(f"Epoch {epoch}: Loss = {loss:.4f}")
+        print(f"Epoch {epoch}: Loss = {loss:.4f}, Accuracy = {accuracy * 100:.2f}%")
+
     
 
   def predict(self, x):
