@@ -62,3 +62,14 @@ def test_model(model, test_loader):
             correct += (y_pred == y_true).sum().item()
 
     print(f"\nAccuracy on test set: {100 * correct / total:.2f}%")
+
+def get_pytorch_model_stats(model):
+    """Calculates total learnable parameters and estimated VRAM usage (in MB)."""
+    total_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    param_size = sum(p.element_size() * p.numel() for p in model.parameters())
+    buffer_size = sum(b.element_size() * b.numel() for b in model.buffers())
+    
+    vram_usage_mb = (param_size + buffer_size) / 1024 # Convert bytes to KB
+    
+    return total_params, vram_usage_mb
+

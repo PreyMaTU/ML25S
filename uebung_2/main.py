@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 ## for pytorch version
 import torch
 from torch.utils.data import TensorDataset, DataLoader
-from pytorch_net.net import train_model, test_model
+from pytorch_net.net import train_model, test_model, get_pytorch_model_stats
 from pytorch_net.net import Net as PyNet
 
 from data_loader import load_csv_from_zip
@@ -79,3 +79,8 @@ model = PyNet(input_dims, output_dims, hidden_layers)
 
 train_model(model, train_loader, epochs=400, learning_rate=0.01)
 test_model(model, test_loader)
+
+# print 
+params, vram = get_pytorch_model_stats(model)
+print(f"Total learnable parameters: {params}")
+print(f"Estimated VRAM usage: {vram:.2f} KB")
