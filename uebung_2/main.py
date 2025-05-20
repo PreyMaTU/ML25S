@@ -40,9 +40,10 @@ net.train( train_x, train_y, GradientDecent(), epochs= 100, batch_size=32)
 
 pred_y = net.predict( test_x )
 
-
 # Evaluation
+pred_train_binary = (pred_train > 0.5).astype(int)
+accuracy_train = np.mean(pred_train_binary == train_y)
+print(f"\nAccuracy on train set: {accuracy_train * 100:.2f}%")
 pred_y_binary = (pred_y > 0.5).astype(int)
 accuracy = np.mean(pred_y_binary == test_y)
-
 print(f"\nAccuracy on test set: {accuracy * 100:.2f}%")
