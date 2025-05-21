@@ -1,7 +1,7 @@
 from scratch_net.activation import ReLu, Sigmoid, Tanh
 from scratch_net.net import Net, Layer
 from scratch_net.optimizer import GradientDecent
-from scratch_net.loss import MSE, BinaryCrossEntropy
+from scratch_net.loss import MSE, CrossEntropyLoss
 import numpy as np
 
 
@@ -16,7 +16,7 @@ def model_scratch_net( train_x, train_y, test_x, test_y, epochs):
     Layer( output_size, Sigmoid() )     # 2 output neurons
   ], loss_function= MSE())
 
-  net.train(train_x, train_y, GradientDecent(), epochs=epochs, batch_size=32)
+  net.train(train_x, train_y, GradientDecent(), epochs=epochs, batch_size=32,learning_rate=0.05)
 
   pred_train = net.predict ( train_x )
   pred_test = net.predict( test_x )

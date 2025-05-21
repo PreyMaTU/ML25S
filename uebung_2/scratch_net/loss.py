@@ -1,6 +1,9 @@
 import numpy as np
 
 class LossFunction:
+  def reset(self):
+    pass
+
   # Loss
   def forward(self, y_true, y_pred):
     return 0
@@ -18,28 +21,27 @@ class MSE(LossFunction):
     return 2.0 * (y_pred - y_true)
 
 
-# TODO: Check correctness of calculation for BCE and CCE
 
-class BinaryCrossEntropy(LossFunction):
+class CrossEntropyLoss(LossFunction):
   def forward(self, y_true, y_pred):
-    # Clip to avoid log(0) errors
-    eps = 1e-15
-    y_pred = np.clip(y_pred, eps, 1 - eps)
-    
-    return -np.mean(y_true * np.log(y_pred) + (1 - y_true) * np.log(1 - y_pred))
+
+    # Subtract max logits per sample -> improves numerical stability, 
+    logits_stable = y_pred - np.max(y_pred, axis=0, keepdims=True)
+
+    # Compute log softmax
+    log_probs = logits_stable - np.log(np.sum(np.exp(logits_stable), axis=0, keepdims=True))
+
+    # Compute cross entropy over samples
+    loss = -np.sum(y_true * log_probs) / y_true.shape[1]
+    return loss
 
   def backward(self, y_true, y_pred):
-    eps = 1e-15
-    y_pred = np.clip(y_pred, eps, 1 - eps)
+    logits_stable = y_pred - np.max(y_pred, axis=0, keepdims=True)
 
+  	# Compute gradient
+    exp_scores = np.exp(logits_stable)
+    probs = exp_scores / np.sum(exp_scores, axis=0, keepdims=True)
 
-    return -(y_true / y_pred - (1 - y_true) / (1 - y_pred)) / y_pred.shape[0]
-
-# CCE
-class CategoricalCrossEntropy(LossFunction):
-  def forward(self, y_true, y_pred):
-    epsilon = 1e-8
-    y_pred = np.clip(y_pred, epsilon, 1.0 - epsilon) # Clip so no log(0) 
-    return - (np.sum(y_true * np.log(y_pred), axis=1))
-
-  # TODO: backward derivative
+    # Gradient of CE loss over samples
+    grad = (probs - y_true) / y_true.shape[1]
+    return grad

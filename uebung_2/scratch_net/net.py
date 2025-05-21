@@ -92,9 +92,15 @@ class Net:
     for layer in self.layers:
       layer.reset()
 
+    self.loss_function.reset()
+
   def _forward(self, x: np.ndarray, keep_output = False):
     for layer in self.layers:
       x= layer.forward( x, keep_output)
+
+    # Clear the loss function if we do not need it anymore
+    if not keep_output:
+      self.loss_function.reset()
 
     return x
 
