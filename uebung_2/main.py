@@ -1,5 +1,6 @@
 
 from data_loader import load_csv_from_zip
+from dataset_loan import encode_dataset_loan
 from scratch_net.data import train_test_split
 
 from model_scratch_net import *
@@ -50,26 +51,35 @@ if False:
   #       e.g. Activation- and Loss-Function, Optimizer, MLP-Structure, ...
   model_pytorch( train_x, train_y_label, test_x, test_y_label, epochs=500 )
 
+# Loan Dataset
+################################################################################################
+if True:
+  [loan_df] = load_csv_from_zip('184-702-tu-ml-2025-s-loan.zip', [
+    'loan-10k.lrn.csv'
+  ])
 
-[data_df] = load_csv_from_zip('184-702-tu-ml-2025-s-breast-cancer-diagnostic.zip', [
-  'breast-cancer-diagnostic.shuf.lrn.csv'
-])
+  # Remove non-feature columns and split columns into inputs and output
+  loan_x = loan_df.drop(columns=['grade', 'ID'])  
 
-# Remove non-feature columns and split columns into inputs and output
-x = data_df.drop(columns=['class', 'ID'])  
+  # One hot encode the labels while keeping the original column
+  loan_y = loan_df[['grade']]
 
-data_df['class_inv']= ~data_df['class']
-y = data_df[['class', 'class_inv']]
+  # Encode the dataset (the same as for uebung_1)
+  loan_x , loan_y = encode_dataset_loan(loan_x, loan_y)
 
-train_x, train_y, test_x, test_y= train_test_split(x, y, split=0.7, random_state=42)
+  # Train/Test split
+  train_x, train_y, test_x, test_y= train_test_split(loan_x, loan_y, split=0.7, random_state=42)
 
-train_x= train_x.to_numpy()
-train_y= train_y.to_numpy()
-test_x= test_x.to_numpy()
-test_y= test_y.to_numpy()
+  # Convert to numpy arrays
+  train_x= train_x.to_numpy()
+  train_y_label= train_y['grade'].to_numpy()
+  train_y_one_hot= train_y.drop(['grade'], axis=1).to_numpy()
+  
+  test_x= test_x.to_numpy()
+  test_y_label= test_y['grade'].to_numpy()
+  test_y_one_hot= test_y.drop(['grade'], axis=1).to_numpy()
 
 
-# TODO: 1x loss function, grid search, measurement of total number of learnable parameters and virtual RAM
-# model_scratch_net( train_x, train_y, test_x, test_y )
+  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=400 )
 
-model_pytorch( train_x, train_y, test_x, test_y )
+  model_pytorch( train_x, train_y_label, test_x, test_y_label, epochs=400 )
