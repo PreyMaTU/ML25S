@@ -5,6 +5,7 @@ from scratch_net.data import train_test_split
 
 from model_scratch_net import *
 from model_pytorch import *
+from model_sklearn import *
 
 from sklearn.preprocessing import StandardScaler
 
@@ -17,7 +18,7 @@ import pandas as pd
 
 # Breast Cancer Dataset
 ##################################################################################################
-if False:
+if True:
   [breast_cancer_df] = load_csv_from_zip('184-702-tu-ml-2025-s-breast-cancer-diagnostic.zip', [
     'breast-cancer-diagnostic.shuf.lrn.csv'
   ])
@@ -49,13 +50,15 @@ if False:
   
 
   # TODO: grid search, measurement of total number of learnable parameters and virtual RAM
-  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500 )
+  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=650 )
 
-  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500 )
+  #model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500 )
+
+  #model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500)
 
 # Loan Dataset
 ################################################################################################
-if True:
+if False:
   [loan_df] = load_csv_from_zip('184-702-tu-ml-2025-s-loan.zip', [
     'loan-10k.lrn.csv'
   ])
