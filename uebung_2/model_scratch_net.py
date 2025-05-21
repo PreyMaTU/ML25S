@@ -2,19 +2,18 @@ from scratch_net.activation import ReLu, Sigmoid, Tanh
 from scratch_net.net import Net, Layer
 from scratch_net.optimizer import GradientDecent
 from scratch_net.loss import MSE, BinaryCrossEntropy
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
 import numpy as np
 
 
-  scaler = StandardScaler()
-  train_x = scaler.fit_transform(train_x)
-  test_x = scaler.transform(test_x)
 def model_scratch_net( train_x, train_y, test_x, test_y, epochs):
 
+  input_size = train_x.shape[1]
+  output_size = train_y.shape[1]
+  
   net= Net([
-    Layer( 10, ReLu(), input_layer_size= 30),
+    Layer( 10, ReLu(), input_layer_size= input_size),
     Layer( 10, ReLu() ),
-    Layer( 2, Sigmoid() )
+    Layer( output_size, Sigmoid() )     # 2 output neurons
   ], loss_function= MSE())
 
   net.train(train_x, train_y, GradientDecent(), epochs=epochs, batch_size=32)

@@ -3,6 +3,8 @@ from torch.utils.data import TensorDataset, DataLoader
 from pytorch_net.net import train_model, test_model, get_pytorch_model_stats
 from pytorch_net.net import Net as PyNet
 
+import numpy as np
+
 def model_pytorch( train_x, train_y, test_x, test_y, epochs ):
 
   # Convert dataset to tensors
@@ -19,8 +21,8 @@ def model_pytorch( train_x, train_y, test_x, test_y, epochs ):
   test_loader = DataLoader(test_dataset, batch_size=32)
 
   # Initialize model
-  input_dims = x_train_tensor.shape[1]  
-  output_dims = 2  # binary classification
+  input_dims = x_train_tensor.shape[1]
+  output_dims = len( np.unique( train_y ) )
   hidden_layers = [10, 10]  
 
   model = PyNet(input_dims, output_dims, hidden_layers)
