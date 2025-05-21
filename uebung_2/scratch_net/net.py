@@ -155,7 +155,7 @@ class Net:
         y_pred_classified= np.argmax( y_pred_epoch, axis= 0 )
         y_true_classified= np.argmax( y_true, axis= 0 )
         accuracy = np.mean(y_pred_classified == y_true_classified)
-        print(f"Epoch {epoch}: Loss = {loss:.4f}, Accuracy = {accuracy * 100:.2f}%")
+        print(f"Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}, Accuracy: {accuracy * 100:.2f}%")
 
     
 

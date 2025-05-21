@@ -35,6 +35,8 @@ def train_model(model, train_loader, epochs, learning_rate=0.01):
   model.train()
   for epoch in range(epochs):
     running_loss = 0.0
+    correct = 0
+    total = 0
     for x, y_true in train_loader:
       outputs = model(x)  # take output of last layer
       loss = loss_fn(outputs,y_true)
@@ -44,7 +46,11 @@ def train_model(model, train_loader, epochs, learning_rate=0.01):
 
       running_loss += loss.item()
     if epoch % 20 == 0:
-      print(f"Epoch {epoch+1}/{epochs}, Loss: {running_loss:.4f}")
+
+      y_pred_classified = torch.argmax(outputs,1)
+      total += y_true.size(0)
+      correct += (y_pred_classified == y_true).sum().item()
+      print(f"Epoch {epoch+1}/{epochs}, Loss: {running_loss:.4f}, Accuracy: {100 * correct / total:.2f}%")
 
 
 def test_model(model, test_loader):
