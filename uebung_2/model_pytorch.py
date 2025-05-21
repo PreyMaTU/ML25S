@@ -9,10 +9,10 @@ def model_pytorch( train_x, train_y, test_x, test_y, epochs ):
 
   # Convert dataset to tensors
   x_train_tensor = torch.tensor(train_x, dtype=torch.float32)
-  y_train_tensor = torch.tensor(train_y, dtype=torch.long)
+  y_train_tensor = torch.tensor(train_y, dtype=torch.float32)
 
   x_test_tensor = torch.tensor(test_x, dtype=torch.float32)
-  y_test_tensor = torch.tensor(test_y, dtype=torch.long)
+  y_test_tensor = torch.tensor(test_y, dtype=torch.float32)
 
   train_dataset = TensorDataset(x_train_tensor, y_train_tensor)
   test_dataset = TensorDataset(x_test_tensor, y_test_tensor)
@@ -22,7 +22,7 @@ def model_pytorch( train_x, train_y, test_x, test_y, epochs ):
 
   # Initialize model
   input_dims = x_train_tensor.shape[1]
-  output_dims = len( np.unique( train_y ) )
+  output_dims = y_train_tensor.shape[1]
   hidden_layers = [10, 10]  
 
   model = PyNet(input_dims, output_dims, hidden_layers)

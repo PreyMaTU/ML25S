@@ -18,6 +18,7 @@ class Net(nn.Module):
 
     # Output layer
     layers.append(nn.Linear(prev_dim, output_dims))
+    layers.append(nn.Sigmoid())
 
     self.model = nn.Sequential(*layers)
 
@@ -30,7 +31,7 @@ class Net(nn.Module):
 
     
 def train_model(model, train_loader, epochs, learning_rate=0.01):
-  loss_fn = nn.CrossEntropyLoss()
+  loss_fn = nn.MSELoss()
   optimizer = optim.SGD(model.parameters(), lr=learning_rate)
   model.train()
   for epoch in range(epochs):
@@ -48,8 +49,9 @@ def train_model(model, train_loader, epochs, learning_rate=0.01):
     if epoch % 20 == 0:
 
       y_pred_classified = torch.argmax(outputs,1)
+      y_true_classified = torch.argmax(y_true,1)
       total += y_true.size(0)
-      correct += (y_pred_classified == y_true).sum().item()
+      correct += (y_pred_classified == y_true_classified).sum().item()
       print(f"Epoch {epoch+1}/{epochs}, Loss: {running_loss:.4f}, Accuracy: {100 * correct / total:.2f}%")
 
 
@@ -63,9 +65,10 @@ def test_model(model, test_loader):
     for x, y_true in test_loader:
       outputs = model(x)  # take output of last layer
       y_pred = torch.argmax(outputs,1)
+      y_true_classified = torch.argmax(y_true,1)
 
       total += y_true.size(0)
-      correct += (y_pred == y_true).sum().item()
+      correct += (y_pred == y_true_classified).sum().item()
 
   print(f"\nAccuracy on test set: {100 * correct / total:.2f}%")
 

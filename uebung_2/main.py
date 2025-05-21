@@ -11,7 +11,6 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import pandas as pd
 
-# Pytorch MSE Loss
 # LLM version, Sklearn version
 # Grid search for scratch_net (Use best version also for other Nets)
 # Plots
@@ -52,9 +51,7 @@ if False:
   # TODO: grid search, measurement of total number of learnable parameters and virtual RAM
   model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500 )
 
-  # TODO: Use same setup as for scratch net to make compareable
-  #       e.g. Activation- and Loss-Function, Optimizer, MLP-Structure, ...
-  model_pytorch( train_x, train_y_label, test_x, test_y_label, epochs=500 )
+  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500 )
 
 # Loan Dataset
 ################################################################################################
@@ -91,4 +88,4 @@ if True:
 
   model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=400 )
 
-  model_pytorch( train_x, train_y_label, test_x, test_y_label, epochs=400 )
+  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=400 )
