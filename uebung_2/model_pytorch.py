@@ -3,7 +3,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from pytorch_net.net import train_model, test_model, get_pytorch_model_stats
 from pytorch_net.net import Net as PyNet
 
-def model_pytorch( train_x, train_y, test_x, test_y ):
+def model_pytorch( train_x, train_y, test_x, test_y, epochs ):
 
   # Convert dataset to tensors
   x_train_tensor = torch.tensor(train_x, dtype=torch.float32)
@@ -25,7 +25,7 @@ def model_pytorch( train_x, train_y, test_x, test_y ):
 
   model = PyNet(input_dims, output_dims, hidden_layers)
 
-  train_model(model, train_loader, epochs=400, learning_rate=0.01)
+  train_model(model, train_loader, epochs=epochs, learning_rate=0.01)
   test_model(model, test_loader)
 
   # print 
