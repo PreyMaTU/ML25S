@@ -43,6 +43,11 @@ if False:
   test_y_label= test_y['class'].to_numpy()
   test_y_one_hot= test_y.drop(['class'], axis=1).to_numpy()
 
+  # Scale the input data
+  scaler = StandardScaler()
+  train_x = scaler.fit_transform(train_x)
+  test_x = scaler.transform(test_x)
+  
 
   # TODO: grid search, measurement of total number of learnable parameters and virtual RAM
   model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500 )
@@ -79,6 +84,10 @@ if True:
   test_y_label= test_y['grade'].to_numpy()
   test_y_one_hot= test_y.drop(['grade'], axis=1).to_numpy()
 
+  # Scale the input data
+  scaler = StandardScaler()
+  train_x = scaler.fit_transform(train_x)
+  test_x = scaler.transform(test_x)
 
   model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=400 )
 
