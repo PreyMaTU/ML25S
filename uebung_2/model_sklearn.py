@@ -2,6 +2,8 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 
+from time import time_ns
+
 def compute_model_size(model):
   weight_mem = sum([a.nbytes for a in model.coefs_]) 
   bias_mem = sum([a.nbytes for a in model.intercepts_])
@@ -25,14 +27,17 @@ def model_sklearn( train_x, train_y, test_x, test_y, activation_function, num_la
     learning_rate_init= 0.05,
     max_iter=epochs,
     hidden_layer_sizes = hidden_layer_sizes,
-    verbose= True
+    verbose= False
   )
 
+  start_time= time_ns()
   model.fit(train_x, train_y)
+  end_time= time_ns()
+  print(f'\nTraining time: {(end_time-start_time)/1e6:.1f}ms')
 
   pred_train_y= model.predict( train_x )
   accuracy_train = accuracy_score(pred_train_y, train_y)
-  print(f"\nAccuracy on train set: {accuracy_train * 100:.3f}%")
+  print(f"Accuracy on train set: {accuracy_train * 100:.3f}%")
 
   pred_y= model.predict( test_x )
   accuracy_test = accuracy_score(test_y, pred_y)

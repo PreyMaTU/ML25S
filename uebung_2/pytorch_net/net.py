@@ -75,7 +75,7 @@ def test_model(model, test_loader):
       total += y_true.size(0)
       correct += (y_pred == y_true_classified).sum().item()
 
-  print(f"\nAccuracy on test set: {100 * correct / total:.3f}%")
+  print(f"Accuracy on test set: {100 * correct / total:.3f}%")
 
 def get_pytorch_model_stats(model):
   """Calculates total learnable parameters and estimated VRAM usage (in MB)."""

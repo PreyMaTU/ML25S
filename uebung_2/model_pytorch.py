@@ -3,6 +3,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from pytorch_net.net import train_model, test_model, get_pytorch_model_stats
 from pytorch_net.net import Net as PyNet
 
+from time import time_ns
 import numpy as np
 
 def model_pytorch( train_x, train_y, test_x, test_y, activation_function, num_layers, num_nodes, epochs ):
@@ -28,7 +29,12 @@ def model_pytorch( train_x, train_y, test_x, test_y, activation_function, num_la
   model = PyNet(input_dims, output_dims, hidden_layers)
 
   # no need to pass activation fucntion, both dataset-setups use ReLu (from gridsearch)
+  start_time= time_ns()
   train_model(model, train_loader, epochs=epochs, learning_rate=0.05)
+  end_time= time_ns()
+  print(f'\nTraining time: {(end_time-start_time)/1e6:.1f}ms')
+
+
   test_model(model, test_loader)
 
   # print 
