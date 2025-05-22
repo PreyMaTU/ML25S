@@ -7,6 +7,7 @@ from scratch_net.activation import ReLu
 from model_scratch_net import *
 from model_pytorch import *
 from model_sklearn import *
+from model_llm_generated import *
 
 from sklearn.preprocessing import StandardScaler
 
@@ -66,6 +67,8 @@ if True:
   print("==================================================================")
   print("Train Sklearn Breast Cancer:")
   model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  print("Train LLM-Generated Breast Cancer:")
+  model_llm_generated( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
 
 # Loan Dataset
 ################################################################################################
