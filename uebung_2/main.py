@@ -14,10 +14,6 @@ from sklearn.preprocessing import StandardScaler
 import numpy as np
 import pandas as pd
 
-# LLM version, Sklearn version
-# Grid search for scratch_net (Use best version also for other Nets)
-# Plots
-
 # Breast Cancer Dataset
 ##################################################################################################
 if True:
