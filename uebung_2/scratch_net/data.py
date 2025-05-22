@@ -5,7 +5,7 @@ import numpy as np
 def train_test_split( x, y, split= 0.7, random_state=None ):
   
   if random_state ==  None:
-    random_state = np.random.randint()
+    random_state = np.random.randint(20)
   x = x.sample(frac=1, random_state= random_state)
   y = y.sample(frac=1, random_state= random_state)
 
