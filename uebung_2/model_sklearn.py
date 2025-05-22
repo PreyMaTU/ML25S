@@ -2,6 +2,17 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 
+def compute_model_size(model):
+  weight_mem = sum([a.nbytes for a in model.coefs_]) 
+  bias_mem = sum([a.nbytes for a in model.intercepts_])
+  total_mem= (weight_mem + bias_mem) / 1024
+
+  weight_count = sum([a.size for a in model.coefs_]) 
+  bias_count = sum([a.size for a in model.intercepts_])
+  total_params = weight_count + bias_count
+
+  return total_mem, total_params
+
 def model_sklearn( train_x, train_y, test_x, test_y, activation_function, num_layers, num_nodes, epochs ):
   
   hidden_layer_sizes = (num_nodes,) * num_layers
@@ -27,8 +38,6 @@ def model_sklearn( train_x, train_y, test_x, test_y, activation_function, num_la
   accuracy_test = accuracy_score(test_y, pred_y)
   print(f"Accuracy on test set: {accuracy_test * 100:.3f}%")
 
-  # Number of learnable parameters
-  weights = sum([a.size for a in model.coefs_]) 
-  biases = sum([a.size for a in model.intercepts_])
-  total_params = weights + biases
+  total_kb, total_params= compute_model_size( model )
   print(f"Total learnable parameters: {total_params}")
+  print(f"Estimated memory usage: {total_kb} KB")
