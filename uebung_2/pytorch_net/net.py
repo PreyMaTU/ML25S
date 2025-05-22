@@ -7,11 +7,16 @@ class Net(nn.Module):
     print(f"Initializing Net with input_dims={input_dims}, output_dims={output_dims}, hidden_layers={hidden_layers}")
     super(Net, self).__init__()
 
+    num_layers = hidden_layers[0]
+    num_nodes = hidden_layers[1]
+    hidden_layer_sizes = (num_nodes,) * num_layers
+
+
     layers = []
     prev_dim = input_dims
 
     # Hidden layers
-    for hidden_dim in hidden_layers:
+    for hidden_dim in hidden_layer_sizes:
       layers.append(nn.Linear(prev_dim, hidden_dim))
       layers.append(nn.ReLU())
       prev_dim = hidden_dim

@@ -2,6 +2,7 @@
 from data_loader import load_csv_from_zip
 from dataset_loan import encode_dataset_loan
 from scratch_net.data import train_test_split
+from scratch_net.activation import ReLu
 
 from model_scratch_net import *
 from model_pytorch import *
@@ -22,6 +23,7 @@ if True:
   [breast_cancer_df] = load_csv_from_zip('184-702-tu-ml-2025-s-breast-cancer-diagnostic.zip', [
     'breast-cancer-diagnostic.shuf.lrn.csv'
   ])
+
 
   # Remove non-feature columns and split columns into inputs and output
   breast_cancer_x = breast_cancer_df.drop(columns=['class', 'ID'])  
@@ -48,13 +50,22 @@ if True:
   train_x = scaler.fit_transform(train_x)
   test_x = scaler.transform(test_x)
   
+  epochs = 200
+  activation_function = ReLu()
+  num_layers = 2
+  num_nodes = 20
 
-  # TODO: grid search, measurement of total number of learnable parameters and virtual RAM
-  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=650 )
+  print("==================================================================")
+  print("Train ScratchNet Breast Cancer:")
+  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
 
-  #model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500 )
+  print("==================================================================")
+  print("Train Pytorch Breast Cancer:")
+  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
 
-  #model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=500)
+  print("==================================================================")
+  print("Train Sklearn Breast Cancer:")
+  model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
 
 # Loan Dataset
 ################################################################################################
@@ -62,6 +73,7 @@ if False:
   [loan_df] = load_csv_from_zip('184-702-tu-ml-2025-s-loan.zip', [
     'loan-10k.lrn.csv'
   ])
+
 
   # Remove non-feature columns and split columns into inputs and output
   loan_x = loan_df.drop(columns=['grade', 'ID'])  
@@ -89,6 +101,19 @@ if False:
   train_x = scaler.fit_transform(train_x)
   test_x = scaler.transform(test_x)
 
-  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=400 )
+  epochs = 200
+  activation_function = ReLu()
+  num_layers = 2
+  num_nodes = 5
 
-  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, epochs=400 )
+  print("==================================================================")
+  print("Train ScratchNet Loan:")
+  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+
+  print("==================================================================")
+  print("Train Pytorch Loan:")
+  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+
+  print("==================================================================")
+  print("Train Sklearn Loan:")
+  model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )

@@ -5,7 +5,7 @@ from pytorch_net.net import Net as PyNet
 
 import numpy as np
 
-def model_pytorch( train_x, train_y, test_x, test_y, epochs ):
+def model_pytorch( train_x, train_y, test_x, test_y, activation_function, num_layers, num_nodes, epochs ):
 
   # Convert dataset to tensors
   x_train_tensor = torch.tensor(train_x, dtype=torch.float32)
@@ -23,11 +23,12 @@ def model_pytorch( train_x, train_y, test_x, test_y, epochs ):
   # Initialize model
   input_dims = x_train_tensor.shape[1]
   output_dims = y_train_tensor.shape[1]
-  hidden_layers = [10, 10]  
+  hidden_layers = [num_layers, num_nodes]  
 
   model = PyNet(input_dims, output_dims, hidden_layers)
 
-  train_model(model, train_loader, epochs=epochs, learning_rate=0.01)
+  # no need to pass activation fucntion, both dataset-setups use ReLu (from gridsearch)
+  train_model(model, train_loader, epochs=epochs, learning_rate=0.05)
   test_model(model, test_loader)
 
   # print 
