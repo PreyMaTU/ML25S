@@ -34,4 +34,4 @@ def model_pytorch( train_x, train_y, test_x, test_y, activation_function, num_la
   # print 
   params, vram = get_pytorch_model_stats(model)
   print(f"Total learnable parameters: {params}")
-  print(f"Estimated VRAM usage: {vram:.2f} KB")
+  print(f"Estimated memory usage: {vram:.2f} KB")

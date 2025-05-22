@@ -21,8 +21,14 @@ def model_sklearn( train_x, train_y, test_x, test_y, activation_function, num_la
 
   pred_train_y= model.predict( train_x )
   accuracy_train = accuracy_score(pred_train_y, train_y)
-  print(f"\nAccuracy on train set: {accuracy_train * 100:.2f}%")
+  print(f"\nAccuracy on train set: {accuracy_train * 100:.3f}%")
 
   pred_y= model.predict( test_x )
   accuracy_test = accuracy_score(test_y, pred_y)
-  print(f"\nAccuracy on test set: {accuracy_test * 100:.2f}%")
+  print(f"Accuracy on test set: {accuracy_test * 100:.3f}%")
+
+  # Number of learnable parameters
+  weights = sum([a.size for a in model.coefs_]) 
+  biases = sum([a.size for a in model.intercepts_])
+  total_params = weights + biases
+  print(f"Total learnable parameters: {total_params}")

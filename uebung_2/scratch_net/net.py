@@ -33,6 +33,9 @@ class Layer:
     self.shape= (self.perceptron_count, previous.perceptron_count)
     self.reset()
 
+  def size(self):
+    return self.shape[0]
+
   def reset(self):
     # weights = row vector
     self.weights= np.random.rand( self.shape[0], self.shape[1] ) - 0.5 # weights in range [-0.5, 0.5]
@@ -172,6 +175,24 @@ class Net:
     return prediction.T
 
 
+  def stats(self):
+    weights= 0
+    biases= 0
+    memory_bytes= 0
+    layers= []
+
+    for l in self.layers:
+      layers.append({'size': l.size(), 'activation_function': l.activation_function.__class__.__name__})
+      shape= l.weights.shape
+      weights += (shape[0] * (shape[1]-1))    # Subtract the column of biases
+      biases += shape[0]
+      memory_bytes += l.weights.nbytes
 
 
-
+    return {
+      'loss_function': self.loss_function.__class__.__name__,
+      'layers': layers,
+      'weights': weights,
+      'biases': biases,
+      'memory': memory_bytes / 1024
+    }

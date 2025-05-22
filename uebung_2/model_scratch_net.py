@@ -87,4 +87,9 @@ def model_scratch_net( train_x, train_y, test_x, test_y, activation_function, nu
   test_truth= np.argmax( test_y, axis= 1)
 
   accuracy = np.mean(pred_test_classified == test_truth)
-  print(f"\nAccuracy on test set: {accuracy * 100:.2f}%")
+  print(f"Accuracy on test set: {accuracy * 100:.2f}%")
+
+  stats = net.stats()
+  params = stats['weights'] + stats['biases']
+  print(f"Total learnable parameters: {params}")
+  print(f"Estimated memory usage: {stats['memory']:.2f} KB")
