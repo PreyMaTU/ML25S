@@ -57,7 +57,7 @@ def mse_loss_deriv(y_true, y_pred):
 class NeuralNet:
     def __init__(self, x_train, y_train, layer_sizes, learning_rate=0.01):
         self.input_size = x_train.shape[1]
-        self.output_size = len(np.unique(y_train))
+        self.output_size = y_train.shape[1]
         self.learning_rate = learning_rate
 
         # Add input and output layers
