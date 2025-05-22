@@ -1,5 +1,6 @@
 
 # This code was generated using ChatGPT based on the following prompt:
+#
 # Please write a neural net in python from scratch in Python (you may use math 
 # libs like numpy, but no ML framework like sklearn or torch) with the following 
 # configuration:
@@ -15,8 +16,22 @@
 # number of input samples and number of unique labels in the y_train data.
 # You do not have to design your code to be a reusable framework, it may be 
 # tightly integrated.
+#
+# Performed changes:
+# The inputs are already 1-hot encoded, so we removed the 1-hot encoding
+# implemented by ChatGPT.
+#
+# Add a method for computing net stats based on the following prompt:
+# Please write a method for the neural net (only the method do not repeat the rest)
+# that computes the number of learnable parameters (weights + biases) and the
+# memory consumption in kiB. The data should be returned as a dictornary
+#
+# Remove printing of the accuracy in the evaluate() method, we do that
+# outside in the caller.
+#
+# Add modulo counting in the train function so that we print the loss only every
+# 20th epoch.
 
-# 
 
 import numpy as np
 
@@ -38,9 +53,6 @@ def mse_loss(y_true, y_pred):
 
 def mse_loss_deriv(y_true, y_pred):
     return 2 * (y_pred - y_true) / y_true.size
-
-def one_hot_encode(y, num_classes):
-    return np.eye(num_classes)[y]
 
 class NeuralNet:
     def __init__(self, x_train, y_train, layer_sizes, learning_rate=0.01):
@@ -95,13 +107,11 @@ class NeuralNet:
 
     def train(self, x_train, y_train, epochs=100):
         batch_size = 32
-        num_classes = self.output_size
-        y_train_encoded = y_train # one_hot_encode(y_train, num_classes)
 
         for epoch in range(epochs):
             indices = np.random.permutation(len(x_train))
             x_train_shuffled = x_train[indices]
-            y_train_shuffled = y_train_encoded[indices]
+            y_train_shuffled = y_train[indices]
 
             for i in range(0, len(x_train), batch_size):
                 x_batch = x_train_shuffled[i:i + batch_size]
@@ -112,9 +122,10 @@ class NeuralNet:
                 self.update_weights(grads_w, grads_b)
 
             # Optionally print loss
-            train_pred = self.predict(x_train)
-            loss = mse_loss(y_train_encoded, train_pred)
-            print(f"Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}")
+            if (epoch % 20) == 0 or epoch == epochs - 1:
+                train_pred = self.predict(x_train)
+                loss = mse_loss(y_train, train_pred)
+                print(f"Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}")
 
     def predict(self, x):
         activations, _ = self.forward(x)
@@ -125,8 +136,20 @@ class NeuralNet:
         y_pred = np.argmax(y_pred_probs, axis=1)
         y_test = np.argmax(y_test, axis=1)
         accuracy = np.mean(y_pred == y_test)
-        print(f"Test Accuracy: {accuracy * 100:.2f}%")
         return accuracy
+    
+    def get_model_size_info(self):
+        total_params = 0
+        total_bytes = 0
+
+        for w, b in zip(self.weights, self.biases):
+            total_params += w.size + b.size
+            total_bytes += w.nbytes + b.nbytes
+
+        return {
+            "total_parameters": total_params,
+            "memory_kib": total_bytes / 1024  # Convert bytes to KiB
+        }
 
 # Example usage:
 # Define parameters

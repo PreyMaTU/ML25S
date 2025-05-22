@@ -67,6 +67,8 @@ if True:
   print("==================================================================")
   print("Train Sklearn Breast Cancer:")
   model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+
+  print("==================================================================")
   print("Train LLM-Generated Breast Cancer:")
   model_llm_generated( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
 
