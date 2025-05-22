@@ -81,13 +81,13 @@ def model_scratch_net( train_x, train_y, test_x, test_y, activation_function, nu
 
 
   accuracy_train = np.mean(pred_train_classified == train_truth)
-  print(f"\nAccuracy on train set: {accuracy_train * 100:.2f}%")
+  print(f"\nAccuracy on train set: {accuracy_train * 100:.3f}%")
 
   pred_test_classified= np.argmax( pred_test, axis= 1)
   test_truth= np.argmax( test_y, axis= 1)
 
   accuracy = np.mean(pred_test_classified == test_truth)
-  print(f"Accuracy on test set: {accuracy * 100:.2f}%")
+  print(f"Accuracy on test set: {accuracy * 100:.3f}%")
 
   stats = net.stats()
   params = stats['weights'] + stats['biases']
