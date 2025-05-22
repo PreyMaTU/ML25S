@@ -70,7 +70,7 @@ if True:
 
 # Loan Dataset
 ################################################################################################
-if False:
+if True:
   [loan_df] = load_csv_from_zip('184-702-tu-ml-2025-s-loan.zip', [
     'loan-10k.lrn.csv'
   ])
@@ -118,3 +118,7 @@ if False:
   print("==================================================================")
   print("Train Sklearn Loan:")
   model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+
+  print("==================================================================")
+  print("Train LLM-Generated Loan:")
+  model_llm_generated( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
