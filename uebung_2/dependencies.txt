@@ -1,0 +1,6 @@
+Pyhton Version: Python 3.12.0
+
+Installed libraries:
+-) pandas
+-) scikit-learn
+-) torch
