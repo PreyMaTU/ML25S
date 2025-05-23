@@ -3,6 +3,7 @@ from data_loader import load_csv_from_zip
 from dataset_loan import encode_dataset_loan
 from scratch_net.data import train_test_split
 from scratch_net.activation import ReLu
+from plotting import plot_loss, plot_accuracy
 
 from model_scratch_net import *
 from model_pytorch import *
@@ -13,6 +14,11 @@ from sklearn.preprocessing import StandardScaler
 
 import numpy as np
 import pandas as pd
+
+import sys, os, pathlib
+sys.path.insert(0, os.path.abspath('..'))
+
+pathlib.Path('./out').mkdir(parents=True, exist_ok=True)
 
 # Breast Cancer Dataset
 ##################################################################################################
@@ -52,21 +58,27 @@ if True:
   num_layers = 2
   num_nodes = 20
 
+  traces= []
+
   print("==================================================================")
   print("Train ScratchNet Breast Cancer:")
-  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
 
   print("==================================================================")
   print("Train Pytorch Breast Cancer:")
-  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
 
   print("==================================================================")
   print("Train Sklearn Breast Cancer:")
-  model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
 
   print("==================================================================")
   print("Train LLM-Generated Breast Cancer:")
-  model_llm_generated( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_llm_generated( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
+
+  plot_loss('Breast Cancer - Training Loss', traces)
+  plot_loss('Breast Cancer - Training Loss (DIY)', traces, ['ScratchNet', 'LLM'])
+  plot_accuracy('Breast Cancer - Training Accuracy', traces, ['ScratchNet', 'LLM'])
 
 # Loan Dataset
 ################################################################################################
@@ -107,18 +119,24 @@ if True:
   num_layers = 2
   num_nodes = 5
 
+  traces= []
+
   print("==================================================================")
   print("Train ScratchNet Loan:")
-  model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_scratch_net( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
 
   print("==================================================================")
   print("Train Pytorch Loan:")
-  model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_pytorch( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
 
   print("==================================================================")
   print("Train Sklearn Loan:")
-  model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_sklearn( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
 
   print("==================================================================")
   print("Train LLM-Generated Loan:")
-  model_llm_generated( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs )
+  traces.append( model_llm_generated( train_x, train_y_one_hot, test_x, test_y_one_hot, activation_function, num_layers, num_nodes, epochs=epochs ) )
+
+  plot_loss('Loan - Training Loss', traces)
+  plot_loss('Loan - Training Loss (no PyTorch)', traces, ['ScratchNet', 'LLM', 'sklearn'])
+  plot_accuracy('Loan - Training Accuracy', traces, ['ScratchNet', 'LLM'])

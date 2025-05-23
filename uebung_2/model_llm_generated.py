@@ -13,7 +13,7 @@ def model_llm_generated( train_x, train_y, test_x, test_y, activation_function, 
   nn = NeuralNet(train_x, train_y, layer_sizes=layer_sizes, learning_rate=0.05)
 
   start_time= time_ns()
-  nn.train(train_x, train_y, epochs=epochs)
+  trace= nn.train(train_x, train_y, epochs=epochs)
   end_time= time_ns()
   print(f'\nTraining time: {(end_time-start_time)/1e6:.1f}ms')
 
@@ -23,3 +23,5 @@ def model_llm_generated( train_x, train_y, test_x, test_y, activation_function, 
   stats= nn.get_model_size_info()
   print(f"Total learnable parameters: {stats['total_parameters']}")
   print(f"Estimated memory usage: {stats['memory_kib']:.2f} KB")
+
+  return trace

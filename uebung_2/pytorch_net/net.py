@@ -2,6 +2,8 @@ import torch.nn as nn
 import torch
 import torch.optim as optim
 
+from plotting import TrainingTrace
+
 class Net(nn.Module):
   def __init__(self, input_dims, output_dims, hidden_layers):
     print(f"Initializing Net with input_dims={input_dims}, output_dims={output_dims}, hidden_layers={hidden_layers}")
@@ -38,6 +40,7 @@ class Net(nn.Module):
 def train_model(model, train_loader, epochs, learning_rate=0.01):
   loss_fn = nn.MSELoss()
   optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+  trace = TrainingTrace('PyTorch')
   model.train()
   for epoch in range(epochs):
     running_loss = 0.0
@@ -51,13 +54,18 @@ def train_model(model, train_loader, epochs, learning_rate=0.01):
       optimizer.step()
 
       running_loss += loss.item()
-    if epoch % 20 == 0:
+    if epoch % 20 == 0 or epoch == epochs - 1:
 
       y_pred_classified = torch.argmax(outputs,1)
       y_true_classified = torch.argmax(y_true,1)
       total += y_true.size(0)
       correct += (y_pred_classified == y_true_classified).sum().item()
-      print(f"Epoch {epoch+1}/{epochs}, Loss: {running_loss:.4f}, Accuracy: {100 * correct / total:.2f}%")
+      accuracy= correct / total
+      trace.append(epoch+1, running_loss, accuracy)
+
+      print(f"Epoch {epoch+1}/{epochs}, Loss: {running_loss:.4f}, Accuracy: {100 * accuracy:.2f}%")
+  
+  return trace
 
 
 def test_model(model, test_loader):

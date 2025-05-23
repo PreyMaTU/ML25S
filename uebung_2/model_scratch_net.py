@@ -72,7 +72,7 @@ def model_scratch_net( train_x, train_y, test_x, test_y, activation_function, nu
   net = Net(layers, loss_function=MSE())
 
   start_time= time_ns()
-  net.train(train_x, train_y, GradientDecent(), epochs=epochs, batch_size=32, learning_rate=0.05)
+  trace= net.train(train_x, train_y, GradientDecent(), epochs=epochs, batch_size=32, learning_rate=0.05)
   end_time= time_ns()
   print(f'\nTraining time: {(end_time-start_time)/1e6:.1f}ms')
 
@@ -94,3 +94,5 @@ def model_scratch_net( train_x, train_y, test_x, test_y, activation_function, nu
   params = stats['weights'] + stats['biases']
   print(f"Total learnable parameters: {params}")
   print(f"Estimated memory usage: {stats['memory']:.2f} KB")
+
+  return trace

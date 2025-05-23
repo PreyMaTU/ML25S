@@ -5,6 +5,7 @@ from typing import Self
 from .activation import ActivationFunction
 from .loss import LossFunction
 from .optimizer import Optimizer
+from plotting import TrainingTrace
 
 class Layer:
   def __init__(self, perceptron_count: int, activation_function: ActivationFunction, input_layer_size: int= 0):
@@ -133,8 +134,10 @@ class Net:
 
     x = self._shape_data(x, name='x')
     y_true = self._shape_data(y_true, name='y')
+    y_true_classified= np.argmax( y_true, axis= 0 )
 
     optimizer.initialize(self.layers)
+    trace= TrainingTrace('ScratchNet')
 
     sample_count = x.shape[1]  # assuming x shape is (input_dim, num_samples)
 
@@ -155,16 +158,21 @@ class Net:
         optimizer.update(self.layers, learning_rate)
 
       # Calculate accuracy per epoch
-      if verbose and (epoch % 20 == 0 or epoch == epochs - 1):
+      if epoch % 20 == 0 or epoch == epochs - 1:
         y_pred_epoch = self._forward(x, keep_output=False)
         loss = self.loss_function.forward(y_true, y_pred_epoch)
 
         # Convert predictions to classification by finding the neuron with
         # the largest activation
         y_pred_classified= np.argmax( y_pred_epoch, axis= 0 )
-        y_true_classified= np.argmax( y_true, axis= 0 )
         accuracy = np.mean(y_pred_classified == y_true_classified)
-        print(f"Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}, Accuracy: {accuracy * 100:.2f}%")
+
+        trace.append(epoch+1, loss, accuracy)
+
+        if verbose:
+          print(f"Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}, Accuracy: {accuracy * 100:.2f}%")
+
+    return trace
 
     
 

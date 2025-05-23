@@ -30,7 +30,7 @@ def model_pytorch( train_x, train_y, test_x, test_y, activation_function, num_la
 
   # no need to pass activation fucntion, both dataset-setups use ReLu (from gridsearch)
   start_time= time_ns()
-  train_model(model, train_loader, epochs=epochs, learning_rate=0.05)
+  trace= train_model(model, train_loader, epochs=epochs, learning_rate=0.05)
   end_time= time_ns()
   print(f'\nTraining time: {(end_time-start_time)/1e6:.1f}ms')
 
@@ -41,3 +41,5 @@ def model_pytorch( train_x, train_y, test_x, test_y, activation_function, num_la
   params, vram = get_pytorch_model_stats(model)
   print(f"Total learnable parameters: {params}")
   print(f"Estimated memory usage: {vram:.2f} KB")
+
+  return trace

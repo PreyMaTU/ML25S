@@ -2,6 +2,8 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import accuracy_score
 
+from plotting import TrainingTrace
+
 from time import time_ns
 
 def compute_model_size(model):
@@ -46,3 +48,7 @@ def model_sklearn( train_x, train_y, test_x, test_y, activation_function, num_la
   total_kb, total_params= compute_model_size( model )
   print(f"Total learnable parameters: {total_params}")
   print(f"Estimated memory usage: {total_kb} KB")
+
+  trace= TrainingTrace('sklearn')
+  trace.set(None, model.loss_curve_, None)
+  return trace

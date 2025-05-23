@@ -31,7 +31,10 @@
 #
 # Add modulo counting in the train function so that we print the loss only every
 # 20th epoch.
+#
+# Add loss and accuracy tracing for later plotting.
 
+from plotting import TrainingTrace
 
 import numpy as np
 
@@ -107,6 +110,9 @@ class NeuralNet:
 
     def train(self, x_train, y_train, epochs=100):
         batch_size = 32
+        trace= TrainingTrace('LLM')
+        y_true_classified= np.argmax( y_train, axis= 1 )
+
 
         for epoch in range(epochs):
             indices = np.random.permutation(len(x_train))
@@ -125,7 +131,14 @@ class NeuralNet:
             if (epoch % 20) == 0 or epoch == epochs - 1:
                 train_pred = self.predict(x_train)
                 loss = mse_loss(y_train, train_pred)
-                print(f"Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}")
+
+                y_pred_classified= np.argmax( train_pred, axis= 1 )
+                accuracy = np.mean(y_pred_classified == y_true_classified)
+                trace.append(epoch+1, loss, accuracy)
+
+                print(f"Epoch {epoch+1}/{epochs}, Loss: {loss:.4f}, Accuracy: {accuracy * 100:.2f}%")
+
+        return trace
 
     def predict(self, x):
         activations, _ = self.forward(x)
