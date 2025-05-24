@@ -29,6 +29,7 @@ def model_sklearn( train_x, train_y, test_x, test_y, activation_function, num_la
     learning_rate_init= 0.05,
     max_iter=epochs,
     hidden_layer_sizes = hidden_layer_sizes,
+    # n_iter_no_change= 50,
     verbose= False
   )
 
