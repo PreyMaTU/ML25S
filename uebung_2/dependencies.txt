@@ -4,3 +4,4 @@ Installed libraries:
 -) pandas
 -) scikit-learn
 -) torch
+-) matplotlib
