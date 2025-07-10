@@ -94,6 +94,39 @@ def main():
   policy= Policy()
 
   policy.train(layouts, 8000)
+
+  renderer= PyGameRenderer()
+  renderer.init()
+
+  for i in range(100):
+    print(f'############################\nPlay game {i}')
+
+    game= Game(FIELD_WIDTH, FIELD_HEIGHT, BRICK_LAYOUT_A, renderer)
+    game.reset()
+    game.draw()
+
+    step= 0
+    while True:
+      event= renderer.handle_events()
+      if event == 'quit':
+        pygame.quit()
+        exit()
+
+      action= policy.play_step( game )
+      
+      print(f'  Step {step}: {action}')
+
+      game.update()
+      game.draw()
+
+      if game.has_won():
+        print('Game won!')
+        break
+
+      step+= 1
+
+  pygame.quit()
+
 if __name__ == '__main__':
   main()
 
