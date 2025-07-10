@@ -1,5 +1,6 @@
 import random
 import math
+import numpy as np
 
 PADDLE_HEIGHT= 1
 PADDLE_WIDTH= 5
@@ -36,7 +37,7 @@ class Ball:
     self.y= height - PADDLE_HEIGHT - 1
     self.x= math.floor( width / 2 )
 
-    (dx, dy)= random.choice( Paddle.Reflections )
+    (dx, dy)= random.choice( Paddle.Reflections ) # Paddle.Reflections[2]
     self.dx= dx
     self.dy= dy
 
@@ -90,6 +91,53 @@ class Paddle:
   def draw(self, renderer: Renderer):
     renderer.draw_rect(self.x, self.y, PADDLE_WIDTH, PADDLE_HEIGHT, PADDLE_COLOR)
 
+
+class State:
+  def __init__(self, ball: Ball, paddle: Paddle, bricks: list[(int,int)], width: int, height: int):
+    self.ball_x= ball.x
+    self.ball_y= ball.y
+    self.ball_velocity_x= ball.dx
+    self.ball_velocity_y= ball.dy
+    self.paddle_x= paddle.x
+    self.paddle_y= paddle.y
+    self.paddle_velocity= paddle.dx
+
+    bricks= bricks.copy()
+    bricks.sort()
+    self.bricks= tuple( bricks )
+    # self.map= np.zeros( width * height, np.int8 )
+
+    # # Set a 1 wherever a brick is on the map
+    # for (x, y) in bricks:
+    #   for i in range(x, x+ BRICK_WIDTH):
+    #     for j in range(y, y+ BRICK_HEIGHT):
+    #       self.map[ i + j* width ]= 1
+
+  def __hash__(self):
+    return hash((
+      self.ball_x,
+      self.ball_y,
+      self.ball_velocity_x,
+      self.ball_velocity_y,
+      self.paddle_x,
+      self.paddle_y,
+      self.paddle_velocity,
+      self.bricks
+    ))
+
+  def __eq__(self, other):
+    return (
+      self.ball_x == other.ball_x and
+      self.ball_y == other.ball_y and
+      self.ball_velocity_x == other.ball_velocity_x and
+      self.ball_velocity_y == other.ball_velocity_y and
+      self.paddle_x == other.paddle_x and
+      self.paddle_y == other.paddle_y and
+      self.paddle_velocity == other.paddle_velocity and
+      self.bricks == other.bricks
+    )
+
+
 class Game:
   def __init__(self, width: int, height: int, brick_layout: list[(int,int)], renderer: Renderer):
     self.width= width
@@ -121,7 +169,7 @@ class Game:
     # Player looses when the ball moves past the paddle
     if self.ball.y >= self.height-1:
       self.reset()
-      return
+      return False, self.to_state()
 
     # Check paddle collision
     self.paddle.reflect_ball( self.ball )
@@ -140,7 +188,11 @@ class Game:
 
     if not (0 <= self.ball.x + self.ball.dx <= self.width - 1):
       self.ball.reflect_x()
+
+    return True, self.to_state()
     
+  def to_state(self):
+    return State( self.ball, self.paddle, self.bricks, self.width, self.height )
     
   def has_won(self):
     return len(self.bricks) < 1

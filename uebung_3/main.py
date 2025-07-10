@@ -1,12 +1,18 @@
 
 from game import *
+from learning import *
 import pygame
+import random
 
 GRID_PIXELS= 30
 FIELD_WIDTH= 15
 FIELD_HEIGHT= 10
 
-FPS= 1
+FPS= 3
+
+BRICK_LAYOUT_A = [(0,0), (6,0), (12,0), (0,2), (12,2)]
+BRICK_LAYOUT_B = [(0,0), (3,0), (6,0), (9,0), (12,0), (0,2), (6,2), (12,2)]
+BRICK_LAYOUT_C = [(0,0), (3,0), (6,0), (9,0), (12,0), (0,2), (3,2), (6,2), (9,2), (12,2)]
 
 class PyGameRenderer( Renderer ):
   def __init__(self):
@@ -48,15 +54,11 @@ class PyGameRenderer( Renderer ):
   
 
 
-def main():
+def play_game_interactively():
   renderer= PyGameRenderer()
   renderer.init()
 
-  brick_layout_a = [(0,0), (6,0), (12,0), (0,2), (12,2)]
-  brick_layout_b = [(0,0), (3,0), (6,0), (9,0), (12,0), (0,2), (6,2), (12,2)]
-  brick_layout_c = [(0,0), (3,0), (6,0), (9,0), (12,0), (0,2), (3,2), (6,2), (9,2), (12,2)]
-
-  game= Game(FIELD_WIDTH, FIELD_HEIGHT, brick_layout_c, renderer)
+  game= Game(FIELD_WIDTH, FIELD_HEIGHT, BRICK_LAYOUT_B, renderer)
   game.reset()
   game.draw()
 
@@ -80,5 +82,18 @@ def main():
 
   pygame.quit()
 
+def main():
+  random.seed(42)
+
+  layouts= [
+    BRICK_LAYOUT_A,
+    #BRICK_LAYOUT_B,
+    #BRICK_LAYOUT_C
+  ]
+
+  policy= Policy()
+
+  policy.train(layouts, 8000)
 if __name__ == '__main__':
   main()
+
