@@ -174,8 +174,9 @@ def main():
     # Play each of the 15 possible start (3 layouts * 5 starting directions)
     for layout_id in range( len(layouts) ) :
       for direction in Paddle.Reflections:
+        play_game_and_plot(policy_name, policy, layouts[layout_id], layout_id, direction )
 
-        play_game_automatically( policy, layouts[layout_id] )
+        # play_game_automatically( policy, layouts[layout_id] )
 
 
 
