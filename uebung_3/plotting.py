@@ -14,7 +14,7 @@ def export_current_plot_with_title_name( title ):
   plt.savefig(path)
   plt.clf()
 
-def plot_win_percentage(training_info: TrainingInfo, batch_size = 100):
+def plot_win_percentage(policy_name: str, training_info: TrainingInfo, batch_size = 100):
   percent_batches = []
   # Create batches of max batch_size episodes
   for win_batch, _ in training_info.batches( batch_size ):
@@ -34,9 +34,9 @@ def plot_win_percentage(training_info: TrainingInfo, batch_size = 100):
   plt.ylabel('Win Percentage')
   plt.legend(framealpha = 0.6)
 
-  export_current_plot_with_title_name( title )
+  export_current_plot_with_title_name( f'{policy_name} {title}' )
 
-def plot_step_count_per_win(training_info: TrainingInfo, batch_size = 100):
+def plot_step_count_per_win(policy_name: str, training_info: TrainingInfo, batch_size = 100):
   avg_steps_batches = []
   # Create batches of max batch_size episodes
   for win_batch, step_count_batch in training_info.batches( batch_size ):
@@ -59,4 +59,4 @@ def plot_step_count_per_win(training_info: TrainingInfo, batch_size = 100):
   plt.ylabel('Step Count')
   plt.legend(framealpha = 0.6)
 
-  export_current_plot_with_title_name( title )
+  export_current_plot_with_title_name( f'{policy_name} {title}' )

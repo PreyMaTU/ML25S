@@ -37,7 +37,10 @@ class Ball:
     self.y= height - PADDLE_HEIGHT - 1
     self.x= math.floor( width / 2 )
 
-    (dx, dy)= random.choice( Paddle.Reflections )
+    self.set_direction( random.choice( Paddle.Reflections ) )
+
+  def set_direction(self, direction: tuple[int,int]):
+    (dx, dy)= direction
     self.dx= dx
     self.dy= dy
 
@@ -93,7 +96,7 @@ class Paddle:
 
 
 class State:
-  def __init__(self, ball: Ball, paddle: Paddle, bricks: list[(int,int)]):
+  def __init__(self, ball: Ball, paddle: Paddle, bricks: list[tuple[int,int]]):
     self.ball_x= ball.x
     self.ball_y= ball.y
     self.ball_velocity_x= ball.dx
@@ -133,7 +136,7 @@ class State:
 
 
 class Game:
-  def __init__(self, width: int, height: int, brick_layout: list[(int,int)], renderer: Renderer):
+  def __init__(self, width: int, height: int, brick_layout: list[tuple[int,int]], renderer: Renderer):
     self.width= width
     self.height= height
 
@@ -144,11 +147,14 @@ class Game:
     self.brick_layout= brick_layout
     self.bricks= []
 
-  def reset(self):
+  def reset(self, ball_direction: tuple[int,int]|None= None):
     self.bricks= self.brick_layout.copy()
 
     self.ball.reset_randomly(self.width, self.height)
     self.paddle.reset(self.width, self.height)
+
+    if ball_direction:
+      self.ball.set_direction( ball_direction )
 
   def move_paddle_right(self):
     self.paddle.move( +1 )

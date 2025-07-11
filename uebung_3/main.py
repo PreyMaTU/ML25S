@@ -55,7 +55,7 @@ class PyGameRenderer( Renderer ):
     return pressed_key
   
 
-
+# Play with keyboard
 def play_game_interactively():
   renderer= PyGameRenderer()
   renderer.init()
@@ -84,7 +84,64 @@ def play_game_interactively():
 
   pygame.quit()
 
+# Bot plays and game is shown
+def play_game_automatically( policy: Policy, layout ):
+  renderer= PyGameRenderer()
+  renderer.init()
+
+  print(f'############################\nPlay game')
+
+  game= Game(FIELD_WIDTH, FIELD_HEIGHT, layout, renderer)
+  game.reset()
+  game.draw()
+
+  step= 0
+  while True:
+    event= renderer.handle_events()
+    if event == 'quit':
+      pygame.quit()
+      exit()
+
+    action= policy.play_step( game )
+    
+    print(f'  Step {step}: {action}')
+
+    game.update()
+    game.draw()
+
+    if game.has_won():
+      print('Game won!')
+      break
+
+    step+= 1
+
+  pygame.quit()
+  
+
+def play_game_and_plot( policy_name, policy: Policy, layout, layout_id, direction):
+  layout_letter= chr(65+ layout_id)
+  print(f'Play game on map {layout_letter}, starting direction {direction}')
+
+  game= Game(FIELD_WIDTH, FIELD_HEIGHT, layout, EmptyRenderer())
+  game.reset(direction)
+
+  trajectory= [ (game.ball.x, game.ball.y) ]
+  still_playing= True
+  while still_playing:
+    action= policy.play_step( game )
+
+    still_playing, _ = game.update()
+
+    if game.has_won():
+      break
+
+    trajectory.append( (game.ball.x, game.ball.y) )
+
+  plot_game_trajectory( policy_name, trajectory, game.has_won(), layout, layout_letter, direction)
+
+
 def main():
+
   pathlib.Path('./out').mkdir(parents=True, exist_ok=True)
 
   random.seed(42)
@@ -95,47 +152,32 @@ def main():
     BRICK_LAYOUT_C
   ]
 
-  policy= Policy()
+  # policy_name= 'policy_cooldown_250k'
+  policy_name= 'policy_fixed_250k'
+  policy_path= f'./out/{policy_name}.pickle'
 
-  training_info= TrainingInfo()
-  policy.train(layouts, 300000, training_info= training_info)
+  if False:
+    policy= Policy()
 
-  plot_win_percentage(training_info, batch_size=3000)
-  plot_step_count_per_win(training_info, batch_size=3000)
+    training_info= TrainingInfo()
+    policy.train(layouts, 250000, training_info= training_info, epsilon_start= 0.1, epsilon_min= 0.1)
 
-  return 
+    policy.store_to_file( policy_path )
 
-  renderer= PyGameRenderer()
-  renderer.init()
+    plot_win_percentage(policy_name, training_info, batch_size=3000)
+    plot_step_count_per_win(policy_name, training_info, batch_size=3000)
 
-  for i in range(100):
-    print(f'############################\nPlay game {i}')
+  else:
 
-    game= Game(FIELD_WIDTH, FIELD_HEIGHT, BRICK_LAYOUT_A, renderer)
-    game.reset()
-    game.draw()
+    policy = Policy.load_from_file( policy_path )
 
-    step= 0
-    while True:
-      event= renderer.handle_events()
-      if event == 'quit':
-        pygame.quit()
-        exit()
+    # Play each of the 15 possible start (3 layouts * 5 starting directions)
+    for layout_id in range( len(layouts) ) :
+      for direction in Paddle.Reflections:
 
-      action= policy.play_step( game )
-      
-      print(f'  Step {step}: {action}')
+        play_game_automatically( policy, layouts[layout_id] )
 
-      game.update()
-      game.draw()
 
-      if game.has_won():
-        print('Game won!')
-        break
-
-      step+= 1
-
-  pygame.quit()
 
 if __name__ == '__main__':
   main()
