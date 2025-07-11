@@ -1,5 +1,7 @@
 from game import *
 
+import pickle
+
 FIELD_WIDTH= 15
 FIELD_HEIGHT= 10
 
@@ -127,6 +129,14 @@ class TrainingInfoBatcher:
 class Policy:
   def __init__(self):
     self.value_map= dict()
+
+  def load_from_file( path: str ) -> 'Policy':
+    with open(path, 'rb') as file:
+      return pickle.load( file )
+
+  def store_to_file(self, path: str):
+    with open(path, 'wb') as file:
+      pickle.dump( self, file )
 
   def reset(self):
     self.value_map= dict()
