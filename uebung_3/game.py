@@ -37,7 +37,7 @@ class Ball:
     self.y= height - PADDLE_HEIGHT - 1
     self.x= math.floor( width / 2 )
 
-    (dx, dy)= random.choice( Paddle.Reflections ) # Paddle.Reflections[2]
+    (dx, dy)= random.choice( Paddle.Reflections )
     self.dx= dx
     self.dy= dy
 
@@ -81,7 +81,7 @@ class Paddle:
       ball.dy= dy
 
   def update(self, width):
-    # Check gamefield boundaries
+    # Check game field boundaries
     self.x= min( width - PADDLE_WIDTH, max( 0, self.x + self.dx ) )
 
     if self.x <= 0 or self.x + PADDLE_WIDTH >= width:
@@ -93,7 +93,7 @@ class Paddle:
 
 
 class State:
-  def __init__(self, ball: Ball, paddle: Paddle, bricks: list[(int,int)], width: int, height: int):
+  def __init__(self, ball: Ball, paddle: Paddle, bricks: list[(int,int)]):
     self.ball_x= ball.x
     self.ball_y= ball.y
     self.ball_velocity_x= ball.dx
@@ -105,14 +105,8 @@ class State:
     bricks= bricks.copy()
     bricks.sort()
     self.bricks= tuple( bricks )
-    # self.map= np.zeros( width * height, np.int8 )
 
-    # # Set a 1 wherever a brick is on the map
-    # for (x, y) in bricks:
-    #   for i in range(x, x+ BRICK_WIDTH):
-    #     for j in range(y, y+ BRICK_HEIGHT):
-    #       self.map[ i + j* width ]= 1
-
+  # Must be hashable and equality-comparable for value map during learning
   def __hash__(self):
     return hash((
       self.ball_x,
@@ -192,7 +186,7 @@ class Game:
     return True, self.to_state()
     
   def to_state(self):
-    return State( self.ball, self.paddle, self.bricks, self.width, self.height )
+    return State( self.ball, self.paddle, self.bricks )
     
   def has_won(self):
     return len(self.bricks) < 1

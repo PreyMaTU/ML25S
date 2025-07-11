@@ -67,8 +67,10 @@ class StateActionSpace:
     self.policy= Action.make_random()
 
   def update(self, action: Action, gain: float):
+    # Update the action's average value gain
     self.actions[action.action].append( gain )
 
+    # Select the action with the best average value gain as the policy
     avg= self.actions[0].get( -math.inf )
     act= 0
     for i in range(len(self.actions)):
@@ -76,8 +78,6 @@ class StateActionSpace:
       if new_avg > avg:
         avg= new_avg
         act= i
-
-    # print( self.actions, '-> picked:', act )
 
     self.policy= Action( act )
 
@@ -115,10 +115,9 @@ class Policy:
     actions= []
     rewards= []
 
+    # Limit runtime of game (prevent getting stuck with no progress)
     for i in range(max_length):
       action= self.select_action( state, epsilon )
-
-      # print('Do action:', action)
 
       states.append( state )
       actions.append( action )
@@ -135,7 +134,8 @@ class Policy:
 
       if game.has_won():
         break
-
+    
+    # Add additional punishment if game got stuck
     if not game.has_won():
       rewards[ -1 ] *= 1.1
 
@@ -145,11 +145,13 @@ class Policy:
     self.reset()
 
     for i in range(episode_count):
+      # Run the game with the current policy
       brick_layout= brick_layouts[ i % len(brick_layouts) ]
       game= Game(FIELD_WIDTH, FIELD_HEIGHT, brick_layout, EmptyRenderer())
 
       states, actions, rewards= self.generate_episode( game )
 
+      # Print progress
       if verbose and (i % 20 == 0 or i == episode_count - 1):
         if not game.has_won():
           print(f'Episode {i}: Game lost after {len(states)} steps (state map: {len(self.value_map.keys())})')
@@ -160,17 +162,18 @@ class Policy:
       gain= 0
       seen_state_actions= set()
 
+      # Update the policy map based on this game run
       for state, action, reward in zip(reversed(states), reversed(actions), reversed(rewards)):
         gain= gain * gamma + reward
 
+        # Only update each state-action-pair once per run even if it occurs multiple times
         if not (state, action) in seen_state_actions:
           seen_state_actions.add( (state, action) )
 
           action_space= self.get_action_space( state )
           action_space.update( action, gain )
 
-          # print(f'Updating state, new policy:', action_space.policy)
-
+  # Play the game with the best action (=policy, no exploration)
   def play_step(self, game: Game):
     state= game.to_state()
     action= self.select_action( state, 0 )
