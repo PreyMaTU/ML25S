@@ -1,8 +1,10 @@
 
 from game import *
 from learning import *
+from plotting import *
 import pygame
 import random
+import pathlib
 
 GRID_PIXELS= 30
 FIELD_WIDTH= 15
@@ -83,17 +85,25 @@ def play_game_interactively():
   pygame.quit()
 
 def main():
+  pathlib.Path('./out').mkdir(parents=True, exist_ok=True)
+
   random.seed(42)
 
   layouts= [
     BRICK_LAYOUT_A,
-    #BRICK_LAYOUT_B,
-    #BRICK_LAYOUT_C
+    BRICK_LAYOUT_B,
+    BRICK_LAYOUT_C
   ]
 
   policy= Policy()
 
-  policy.train(layouts, 8000)
+  training_info= TrainingInfo()
+  policy.train(layouts, 300000, training_info= training_info)
+
+  plot_win_percentage(training_info, batch_size=3000)
+  plot_step_count_per_win(training_info, batch_size=3000)
+
+  return 
 
   renderer= PyGameRenderer()
   renderer.init()

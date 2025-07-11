@@ -87,6 +87,43 @@ class StateActionSpace:
     
     return Action.make_random()
 
+class TrainingInfo:
+  def __init__(self):
+    self.episode_wins= []
+    self.episode_step_count= []
+
+  def append(self, did_win, step_count):
+    self.episode_wins.append( did_win )
+    self.episode_step_count.append( step_count )
+
+  def batches(self, batch_size):
+    return TrainingInfoBatcher( self, batch_size )
+
+class TrainingInfoBatcher:
+  def __init__(self, training_info: TrainingInfo, batch_size: int):
+    self.training_info= training_info
+    self.batch_size= batch_size
+    self.batch_count= math.ceil( len(training_info.episode_wins) / batch_size )
+    self.batch_index= 0
+
+  def __iter__(self):
+    self.batch_index = 0
+    return self
+  
+  def __next__(self):
+    if self.batch_index >= self.batch_count:
+      raise StopIteration
+
+    start= self.batch_index * self.batch_size
+    end= (self.batch_index + 1) * self.batch_size
+    batch_wins= self.training_info.episode_wins[start:end]
+    batch_step_count= self.training_info.episode_step_count[start:end]
+
+    self.batch_index += 1
+
+    return batch_wins, batch_step_count
+
+
 class Policy:
   def __init__(self):
     self.value_map= dict()
@@ -127,10 +164,10 @@ class Policy:
 
       still_playing, state= game.update()
 
-      #TODO: Maybe break game/episode more intelligently?
-      #if not still_playing:
-        # Assign negative reward
-        #break
+      # When game is 'lost', give agent a big punishment and stop episode
+      if not still_playing:
+        rewards[ -1 ] -= max_length 
+        break
 
       if game.has_won():
         break
@@ -141,8 +178,10 @@ class Policy:
 
     return states, actions, rewards
 
-  def train(self, brick_layouts: list[list[(int,int)]], episode_count: int, gamma: float= 0.9, verbose= True):
+  def train(self, brick_layouts: list[list[(int,int)]], episode_count: int, gamma: float= 0.92, verbose= True, training_info: TrainingInfo|None= None):
     self.reset()
+
+    episodes_with_win= 0
 
     for i in range(episode_count):
       # Run the game with the current policy
@@ -151,13 +190,15 @@ class Policy:
 
       states, actions, rewards= self.generate_episode( game )
 
-      # Print progress
-      if verbose and (i % 20 == 0 or i == episode_count - 1):
-        if not game.has_won():
-          print(f'Episode {i}: Game lost after {len(states)} steps (state map: {len(self.value_map.keys())})')
+      if training_info:
+        training_info.append( game.has_won(), len(states) )
 
-        else:
-          print(f'Episode {i}: Game won after {len(states)} steps (state map: {len(self.value_map.keys())})')
+      # Print progress
+      episodes_with_win += 1 if game.has_won() else 0
+      if verbose and (i % 100 == 0 or i == episode_count - 1):
+        episodes= 100 if i % 100 == 0 else i % 100
+        print(f'Episode {i}: {episodes_with_win}/{episodes} games won (last steps: {len(states)}, state map: {len(self.value_map.keys())})')
+        episodes_with_win= 0
 
       gain= 0
       seen_state_actions= set()
