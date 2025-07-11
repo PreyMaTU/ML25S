@@ -193,7 +193,9 @@ class Policy:
 
     episodes_with_win= 0
 
-    epsilon_decay = (1.0 / episode_count) * math.log((epsilon_start - epsilon_min) / (0.0001))
+    epsilon_decay = 0
+    if epsilon_start != epsilon_min:
+      epsilon_decay= (1.0 / episode_count) * math.log((epsilon_start - epsilon_min) / (0.0001))
 
     for i in range(episode_count):
       # Run the game with the current policy
