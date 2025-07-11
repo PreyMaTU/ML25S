@@ -144,7 +144,7 @@ class Policy:
     action_space= self.get_action_space( state )
     return action_space.get_policy( epsilon )
 
-  def generate_episode(self, game: Game, epsilon: float=0.1, max_length= 2500):
+  def generate_episode(self, game: Game, epsilon: float, max_length= 2500):
     game.reset()
     state= game.to_state()
 
@@ -178,17 +178,20 @@ class Policy:
 
     return states, actions, rewards
 
-  def train(self, brick_layouts: list[list[(int,int)]], episode_count: int, gamma: float= 0.92, verbose= True, training_info: TrainingInfo|None= None):
+  def train(self, brick_layouts: list[list[tuple[int,int]]], episode_count: int, gamma: float= 0.92, epsilon_start: float= 0.5, epsilon_min: float= 0.02, verbose= True, training_info: TrainingInfo|None= None):
     self.reset()
 
     episodes_with_win= 0
+
+    epsilon_decay = (1.0 / episode_count) * math.log((epsilon_start - epsilon_min) / (0.0001))
 
     for i in range(episode_count):
       # Run the game with the current policy
       brick_layout= brick_layouts[ i % len(brick_layouts) ]
       game= Game(FIELD_WIDTH, FIELD_HEIGHT, brick_layout, EmptyRenderer())
 
-      states, actions, rewards= self.generate_episode( game )
+      epsilon= epsilon_min + (epsilon_start - epsilon_min) * math.exp(-epsilon_decay * i)
+      states, actions, rewards= self.generate_episode( game, epsilon )
 
       if training_info:
         training_info.append( game.has_won(), len(states) )
@@ -197,7 +200,7 @@ class Policy:
       episodes_with_win += 1 if game.has_won() else 0
       if verbose and (i % 100 == 0 or i == episode_count - 1):
         episodes= 100 if i % 100 == 0 else i % 100
-        print(f'Episode {i}: {episodes_with_win}/{episodes} games won (last steps: {len(states)}, state map: {len(self.value_map.keys())})')
+        print(f'Episode {i}: {episodes_with_win}/{episodes} games won (last steps: {len(states)}, epsilon: {epsilon}, state map: {len(self.value_map.keys())})')
         episodes_with_win= 0
 
       gain= 0
