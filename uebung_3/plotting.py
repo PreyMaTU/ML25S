@@ -8,7 +8,7 @@ from matplotlib.collections import LineCollection
 from matplotlib.ticker import MultipleLocator
 from matplotlib.patches import Rectangle
 
-only_word_chars_pattern = re.compile('[^\\w ]')
+only_word_chars_pattern = re.compile('[^\\w\\- ]')
 def snakeify( text, sep = '_' ):
   return re.sub(only_word_chars_pattern, '', text.lower()).replace(' ', sep)
 
