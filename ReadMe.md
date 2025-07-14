@@ -50,6 +50,10 @@ The datasets are loaded from disk as ZIP files, or via `fetch_ucirepo`:
   our experiments, to keep the dataset in its original form. In later sections we give some observations
   on the differences in performance of the two versions.
 
+<p align="center">
+  <img src="./assets/ex1_comparison_of_f1_score_distribution_on_loan_boxplots_f1.png" width="350px" hspace="20px">
+</p>
+
 Results can be exported and imported, so that the code for plotting can be
 adapted without re-running the training and evaluation code.
 
@@ -69,6 +73,10 @@ the previous exercise 1 were used for training. The following networks were crea
 - LLM Generated Net: A purpose built classifier network for our two datasets only using
   numpy generated with ChatGPT based on a lengthy prompt. Needed only minor manual fixes.
 
+<p align="center">
+  <img src="./assets/ex2_loan__training_accuracy.png" width="350px" hspace="20px">
+</p>
+
 ## Exercise 3
 
 A simplified version of the retro game Breakout was written and used to train
@@ -77,6 +85,11 @@ a reinforcement learning model. This uses on-policy first-visit Monte-Carlo cont
 interactively with the PyGame library and controlled using the arrow keys on the keyboard.
 Else the game can be controlled using a trained policy and visualized with PyGame
 or it can be run completely headlessly for training or evaluation.
+
+<p align="center">
+  <img src="./assets/ex3_game.png" width="300px" hspace="20px">
+  <img src="./assets/ex3_policy_cooldown_250k_ball_trajectory_with_map-layout_a_and_direction_1_-1.png" width="300px">
+</p>
 
 ## License
 
